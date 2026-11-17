@@ -341,6 +341,8 @@ docker compose up -d
 docker compose exec -T radar python scripts/backup_database.py
 ```
 
+V1.1 首次启动会把数据库从 schema v1 增量迁移到 v2。迁移只增加科研实体、关系、证据和快照表，不删除旧扫描表。升级前生成的备份是回滚依据，不要跳过。
+
 替换代码后：
 
 ```powershell

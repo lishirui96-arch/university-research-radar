@@ -1,4 +1,4 @@
-# 高校科研热点雷达网站
+# 高校科研热点雷达网站 V1.1
 
 这是 `university-research-radar` 的交互式查询界面。它支持：
 
@@ -54,5 +54,7 @@
 后续源码发布与公司主机一键更新见 [UPDATE_WORKFLOW.md](UPDATE_WORKFLOW.md)。更新脚本会先备份数据库，再拉取 GitHub 的 `main` 分支并重建网站。
 
 历史运行数据保存在主机的 `persistent/data/radar.db`，备份保存在 `persistent/backups/`。重建容器不会删除这些目录；不要手工删除 `persistent/`。
+
+V1.1 的科研实体库、热点算法、schema v2 迁移、测试与回滚说明见 [V1_1_RELEASE_NOTES.md](V1_1_RELEASE_NOTES.md)。
 
 在线检索使用 OpenAlex。匿名访问被限流时，可在界面中填写免费的 OpenAlex API key。课题组归属默认是候选线索，正式报告仍需用高校官网或实验室成员页核验。
