@@ -7,6 +7,7 @@ from pathlib import Path
 from streamlit.testing.v1 import AppTest
 
 from dashboard_repository import load_dashboard_data, load_database_status
+from research_taxonomy import load_research_taxonomy
 from storage import initialize_database
 
 
@@ -47,9 +48,26 @@ class DashboardPageTests(unittest.TestCase):
         app = AppTest.from_file(root / "streamlit_app.py", default_timeout=15)
         app.run()
         self.assertEqual(len(app.exception), 0)
-        self.assertEqual(len(app.title), 1)
         self.assertGreaterEqual(len(app.metric), 4)
         self.assertTrue(any(metric.value == "--" for metric in app.metric))
+        self.assertGreaterEqual(len(app.button), 3)
+        hero_html = "\n".join(element.value for element in app.get("html"))
+        self.assertIn("radar-hero-copy", hero_html)
+
+
+class ResearchTaxonomyTests(unittest.TestCase):
+    def test_taxonomy_has_three_complete_levels_and_unique_ids(self) -> None:
+        taxonomy = load_research_taxonomy()
+        self.assertGreaterEqual(len(taxonomy["domains"]), 6)
+        ids: list[str] = []
+        for domain in taxonomy["domains"]:
+            ids.append(domain["id"])
+            self.assertTrue(domain["directions"])
+            for direction in domain["directions"]:
+                ids.append(direction["id"])
+                self.assertTrue(direction["technologies"])
+                ids.extend(item["id"] for item in direction["technologies"])
+        self.assertEqual(len(ids), len(set(ids)))
 
 
 if __name__ == "__main__":

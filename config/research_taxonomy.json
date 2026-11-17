@@ -1,0 +1,168 @@
+{
+  "version": "1.0.0",
+  "updated_at": "2026-11-17",
+  "notice": "初始导航分类，不代表实时热点排名。",
+  "domains": [
+    {
+      "id": "embodied-intelligence",
+      "label": "人形机器人与具身智能",
+      "icon": "smart_toy",
+      "directions": [
+        {
+          "id": "dexterous-touch",
+          "label": "灵巧手与触觉感知",
+          "technologies": [
+            {"id": "tactile-array", "label": "触觉阵列与多模态感知", "aliases": ["tactile sensing", "multimodal touch"]},
+            {"id": "micro-sensor", "label": "微型六维力传感器", "aliases": ["six-axis force sensor"]},
+            {"id": "slip-contact", "label": "滑动与接触检测", "aliases": ["slip detection", "contact detection"]},
+            {"id": "soft-pressure", "label": "柔性压力传感", "aliases": ["flexible pressure sensor"]},
+            {"id": "high-density-skin", "label": "高密度触觉皮肤", "aliases": ["high-density tactile skin"]}
+          ]
+        },
+        {
+          "id": "joint-thermal",
+          "label": "关节模组与热管理",
+          "technologies": [
+            {"id": "integrated-joint", "label": "一体化关节模组", "aliases": ["integrated robot joint"]},
+            {"id": "joint-thermal-control", "label": "关节热管理与温控", "aliases": ["robot joint thermal management"]},
+            {"id": "torque-density", "label": "高扭矩密度执行器", "aliases": ["high torque density actuator"]}
+          ]
+        },
+        {
+          "id": "roller-screw",
+          "label": "行星滚柱丝杠",
+          "technologies": [
+            {"id": "roller-screw-design", "label": "滚柱丝杠结构设计", "aliases": ["planetary roller screw"]},
+            {"id": "roller-screw-manufacturing", "label": "精密加工与寿命评估", "aliases": ["roller screw manufacturing"]}
+          ]
+        },
+        {
+          "id": "precision-reducer",
+          "label": "精密减速器",
+          "technologies": [
+            {"id": "harmonic-drive", "label": "谐波减速器", "aliases": ["harmonic drive"]},
+            {"id": "rv-reducer", "label": "RV减速器", "aliases": ["RV reducer"]}
+          ]
+        },
+        {
+          "id": "bionic-skin",
+          "label": "仿生皮肤与柔性传感",
+          "technologies": [
+            {"id": "electronic-skin", "label": "电子皮肤", "aliases": ["electronic skin", "e-skin"]},
+            {"id": "self-healing-sensor", "label": "自修复柔性传感器", "aliases": ["self-healing flexible sensor"]}
+          ]
+        },
+        {
+          "id": "robot-skeleton",
+          "label": "机器人骨架与复合材料",
+          "technologies": [
+            {"id": "lightweight-skeleton", "label": "轻量化机器人骨架", "aliases": ["lightweight robot skeleton"]},
+            {"id": "structural-composite", "label": "结构复合材料", "aliases": ["structural composite"]}
+          ]
+        },
+        {
+          "id": "motion-vla",
+          "label": "运动控制与VLA",
+          "technologies": [
+            {"id": "whole-body-control", "label": "全身运动控制", "aliases": ["whole-body control"]},
+            {"id": "vision-language-action", "label": "视觉语言动作模型", "aliases": ["vision-language-action", "VLA"]}
+          ]
+        },
+        {
+          "id": "human-robot-safety",
+          "label": "人机协作与安全",
+          "technologies": [
+            {"id": "collaborative-safety", "label": "协作安全与碰撞防护", "aliases": ["human robot collaboration safety"]},
+            {"id": "intent-recognition", "label": "人类意图识别", "aliases": ["human intention recognition"]}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ai-chip",
+      "label": "AI芯片与先进计算",
+      "icon": "memory",
+      "directions": [
+        {
+          "id": "advanced-packaging",
+          "label": "先进封装",
+          "technologies": [
+            {"id": "chiplet", "label": "Chiplet", "aliases": ["chiplet"]},
+            {"id": "hybrid-bonding", "label": "混合键合", "aliases": ["hybrid bonding"]},
+            {"id": "glass-substrate", "label": "玻璃基板", "aliases": ["glass substrate"]}
+          ]
+        },
+        {
+          "id": "high-speed-interconnect",
+          "label": "高速互连",
+          "technologies": [
+            {"id": "cpo", "label": "CPO", "aliases": ["co-packaged optics"]},
+            {"id": "silicon-photonics", "label": "硅光", "aliases": ["silicon photonics"]},
+            {"id": "optoelectronic-packaging", "label": "光电共封装", "aliases": ["optoelectronic co-packaging"]}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "new-energy",
+      "label": "新能源",
+      "icon": "battery_charging_full",
+      "directions": [
+        {
+          "id": "solid-state-battery",
+          "label": "固态电池",
+          "technologies": [
+            {"id": "solid-electrolyte", "label": "固态电解质", "aliases": ["solid electrolyte"]},
+            {"id": "battery-interface", "label": "界面工程", "aliases": ["solid-state battery interface engineering"]}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "advanced-materials",
+      "label": "新材料",
+      "icon": "category",
+      "directions": [
+        {
+          "id": "copper-materials",
+          "label": "铜基材料",
+          "technologies": [
+            {"id": "thermal-copper-composite", "label": "高导热铜基复合材料", "aliases": ["high thermal conductivity copper composite"]},
+            {"id": "copper-alloy", "label": "高性能铜合金", "aliases": ["high-performance copper alloy"]}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aerospace",
+      "label": "航空航天",
+      "icon": "flight",
+      "directions": [
+        {
+          "id": "advanced-propulsion",
+          "label": "先进推进",
+          "technologies": [
+            {"id": "electric-propulsion", "label": "电推进", "aliases": ["electric propulsion"]},
+            {"id": "scramjet", "label": "超燃冲压发动机", "aliases": ["scramjet"]}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "biomanufacturing",
+      "label": "生物制造",
+      "icon": "genetics",
+      "directions": [
+        {
+          "id": "synthetic-biology",
+          "label": "合成生物学",
+          "technologies": [
+            {"id": "cell-factory", "label": "细胞工厂", "aliases": ["cell factory"]},
+            {"id": "enzyme-engineering", "label": "酶工程", "aliases": ["enzyme engineering"]},
+            {"id": "bio-based-material", "label": "生物基材料", "aliases": ["bio-based material"]}
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -131,9 +131,11 @@ with st.sidebar:
     else:
         selected_topics = [st.selectbox("主题种子", topic_options)]
 
+    requested_deep_dive_topic = st.session_state.pop("requested_deep_dive_topic", "")
     with st.form("radar_search"):
         query = st.text_input(
             "自定义主题（可选）",
+            value=requested_deep_dive_topic,
             placeholder="主题深挖时替换种子；领域扫描时作为新增主题",
         )
         extra_terms = st.text_input(

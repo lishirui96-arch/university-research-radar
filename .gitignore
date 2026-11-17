@@ -12,3 +12,4 @@ work/
 logs/
 persistent/
 .env
+artifacts/ui-audit/

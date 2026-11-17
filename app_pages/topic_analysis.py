@@ -21,6 +21,42 @@ st.caption("基于已经成功保存的扫描结果进行回溯；新主题可�
 db_path = Path(database_path())
 signature = (db_path.stat().st_mtime_ns, db_path.stat().st_size) if db_path.exists() else (0, 0)
 observations = _load(str(db_path), signature)
+requested = st.session_state.get("analysis_requested_topic")
+
+if requested:
+    requested_label = str(requested.get("label") or "").strip()
+    hierarchy = " / ".join(
+        item
+        for item in [requested.get("domain"), requested.get("direction"), requested_label]
+        if item
+    )
+    if hierarchy:
+        st.caption(hierarchy)
+    requested_rows = (
+        observations[
+            observations["topic"].fillna("").astype(str).str.casefold()
+            == requested_label.casefold()
+        ]
+        if not observations.empty and requested_label
+        else pd.DataFrame()
+    )
+    if requested_rows.empty:
+        st.subheader(requested_label or "所选研究主题")
+        with st.container(horizontal=True):
+            st.metric("近一年论文数量", "--", border=True)
+            st.metric("近一年增长率", "--", border=True)
+            st.metric("新进入研究高校", "--", border=True)
+            st.metric("跨学科研究程度", "--", border=True)
+        st.info(
+            "本地数据库尚无该细分技术的标准化指标。系统未使用示例数字填充；"
+            "可前往科研热点发现页发起真实 OpenAlex 深挖。",
+            icon=":material/data_alert:",
+        )
+        if st.button("发起真实主题深挖", type="primary", icon=":material/search:"):
+            st.session_state["run_mode_control"] = "主题深挖"
+            st.session_state["requested_deep_dive_topic"] = requested_label
+            st.switch_page("app_pages/domain_scan.py")
+        st.stop()
 
 if observations.empty:
     st.info("当前数据库没有可分析的成功主题记录。", icon=":material/info:")
@@ -30,9 +66,16 @@ if observations.empty:
     st.stop()
 
 with st.container(horizontal=True, vertical_alignment="bottom"):
+    available_topics = sorted(observations["topic"].dropna().unique().tolist())
+    default_index = (
+        available_topics.index(requested_label)
+        if requested and requested_label in available_topics
+        else 0
+    )
     topic = st.selectbox(
         "研究主题",
-        sorted(observations["topic"].dropna().unique().tolist()),
+        available_topics,
+        index=default_index,
         key="analysis_topic",
     )
     regions = observations.loc[observations["topic"] == topic, "region"].dropna().unique().tolist()

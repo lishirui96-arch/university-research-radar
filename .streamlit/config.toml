@@ -1,13 +1,21 @@
 [theme]
 base = "light"
-primaryColor = "#007F6D"
-backgroundColor = "#FAFBFC"
-secondaryBackgroundColor = "#EEF2F3"
-textColor = "#172126"
-linkColor = "#006D9C"
-borderColor = "#D5DDDF"
+primaryColor = "#0B63CE"
+backgroundColor = "#F3F7FC"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#14263B"
+linkColor = "#075FB9"
+borderColor = "#DBE7F3"
 showWidgetBorder = true
 baseRadius = "small"
+buttonRadius = "small"
+chartCategoricalColors = ["#0B63CE", "#7C3AED", "#0E9F6E", "#F59E0B", "#E83E8C", "#16A4D8"]
+
+[theme.sidebar]
+backgroundColor = "#071F3B"
+secondaryBackgroundColor = "#0B315A"
+textColor = "#F4F8FF"
+borderColor = "#21486F"
 
 [server]
 runOnSave = true
