@@ -1,0 +1,11 @@
+topic_id,domain,label_zh,label_en,include_terms,material_anchors,process_terms,property_terms,application_terms,exclude_terms,classification_hints,notes
+EMB-001,embodied_ai,视觉语言动作模型,vision-language-action models,"vision-language-action model|VLA model|视觉语言动作模型|视觉-语言-动作模型",,,,,"visual language assessment|very large array",需与机器人策略或动作生成语境共现,种子主题
+EMB-002,embodied_ai,机器人操作,robotic manipulation,"robotic manipulation|robot manipulation|机器人操作|机械臂操作",,,,,"surgical manipulation unrelated",区分通用操作与特定工业任务,种子主题
+EMB-003,embodied_ai,灵巧操作,dexterous manipulation,"dexterous manipulation|dexterous hand|灵巧操作|灵巧手",,,,,,需出现多指手或精细接触操作语境,种子主题
+EMB-004,embodied_ai,触觉感知,tactile sensing for robotics,"robot tactile sensing|visuotactile|tactile manipulation|机器人触觉|视觉触觉",,,,,"medical tactile sensing only",需与机器人感知或控制关联,种子主题
+EMB-005,embodied_ai,模仿学习,imitation learning for robotics,"robot imitation learning|learning from demonstration robotics|机器人模仿学习|示范学习机器人",,,,,"human behavioral imitation only",需与实体机器人任务关联,种子主题
+EMB-006,embodied_ai,机器人世界模型,world models for robotics,"robot world model|world action model|robotics world model|机器人世界模型|世界动作模型",,,,,"economic world model",需支持机器人预测规划或控制,种子主题
+EMB-007,embodied_ai,仿真到现实,sim-to-real robotics,"sim-to-real robotics|simulation-to-reality robot|机器人仿真到现实|机器人虚实迁移",,,,,"non-robotic simulation",需有机器人策略或系统迁移,种子主题
+EMB-008,embodied_ai,人形机器人,humanoid robots,"humanoid robot|humanoid robotics|人形机器人|仿人机器人",,,,,"social humanoid metaphor",按运动控制全身操作与系统平台分层,种子主题
+EMB-009,embodied_ai,腿足运动,legged robot locomotion,"legged robot|quadruped locomotion|biped locomotion|腿足机器人|四足机器人运动",,,,,"animal locomotion biology only",需与机器人运动控制关联,种子主题
+EMB-010,embodied_ai,视觉语言导航,vision-and-language navigation robotics,"vision-language navigation robot|embodied navigation|视觉语言导航|具身导航",,,,,"website navigation|document navigation",区分室内移动无人机和自动驾驶场景,种子主题

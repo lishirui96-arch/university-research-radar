@@ -1,0 +1,10 @@
+publication_date,title,region,institution,group_name,topic,venue,work_type,citations,is_open_access,link
+2026-03-18,Fast-WAM: Do World Action Models Need Test-time Future Imagination?,中国内地,清华大学交叉信息研究院（IIIS）,Zhao Hang 稳定合作团队,机器人世界模型,arXiv,preprint,0,true,https://arxiv.org/abs/2603.16666
+2026-01-01,CAST: Counterfactual Labels Improve Instruction Following in Vision-Language-Action Models,美国,UC Berkeley / BAIR,Robotic AI & Learning Lab（RAIL）,VLA,IEEE Robotics and Automation Letters,article,0,false,https://doi.org/10.1109/LRA.2026.3726383
+2026-01-01,Humanoid Locomotion and Manipulation: Current Progress and Challenges in Control Planning and Learning,欧洲,Technical University of Munich,Institute for Cognitive Systems（ICS）,人形机器人,IEEE/ASME Transactions on Mechatronics,review,0,false,https://doi.org/10.1109/TMECH.2025.3579247
+2026-01-01,OmniVTLA: Vision-Tactile-Language-Action Models With Semantic-Aligned Tactile Sensing,中国内地,上海交通大学,Li Song / OmniVTLA 合作簇,触觉感知,IEEE Robotics and Automation Letters,article,0,false,https://doi.org/10.1109/LRA.2026.3710060
+2025-12-13,Motus: A Unified Latent Action World Model,中国内地,清华大学,Jun Zhu / Hang Su / Motus 合作簇,机器人世界模型,arXiv,preprint,0,true,https://arxiv.org/abs/2512.13030
+2026-01-01,NavDP: Learning Sim-to-Real Navigation Diffusion Policy with Privileged Information Guidance,中国内地,上海人工智能实验室 + 上交/浙大等,Jiangmiao Pang 稳定合作网络,仿真到现实,ICRA,proceedings-article,0,false,https://doi.org/10.1109/ICRA57385.2026.11696748
+2026-01-01,UniTracker: Learning Universal Whole-Body Motion Tracker for Humanoid Robots,中国内地,上海人工智能实验室 + 上交/浙大等,Jiangmiao Pang 稳定合作网络,人形机器人,IEEE Robotics and Automation Letters,article,0,false,https://doi.org/10.1109/LRA.2026.3692091
+2026-01-01,StreamVLN: Streaming Vision-and-Language Navigation via SlowFast Context Modeling,中国内地,上海人工智能实验室 + 上交/浙大等,Jiangmiao Pang 稳定合作网络,语言导航,ICRA,proceedings-article,0,false,https://doi.org/10.1109/ICRA57385.2026.11696190
+2026-01-01,ViTacFormer: Learning Cross-Modal Representation for Visuo-Tactile Dexterous Manipulation,中国内地,北京大学 + UC Berkeley,ViTacFormer 联合团队,灵巧操作,Robotics: Science and Systems XXII,proceedings-article,0,false,https://doi.org/10.15607/RSS.2026.XXII.129

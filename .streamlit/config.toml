@@ -1,0 +1,16 @@
+[theme]
+base = "light"
+primaryColor = "#007F6D"
+backgroundColor = "#FAFBFC"
+secondaryBackgroundColor = "#EEF2F3"
+textColor = "#172126"
+linkColor = "#006D9C"
+borderColor = "#D5DDDF"
+showWidgetBorder = true
+baseRadius = "small"
+
+[server]
+runOnSave = true
+
+[client]
+toolbarMode = "minimal"

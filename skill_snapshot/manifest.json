@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-16T07:35:59.288118+00:00",
+  "source_root": "C:\\Users\\LSR\\.agents\\skills\\university-research-radar",
+  "fingerprint": "956bb95b67e9",
+  "workflow_hash": "c16a8fea82588445eafa53a27ac9104f78194ae6b7a22c3904fb9b606da52fd0",
+  "config_hash": "ec81699ef786a9f55b3dcaad7e105ea09e336452b029f49c8f3f39909fb2ab50",
+  "files": [
+    "SKILL.md",
+    "references/domain-profiles/materials.md",
+    "references/quality-rubrics/materials-evidence.md",
+    "references/source-profiles/materials-sources.md",
+    "references/taxonomies/materials-topics.csv"
+  ]
+}

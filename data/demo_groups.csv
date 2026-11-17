@@ -1,0 +1,8 @@
+region,institution,group_name,leader,confidence,attribution_basis,works,topics,latest_date,representative_work,representative_link
+中国内地,清华大学交叉信息研究院（IIIS）,Zhao Hang 稳定合作团队,Zhao Hang,中高,IIIS 官方任职页面与论文机构署名一致,10,世界动作模型；动作标记化；VLA；3D/深度推理,2026-11-16,Fast-WAM: Do World Action Models Need Test-time Future Imagination?,https://arxiv.org/abs/2603.16666
+美国,UC Berkeley / BAIR,Robotic AI & Learning Lab（RAIL）,Sergey Levine,高,RAIL 官方成员页与论文作者一致,4,机器人学习；VLA；策略泛化,2026-11-16,CAST: Counterfactual Labels Improve Instruction Following in Vision-Language-Action Models,https://doi.org/10.1109/LRA.2026.3726383
+欧洲,Technical University of Munich,Institute for Cognitive Systems（ICS）,Gordon Cheng,高,TUM ICS 官方成员页与论文机构信息一致,4,认知系统；人形机器人；感知-控制,2026-11-16,Humanoid Locomotion and Manipulation: Current Progress and Challenges,https://doi.org/10.1109/TMECH.2025.3579247
+中国内地,上海交通大学,Li Song / OmniVTLA 合作簇,Li Song,中,论文合作网络线索；实验室正式名称待核验,1,视觉-触觉-语言-动作；灵巧操作,2026-11-16,OmniVTLA: Vision-Tactile-Language-Action Models With Semantic-Aligned Tactile Sensing,https://doi.org/10.1109/LRA.2026.3710060
+中国内地,清华大学,Jun Zhu / Hang Su / Motus 合作簇,Jun Zhu / Hang Su,中,同方向论文合作网络；官方成员关系待复核,1,世界模型；动作生成,2025-12-13,Motus: A Unified Latent Action World Model,https://arxiv.org/abs/2512.13030
+中国内地,上海人工智能实验室 + 上交/浙大等,Jiangmiao Pang 稳定合作网络,Jiangmiao Pang,中高,稳定论文合作网络；非单一高校正式课题组,3,导航；全身跟踪；视觉语言导航,2026-11-16,NavDP: Learning Sim-to-Real Navigation Diffusion Policy with Privileged Information Guidance,https://doi.org/10.1109/ICRA57385.2026.11696748
+中国内地,北京大学 + UC Berkeley,ViTacFormer 联合团队,待核验,中,联合论文线索；北大作者所在实验室待核验,1,视觉触觉；灵巧操作,2026-11-16,ViTacFormer: Learning Cross-Modal Representation for Visuo-Tactile Dexterous Manipulation,https://doi.org/10.15607/RSS.2026.XXII.129
