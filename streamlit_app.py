@@ -26,6 +26,11 @@ page = st.navigation(
             default=True,
         ),
         st.Page(
+            APP_DIR / "app_pages/daily_updates.py",
+            title="每日更新",
+            icon=":material/update:",
+        ),
+        st.Page(
             APP_DIR / "app_pages/domain_scan.py",
             title="科研热点发现",
             icon=":material/radar:",

@@ -443,6 +443,132 @@ def load_topic_observations(path: str | Path) -> pd.DataFrame:
     return pd.DataFrame(records)
 
 
+def load_daily_collection_data(path: str | Path, limit: int = 100) -> dict[str, Any]:
+    """Load published V3.2 collection state without mutating the database."""
+    empty = {
+        "available": False,
+        "latest_run": None,
+        "runs": pd.DataFrame(),
+        "windows": pd.DataFrame(),
+        "observations": pd.DataFrame(),
+        "date_status": pd.DataFrame(),
+        "work_types": pd.DataFrame(),
+        "quality": pd.DataFrame(),
+    }
+    db_path = Path(path)
+    if not db_path.exists():
+        return empty
+    with closing(_connect_read_only(db_path)) as connection:
+        tables = _table_names(connection)
+        required = {"daily_collection_runs", "work_date_observations"}
+        if not required.issubset(tables):
+            return empty
+
+        runs = _dataframe(
+            connection.execute(
+                """
+                SELECT run_id, run_date, timezone_name, trigger_kind, status,
+                       started_at, completed_at, window_count, completed_windows,
+                       failed_windows, request_budget, request_count,
+                       response_bytes, retry_count, rate_remaining, error
+                FROM daily_collection_runs
+                ORDER BY started_at DESC LIMIT ?
+                """,
+                (limit,),
+            ).fetchall()
+        )
+        latest_run = None if runs.empty else runs.iloc[0].to_dict()
+        windows = pd.DataFrame()
+        if "daily_collection_windows" in tables:
+            windows = _dataframe(
+                connection.execute(
+                    """
+                    SELECT run_id, publication_date, reasons_json, priority,
+                           preflight_meta_count, estimated_requests, status,
+                           skip_reason, error, updated_at
+                    FROM daily_collection_windows
+                    ORDER BY updated_at DESC, priority LIMIT ?
+                    """,
+                    (limit * 10,),
+                ).fetchall()
+            )
+        observations = _dataframe(
+            connection.execute(
+                """
+                SELECT observation_id, publication_date, batch_id, run_id,
+                       observed_at, meta_count, previous_meta_count, count_delta,
+                       sampled_count, coverage_rate, is_truncated, inserted_works,
+                       updated_works, unchanged_works, authors_inserted,
+                       authors_updated, institution_relationship_changes,
+                       topic_relationship_changes, request_count, response_bytes,
+                       retry_count, rate_remaining, quality_status,
+                       stability_status, published
+                FROM work_date_observations
+                ORDER BY observed_at DESC LIMIT ?
+                """,
+                (limit * 5,),
+            ).fetchall()
+        )
+        date_status = pd.DataFrame()
+        if "work_date_status" in tables:
+            date_status = _dataframe(
+                connection.execute(
+                    """
+                    SELECT publication_date, status, first_observed_at,
+                           last_observed_at, last_meta_count,
+                           successful_observations, consecutive_unchanged,
+                           next_recheck_after, updated_at
+                    FROM work_date_status
+                    ORDER BY publication_date DESC LIMIT ?
+                    """,
+                    (limit,),
+                ).fetchall()
+            )
+        work_types = pd.DataFrame()
+        if "work_type_observations" in tables:
+            work_types = _dataframe(
+                connection.execute(
+                    """
+                    SELECT types.batch_id, observations.publication_date,
+                           observations.observed_at, types.raw_type,
+                           types.normalized_group, types.work_count
+                    FROM work_type_observations types
+                    JOIN work_date_observations observations
+                      ON observations.batch_id=types.batch_id
+                    WHERE observations.published=1
+                    ORDER BY observations.observed_at DESC, types.work_count DESC
+                    """
+                ).fetchall()
+            )
+        quality = pd.DataFrame()
+        if "data_quality_reports" in tables:
+            quality = _dataframe(
+                connection.execute(
+                    """
+                    SELECT reports.batch_id, observations.publication_date,
+                           reports.check_name, reports.severity, reports.status,
+                           reports.details, reports.created_at
+                    FROM data_quality_reports reports
+                    LEFT JOIN work_date_observations observations
+                      ON observations.batch_id=reports.batch_id
+                    WHERE observations.batch_id IS NOT NULL
+                    ORDER BY reports.created_at DESC LIMIT ?
+                    """,
+                    (limit * 5,),
+                ).fetchall()
+            )
+    return {
+        "available": True,
+        "latest_run": latest_run,
+        "runs": runs,
+        "windows": windows,
+        "observations": observations,
+        "date_status": date_status,
+        "work_types": work_types,
+        "quality": quality,
+    }
+
+
 def load_database_status(path: str | Path) -> dict[str, Any]:
     db_path = Path(path)
     if not db_path.exists():

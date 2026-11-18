@@ -7,7 +7,11 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 
-from dashboard_repository import load_dashboard_data, load_topic_observations
+from dashboard_repository import (
+    load_daily_collection_data,
+    load_dashboard_data,
+    load_topic_observations,
+)
 from research_taxonomy import find_direction, find_domain, load_research_taxonomy
 from storage import database_path
 
@@ -22,6 +26,12 @@ def _load_dashboard(path: str, signature: tuple[int, int]) -> dict[str, Any]:
 def _load_observations(path: str, signature: tuple[int, int]) -> pd.DataFrame:
     del signature
     return load_topic_observations(path)
+
+
+@st.cache_data(ttl="2m", max_entries=8, show_spinner=False)
+def _load_daily_collection(path: str, signature: tuple[int, int]) -> dict[str, Any]:
+    del signature
+    return load_daily_collection_data(path)
 
 
 @st.cache_data
@@ -87,6 +97,7 @@ signature = (
 )
 data = _load_dashboard(str(db_path), signature)
 observations = _load_observations(str(db_path), signature)
+daily_collection = _load_daily_collection(str(db_path), signature)
 taxonomy = _load_taxonomy()
 
 with st.container(key="research_hero"):
@@ -151,6 +162,45 @@ for column, (key, label, icon) in zip(st.columns(4, gap="medium"), kpi_specs):
             )
             st.caption(_scope_label(metric.get("scope", "unavailable")))
             st.caption(f"更新：{_display_time(last_updated)}")
+
+with st.container(key="panel_daily_update"):
+    latest_daily_run = daily_collection.get("latest_run")
+    daily_observations = daily_collection.get("observations", pd.DataFrame())
+    latest_daily_observation = (
+        None if daily_observations.empty else daily_observations.iloc[0]
+    )
+    with st.container(horizontal=True, horizontal_alignment="distribute"):
+        st.subheader("每日数据更新")
+        st.badge(
+            "等待首次正式运行" if latest_daily_run is None else str(latest_daily_run["status"]),
+            color="gray" if latest_daily_run is None else "green",
+            icon=":material/update:",
+        )
+    daily_metrics = st.columns(4, gap="small")
+    daily_metrics[0].metric(
+        "最近发表日期",
+        "--" if latest_daily_observation is None else str(latest_daily_observation["publication_date"]),
+    )
+    daily_metrics[1].metric(
+        "完整命中",
+        "--" if latest_daily_observation is None else f"{int(latest_daily_observation['meta_count']):,}",
+    )
+    daily_metrics[2].metric(
+        "新增 Works",
+        "--" if latest_daily_observation is None else f"{int(latest_daily_observation['inserted_works']):,}",
+    )
+    daily_metrics[3].metric(
+        "稳定状态",
+        "--" if latest_daily_observation is None else str(latest_daily_observation["stability_status"]),
+    )
+    with st.container(horizontal=True, horizontal_alignment="distribute"):
+        st.caption("工作日 09:00 · D-1 / D-2 / D-3 / D-7 / D-14 · 页面不会触发在线采集")
+        if st.button(
+            "查看每日更新",
+            icon=":material/arrow_forward:",
+            key="open_daily_updates",
+        ):
+            st.switch_page("app_pages/daily_updates.py")
 
 trend_column, hot_column = st.columns([1.65, 1], gap="medium")
 with trend_column:
