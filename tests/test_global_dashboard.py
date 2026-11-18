@@ -39,7 +39,7 @@ class DashboardRepositoryTests(unittest.TestCase):
         self.assertEqual(before, after)
         self.assertEqual(status["integrity"], "ok")
         self.assertEqual(status["foreign_key_violations"], 0)
-        self.assertEqual(str(status["schema_version"]), "2")
+        self.assertEqual(str(status["schema_version"]), "5")
 
 
 class DashboardPageTests(unittest.TestCase):

@@ -13,7 +13,13 @@ from typing import Any
 
 import pandas as pd
 
-from migrations import LATEST_SCHEMA_VERSION, MIGRATION_2_SQL
+from migrations import (
+    LATEST_SCHEMA_VERSION,
+    MIGRATION_2_SQL,
+    MIGRATION_3_SQL,
+    MIGRATION_4_SQL,
+    MIGRATION_5_SQL,
+)
 
 
 DEFAULT_DB_PATH = Path("persistent/data/radar.db")
@@ -134,6 +140,39 @@ def initialize_database(path: Path | None = None) -> Path:
                     + "INSERT OR REPLACE INTO schema_migrations(version, name, applied_at) "
                     + f"VALUES (2, 'research intelligence foundation', '{now}');\n"
                     + "UPDATE schema_metadata SET value='2' WHERE key='schema_version';\n"
+                    + "COMMIT;"
+                )
+                version = 2
+            if version < 3:
+                now = datetime.now().astimezone().isoformat()
+                connection.executescript(
+                    "BEGIN IMMEDIATE;\n"
+                    + MIGRATION_3_SQL
+                    + "\nINSERT OR REPLACE INTO schema_migrations(version, name, applied_at) "
+                    + f"VALUES (3, 'automated collection control plane', '{now}');\n"
+                    + "UPDATE schema_metadata SET value='3' WHERE key='schema_version';\n"
+                    + "COMMIT;"
+                )
+                version = 3
+            if version < 4:
+                now = datetime.now().astimezone().isoformat()
+                connection.executescript(
+                    "BEGIN IMMEDIATE;\n"
+                    + MIGRATION_4_SQL
+                    + "\nINSERT OR REPLACE INTO schema_migrations(version, name, applied_at) "
+                    + f"VALUES (4, 'v3.2 automatic updates and historical rechecks', '{now}');\n"
+                    + "UPDATE schema_metadata SET value='4' WHERE key='schema_version';\n"
+                    + "COMMIT;"
+                )
+                version = 4
+            if version < 5:
+                now = datetime.now().astimezone().isoformat()
+                connection.executescript(
+                    "BEGIN IMMEDIATE;\n"
+                    + MIGRATION_5_SQL
+                    + "\nINSERT OR REPLACE INTO schema_migrations(version, name, applied_at) "
+                    + f"VALUES (5, 'v3.2 legacy Works observation backfill', '{now}');\n"
+                    + "UPDATE schema_metadata SET value='5' WHERE key='schema_version';\n"
                     + "COMMIT;"
                 )
         _INITIALIZED_PATHS.add(path_key)
