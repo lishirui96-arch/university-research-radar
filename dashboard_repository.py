@@ -9,6 +9,8 @@ from typing import Any
 
 import pandas as pd
 
+from trend_aggregation import aggregate_topic_trends
+
 
 ENTITY_TABLES = (
     "works",
@@ -544,6 +546,7 @@ def get_v14_hotspot_dashboard(
         "ranking": pd.DataFrame(),
         "all_topics": pd.DataFrame(),
         "daily": pd.DataFrame(),
+        "trend": pd.DataFrame(),
         "fields": pd.DataFrame(),
         "metrics": {},
         "integrity": {},
@@ -624,7 +627,9 @@ def get_v14_hotspot_dashboard(
 
         window_start = str(all_topics.iloc[0]["window_start"])
         window_end = str(all_topics.iloc[0]["window_end"])
-        extra_start = (pd.Timestamp(window_start) - pd.Timedelta(days=14)).date().isoformat()
+        extra_start = (
+            pd.Timestamp(window_start) - pd.DateOffset(months=1)
+        ).date().isoformat()
         daily_parameters: list[Any] = [V14_TAXONOMY_VERSION, extra_start, window_end]
         daily_field_clause = ""
         if field_id is not None:
@@ -666,17 +671,18 @@ def get_v14_hotspot_dashboard(
                 indexed["query_status"] = indexed["daily_works_count"].map(
                     lambda value: "success" if pd.notna(value) else "missing"
                 )
-                current_7d = indexed["daily_works_count"].rolling(7, min_periods=7).sum()
-                previous_7d = current_7d.shift(7)
-                indexed["growth_rate_7d"] = (
-                    current_7d.div(previous_7d).sub(1)
-                ).where(previous_7d > 0)
                 daily_parts.append(indexed.reset_index())
-        daily = pd.concat(daily_parts, ignore_index=True) if daily_parts else pd.DataFrame()
-        if not daily.empty:
-            daily = daily[
-                (daily["date"] >= pd.Timestamp(window_start))
-                & (daily["date"] <= pd.Timestamp(window_end))
+        daily_with_baseline = (
+            pd.concat(daily_parts, ignore_index=True) if daily_parts else pd.DataFrame()
+        )
+        trend = aggregate_topic_trends(
+            daily_with_baseline, period_days, window_start, window_end
+        )
+        daily = daily_with_baseline
+        if not daily_with_baseline.empty:
+            daily = daily_with_baseline[
+                (daily_with_baseline["date"] >= pd.Timestamp(window_start))
+                & (daily_with_baseline["date"] <= pd.Timestamp(window_end))
             ].reset_index(drop=True)
 
         period_matrix_complete = (
@@ -702,6 +708,32 @@ def get_v14_hotspot_dashboard(
             ).reset_index(drop=True)
             all_topics["rank"] = range(1, len(all_topics) + 1)
             ranking_source = "complete_daily_sum"
+
+        latest_growth = pd.Series(dtype="float64")
+        if not trend.empty:
+            latest_period_end = trend["period_end"].max()
+            latest_growth = (
+                trend[trend["period_end"] == latest_period_end]
+                .set_index("topic_id")["growth_rate"]
+            )
+        all_topics["period_growth_rate"] = pd.to_numeric(
+            all_topics["topic_id"].map(latest_growth), errors="coerce"
+        )
+        all_topics["trend"] = all_topics["period_growth_rate"].map(
+            lambda value: (
+                "增长" if pd.notna(value) and value > 0
+                else "下降" if pd.notna(value) and value < 0
+                else "持平" if pd.notna(value)
+                else "无可比基期"
+            )
+        )
+        growth_ranking = all_topics[
+            all_topics["period_growth_rate"].notna()
+        ].sort_values(
+            ["period_growth_rate", "period_works_count", "topic_id"],
+            ascending=[False, False, True],
+        ).reset_index(drop=True)
+        growth_ranking["rank"] = range(1, len(growth_ranking) + 1)
 
         full_360 = connection.execute(
             """
@@ -750,9 +782,12 @@ def get_v14_hotspot_dashboard(
     completeness = (
         float(available_360_rows) / expected_360_rows if expected_360_rows else 0.0
     )
-    ranking = all_topics.head(10).copy()
-    if sort_by == "growth":
-        ranking = ranking.iloc[0:0].copy()
+    growth_sort_available = not growth_ranking.empty
+    ranking = (
+        growth_ranking.head(10).copy()
+        if sort_by == "growth" and growth_sort_available
+        else all_topics.head(10).copy()
+    )
     available_topic_ids = (
         set(daily.loc[daily["query_status"] == "success", "topic_id"].astype(str))
         if not daily.empty else set()
@@ -785,6 +820,7 @@ def get_v14_hotspot_dashboard(
         "ranking": ranking,
         "all_topics": all_topics,
         "daily": daily,
+        "trend": trend,
         "fields": fields,
         "metrics": metrics,
         "integrity": {
@@ -796,7 +832,7 @@ def get_v14_hotspot_dashboard(
             "missing_is_zero_filled": False,
             "publication_date_only": True,
         },
-        "growth_sort_available": False,
+        "growth_sort_available": growth_sort_available,
     }
 
 

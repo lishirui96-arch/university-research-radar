@@ -29,6 +29,7 @@ from dashboard_repository import (
 )
 from research_taxonomy import load_research_taxonomy
 from storage import initialize_database
+from topic_translations import load_topic_translation_catalog
 
 
 TREND_CATEGORIES = (
@@ -46,6 +47,34 @@ TREND_LABELS = (
     "生物制造",
 )
 TREND_LATEST_VALUES = (418, 361, 3455, 1983, 710)
+
+FIELD_CHART_TOPIC_IDS = {
+    "15": {
+        "T10104", "T10967", "T10495", "T10117", "T12112", "T11009",
+        "T11401", "T11362", "T11208", "T12074",
+    },
+    "16": {
+        "T10212", "T10096", "T10640", "T10701", "T10532", "T10180",
+        "T10274", "T11460", "T10480", "T10578",
+    },
+    "17": {
+        "T10036", "T10883", "T10052", "T10862", "T11714", "T10400",
+        "T10764", "T10028", "T10775", "T10719", "T10689", "T10270",
+        "T10682",
+    },
+    "21": {
+        "T10030", "T10078", "T10088", "T11784", "T11007", "T10284",
+        "T10024", "T12008", "T10491", "T10680",
+    },
+    "22": {
+        "T10018", "T10247", "T10281", "T10033", "T10338", "T11690",
+        "T10220", "T10663", "T10705", "T10161", "T10121",
+    },
+    "25": {
+        "T10063", "T10179", "T10275", "T11948", "T10079", "T10343",
+        "T11091", "T10488", "T10245", "T11224",
+    },
+}
 
 
 def _seed_complete_trend(db_path: Path) -> None:
@@ -184,6 +213,17 @@ class DashboardRepositoryTests(unittest.TestCase):
             self.assertIsNone(metric["value"])
             self.assertEqual(metric["scope"], "unavailable")
 
+    def test_field_chart_topics_have_chinese_names_with_review_status(self) -> None:
+        expected = set().union(*FIELD_CHART_TOPIC_IDS.values())
+        catalog = load_topic_translation_catalog()
+        self.assertTrue(expected.issubset(catalog))
+        for topic_id in expected:
+            record = catalog[topic_id]
+            label = record["topic_name_zh"]
+            self.assertTrue(label.strip())
+            self.assertTrue(any("\u4e00" <= char <= "\u9fff" for char in label))
+            self.assertIn(record["translation_status"], {"verified", "candidate"})
+
     def test_database_status_is_read_only_and_reports_integrity(self) -> None:
         before = self.db_path.stat().st_mtime_ns
         status = load_database_status(self.db_path)
@@ -239,7 +279,16 @@ class DashboardRepositoryTests(unittest.TestCase):
         )
         self.assertEqual(result["integrity"]["available_daily_rows_360"], 1440)
         self.assertFalse(result["integrity"]["missing_is_zero_filled"])
-        self.assertTrue(result["daily"]["growth_rate_7d"].notna().any())
+        self.assertEqual(result["trend"]["date"].nunique(), 13)
+        self.assertTrue(result["trend"]["growth_rate"].notna().any())
+
+        growth = get_v14_hotspot_dashboard(
+            self.db_path, period_days=90, sort_by="growth"
+        )
+        self.assertTrue(growth["growth_sort_available"])
+        self.assertFalse(growth["ranking"].empty)
+        rates = growth["ranking"]["period_growth_rate"].tolist()
+        self.assertEqual(rates, sorted(rates, reverse=True))
 
 
 class DashboardPageTests(unittest.TestCase):
@@ -268,20 +317,27 @@ class DashboardPageTests(unittest.TestCase):
                 app.run()
                 self.assertEqual(len(app.exception), 0)
                 ninety = _chart_dataframe(app)
-                self.assertEqual(len(ninety), 360)
-                self.assertEqual(ninety["date"].nunique(), 90)
+                self.assertEqual(len(ninety), 52)
+                self.assertEqual(ninety["date"].nunique(), 13)
                 self.assertEqual(ninety["topic_id"].nunique(), 4)
+                self.assertEqual(sorted(ninety["period_days"].unique()), [6, 7])
+                self.assertTrue(
+                    ninety["topic_label"].map(
+                        lambda label: any("\u4e00" <= char <= "\u9fff" for char in label)
+                    ).all()
+                )
 
                 app.segmented_control(key="v14_period").set_value("近360天").run()
                 self.assertEqual(len(app.exception), 0)
                 year = _chart_dataframe(app)
-                self.assertEqual(len(year), 1440)
-                self.assertEqual(year["date"].nunique(), 360)
+                self.assertEqual(len(year), 52)
+                self.assertEqual(year["date"].nunique(), 13)
                 self.assertEqual(year["topic_id"].nunique(), 4)
+                self.assertEqual(year.iloc[-1]["period_days"], 18)
 
                 app.segmented_control(key="v14_period").set_value("近90天").run()
                 self.assertEqual(len(app.exception), 0)
-                self.assertEqual(len(_chart_dataframe(app)), 360)
+                self.assertEqual(len(_chart_dataframe(app)), 52)
                 del app
                 gc.collect()
 
@@ -304,12 +360,9 @@ class DashboardPageTests(unittest.TestCase):
                 app.run()
                 self.assertEqual(len(app.exception), 0)
                 chart = _chart_dataframe(app)
-                missing = chart[
-                    (chart["topic_id"] == "T10030")
-                    & (pd.to_datetime(chart["date"]) == pd.Timestamp("2026-11-18"))
-                ]
+                missing = chart[(chart["topic_id"] == "T10030") & (chart["period_end"] == pd.Timestamp("2026-11-18"))]
                 self.assertEqual(len(missing), 1)
-                self.assertTrue(missing["daily_works_count"].isna().all())
+                self.assertTrue(missing["period_works_count"].isna().all())
                 self.assertEqual(missing.iloc[0]["query_status"], "missing")
                 del app
                 gc.collect()

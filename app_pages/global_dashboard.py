@@ -9,6 +9,8 @@ import streamlit as st
 
 from dashboard_repository import get_v14_hotspot_dashboard
 from storage import database_path
+from topic_translations import topic_display_name, topic_translation
+from trend_aggregation import diagnose_topic_trends
 
 
 FIELD_LABEL_ALL = "六大学科（全部）"
@@ -40,8 +42,7 @@ def _display_time(value: Any) -> str:
 
 
 def _topic_label(row: pd.Series | dict[str, Any]) -> str:
-    zh = row.get("topic_name_zh")
-    return str(zh) if pd.notna(zh) and str(zh).strip() else str(row["topic_name"])
+    return topic_display_name(row)
 
 
 def _topic_options(frame: pd.DataFrame) -> tuple[list[str], dict[str, str]]:
@@ -54,28 +55,56 @@ def _topic_options(frame: pd.DataFrame) -> tuple[list[str], dict[str, str]]:
     return labels, label_to_id
 
 
-def _prepare_chart_data(daily: pd.DataFrame, selected_ids: list[str]) -> pd.DataFrame:
-    if daily.empty or not selected_ids:
+def _prepare_chart_data(trend: pd.DataFrame, selected_ids: list[str]) -> pd.DataFrame:
+    if trend.empty or not selected_ids:
         return pd.DataFrame()
-    chart_data = daily[daily["topic_id"].astype(str).isin(selected_ids)].copy()
+    chart_data = trend[trend["topic_id"].astype(str).isin(selected_ids)].copy()
     if chart_data.empty:
         return chart_data
     chart_data["topic_label"] = chart_data.apply(_topic_label, axis=1)
+    translations = chart_data.apply(
+        lambda row: topic_translation(
+            row["topic_id"], row["topic_name"], row.get("topic_name_zh")
+        ),
+        axis=1,
+    )
+    chart_data["translation_status_label"] = translations.map(
+        lambda item: item["translation_status_label"]
+    )
+    for column in ("period_works_count", "comparison_works_count", "growth_rate"):
+        chart_data[column] = pd.to_numeric(
+            chart_data[column], errors="coerce"
+        ).astype("float64")
     chart_data["date"] = pd.to_datetime(chart_data["date"])
     return chart_data
 
 
-def _works_chart(frame: pd.DataFrame, topic_order: list[str]) -> alt.Chart:
+def _time_axis(frame: pd.DataFrame, period_days: int) -> alt.X:
+    dates = sorted(pd.to_datetime(frame["date"].dropna().unique()))
+    values = [pd.Timestamp(value).to_pydatetime() for value in dates]
+    return alt.X(
+        "date:T",
+        title=None,
+        scale=alt.Scale(domain=[values[0], values[-1]]) if values else alt.Undefined,
+        axis=alt.Axis(
+            format="%m-%d" if period_days == 90 else "%Y-%m",
+            values=values,
+            labelOverlap="greedy",
+        ),
+    )
+
+
+def _works_chart(
+    frame: pd.DataFrame, topic_order: list[str], period_days: int
+) -> alt.Chart:
+    y_title = "7天新增 Works" if period_days == 90 else "月度新增 Works"
     return (
         alt.Chart(frame)
         .mark_line(point=alt.OverlayMarkDef(size=30, filled=True), strokeWidth=2)
         .encode(
-            x=alt.X(
-                "date:T", title=None,
-                axis=alt.Axis(format="%Y-%m-%d", labelOverlap="greedy", tickCount=7),
-            ),
+            x=_time_axis(frame, period_days),
             y=alt.Y(
-                "daily_works_count:Q", title="每日新增 Works",
+                "period_works_count:Q", title=y_title,
                 axis=alt.Axis(format=",d"),
             ),
             color=alt.Color(
@@ -84,10 +113,16 @@ def _works_chart(frame: pd.DataFrame, topic_order: list[str]) -> alt.Chart:
                 legend=alt.Legend(orient="bottom", columns=2),
             ),
             tooltip=[
-                alt.Tooltip("date:T", title="日期", format="%Y-%m-%d"),
+                alt.Tooltip("period_label:N", title="统计周期"),
+                alt.Tooltip("period_start:T", title="开始日期", format="%Y-%m-%d"),
+                alt.Tooltip("period_end:T", title="结束日期", format="%Y-%m-%d"),
+                alt.Tooltip("period_days:Q", title="统计天数"),
                 alt.Tooltip("topic_label:N", title="Topic"),
+                alt.Tooltip("topic_name:N", title="OpenAlex 英文名称"),
+                alt.Tooltip("translation_status_label:N", title="中文名称状态"),
                 alt.Tooltip("topic_id:N", title="Topic ID"),
-                alt.Tooltip("daily_works_count:Q", title="当日新增 Works", format=",d"),
+                alt.Tooltip("period_works_count:Q", title="新增 Works", format=",d"),
+                alt.Tooltip("growth_rate:Q", title="环比", format="+.1%"),
                 alt.Tooltip("query_status:N", title="数据状态"),
             ],
         )
@@ -96,17 +131,17 @@ def _works_chart(frame: pd.DataFrame, topic_order: list[str]) -> alt.Chart:
     )
 
 
-def _growth_chart(frame: pd.DataFrame, topic_order: list[str]) -> alt.LayerChart:
+def _growth_chart(
+    frame: pd.DataFrame, topic_order: list[str], period_days: int
+) -> alt.LayerChart:
+    y_title = "周环比增长率" if period_days == 90 else "月环比增长率"
     lines = (
         alt.Chart(frame)
         .mark_line(point=alt.OverlayMarkDef(size=28, filled=True), strokeWidth=2)
         .encode(
-            x=alt.X(
-                "date:T", title=None,
-                axis=alt.Axis(format="%Y-%m-%d", labelOverlap="greedy", tickCount=7),
-            ),
+            x=_time_axis(frame, period_days),
             y=alt.Y(
-                "growth_rate_7d:Q", title="7日滚动增长率",
+                "growth_rate:Q", title=y_title,
                 axis=alt.Axis(format="+.0%"),
             ),
             color=alt.Color(
@@ -115,10 +150,18 @@ def _growth_chart(frame: pd.DataFrame, topic_order: list[str]) -> alt.LayerChart
                 legend=alt.Legend(orient="bottom", columns=2),
             ),
             tooltip=[
-                alt.Tooltip("date:T", title="日期", format="%Y-%m-%d"),
+                alt.Tooltip("period_label:N", title="统计周期"),
+                alt.Tooltip("period_start:T", title="开始日期", format="%Y-%m-%d"),
+                alt.Tooltip("period_end:T", title="结束日期", format="%Y-%m-%d"),
+                alt.Tooltip("period_days:Q", title="统计天数"),
                 alt.Tooltip("topic_label:N", title="Topic"),
+                alt.Tooltip("topic_name:N", title="OpenAlex 英文名称"),
+                alt.Tooltip("translation_status_label:N", title="中文名称状态"),
                 alt.Tooltip("topic_id:N", title="Topic ID"),
-                alt.Tooltip("growth_rate_7d:Q", title="7日滚动增长率", format="+.1%"),
+                alt.Tooltip("period_works_count:Q", title="本期 Works", format=",d"),
+                alt.Tooltip("comparison_works_count:Q", title="对比期 Works", format=",d"),
+                alt.Tooltip("growth_rate:Q", title=y_title, format="+.1%"),
+                alt.Tooltip("growth_status:N", title="增长率状态"),
             ],
         )
     )
@@ -197,7 +240,7 @@ if result["status"] == "unavailable":
     st.stop()
 if sort_by == "growth" and not result["growth_sort_available"]:
     st.warning(
-        "尚未采集前一等长窗口，90/360天榜单增长率不可计算。当前表格保留 Works 排名，增长率显示 NA。",
+        "当前筛选范围没有可用于增长率排名的完整周度或月度基期，已保留 Works 排名。",
         icon=":material/info:",
     )
 
@@ -244,7 +287,7 @@ elif selection_mode == "自定义":
 else:
     selected_ids = display_ranking.head(5)["topic_id"].astype(str).tolist()
 
-chart_data = _prepare_chart_data(result["daily"], selected_ids)
+chart_data = _prepare_chart_data(result["trend"], selected_ids)
 available_ids = (
     set(chart_data.loc[chart_data["query_status"] == "success", "topic_id"].astype(str))
     if not chart_data.empty else set()
@@ -254,31 +297,55 @@ indexed_topics = result["all_topics"].set_index("topic_id")
 selected_rows = indexed_topics.loc[
     [topic_id for topic_id in selected_ids if topic_id in indexed_topics.index]
 ] if selected_ids else pd.DataFrame()
-topic_order = [_topic_label(row) for row in selected_rows.to_dict("records")]
+topic_order = [
+    _topic_label(row) for row in selected_rows.reset_index().to_dict("records")
+]
+diagnostics = diagnose_topic_trends(
+    result["daily"], result["trend"], selected_ids,
+    result["field_id"], len(result["all_topics"]),
+)
 if pending_ids:
     pending_names = [_topic_label(indexed_topics.loc[topic_id]) for topic_id in pending_ids]
     st.info(
         "以下 Topic 的日序列尚在回填，图表不会将缺失值补成 0：" + "、".join(pending_names),
         icon=":material/pending:",
     )
+if diagnostics["unmatched_topic_ids"]:
+    st.error(
+        "图表数据未匹配到以下 Topic ID："
+        + "、".join(diagnostics["unmatched_topic_ids"]),
+        icon=":material/error:",
+    )
 
 chart_columns = st.columns(2, gap="medium")
 with chart_columns[0]:
     with st.container(key="panel_v14_works", border=True, height=505):
         st.subheader(":material/query_stats: 热点增长量趋势（Works）")
-        st.caption("选定 Topic 的每日新增论文数量 · Publication Date")
-        if chart_data.empty or chart_data["daily_works_count"].notna().sum() == 0:
+        st.caption(
+            "选定 Topic 的7天新增论文合计 · Publication Date"
+            if period_days == 90 else
+            "选定 Topic 的自然月新增论文合计 · Publication Date"
+        )
+        if chart_data.empty or chart_data["period_works_count"].notna().sum() == 0:
             st.info("所选 Topic 暂无已完成回填的日序列。", icon=":material/timeline:")
         else:
-            st.altair_chart(_works_chart(chart_data, topic_order), key="v14_works_chart")
+            st.altair_chart(
+                _works_chart(chart_data, topic_order, period_days), key="v14_works_chart"
+            )
 with chart_columns[1]:
     with st.container(key="panel_v14_growth", border=True, height=505):
         st.subheader(":material/trending_up: 热点增长率趋势（Growth Rate）")
-        st.caption("近7日 Works 相对前7日的变化率；无可比基期显示 NA")
-        if chart_data.empty or chart_data["growth_rate_7d"].notna().sum() == 0:
-            st.info("当前日序列不足以计算 7 日滚动增长率。", icon=":material/timeline:")
+        st.caption(
+            "当前7天周期相对上一等长周期；无可比基期显示 NA"
+            if period_days == 90 else
+            "完整月按月环比，未结束月份按 MTD 同期比较；无可比基期显示 NA"
+        )
+        if chart_data.empty or chart_data["growth_rate"].notna().sum() == 0:
+            st.info("当前日序列不足以计算周期增长率。", icon=":material/timeline:")
         else:
-            st.altair_chart(_growth_chart(chart_data, topic_order), key="v14_growth_chart")
+            st.altair_chart(
+                _growth_chart(chart_data, topic_order, period_days), key="v14_growth_chart"
+            )
 
 st.caption(
     f"数据截止：{metrics['data_through']} · 来源：OpenAlex · "
@@ -289,13 +356,17 @@ bottom_columns = st.columns([1.5, 1], gap="medium")
 with bottom_columns[0]:
     with st.container(key="panel_v14_ranking", border=True):
         st.subheader(":material/emoji_events: 科研热点 TOP 10")
-        st.caption(f"六学科范围内近{period_days}天 Works 排名；点击行查看 Topic 详情")
+        ranking_scope = "六学科范围" if result["field_id"] is None else str(field_label).split(" · ")[0]
+        ranking_basis = "最新周期增长率" if sort_by == "growth" else f"近{period_days}天 Works"
+        st.caption(f"{ranking_scope}内按{ranking_basis}排名；点击行查看 Topic 详情")
         table = display_ranking.head(10).copy()
         table["Topic"] = table.apply(_topic_label, axis=1)
         table["所属学科"] = table["field_name_zh"] + " · " + table["field_name"]
         table[f"{period_days}天 Works"] = table["period_works_count"]
-        table["增长率"] = pd.NA
-        table["趋势"] = "无可比基期"
+        table["增长率"] = pd.to_numeric(
+            table["period_growth_rate"], errors="coerce"
+        ).mul(100)
+        table["趋势"] = table["trend"]
         table = table.rename(columns={"rank": "排名"})[
             ["排名", "Topic", "所属学科", f"{period_days}天 Works", "增长率", "趋势"]
         ]
@@ -314,10 +385,16 @@ with bottom_columns[0]:
         detail_columns[0].metric("Topic ID", str(detail["topic_id"]))
         detail_columns[1].metric(f"{period_days}天 Works", f"{int(detail['period_works_count']):,}")
         detail_columns[2].metric("Field", str(detail["field_name"]))
-        detail_columns[3].metric("增长率", "NA")
+        detail_growth = pd.to_numeric(detail["period_growth_rate"], errors="coerce")
+        detail_columns[3].metric(
+            "增长率", f"{detail_growth:+.1%}" if pd.notna(detail_growth) else "NA"
+        )
+        detail_translation = topic_translation(
+            detail["topic_id"], detail["topic_name"], detail.get("topic_name_zh")
+        )
         st.caption(
             f"OpenAlex：{detail['topic_name']} · Subfield：{detail['subfield_name']} · "
-            "前一等长窗口尚未采集，排名增长率不可计算。"
+            f"中文名称状态：{detail_translation['translation_status_label']}。"
         )
 
 with bottom_columns[1]:

@@ -1,8 +1,8 @@
-# 全球高校科研热点与产业创新情报平台 V1.4
+# 全球高校科研热点与产业创新情报平台 V1.4.2
 
-`university-research-radar` 是基于 Streamlit、SQLite 和 OpenAlex 的科研热点监测平台。当前首页使用 OpenAlex 官方 Topic 层级，在六个 Physical Sciences Fields 内展示真实的90天与360天科研热点排名、每日新增 Works 和7日滚动增长率。
+`university-research-radar` 是基于 Streamlit、SQLite 和 OpenAlex 的科研热点监测平台。当前首页使用 OpenAlex 官方 Topic 层级，在六个 Physical Sciences Fields 内展示真实的90天与360天科研热点排名、周期新增 Works 和周/月环比增长率。
 
-## V1.4 首页
+## V1.4.2 首页
 
 - 分类版本：`openalex-taxonomy-2026-11-18-v1.4`。
 - 学科范围：Chemical Engineering、Chemistry、Computer Science、Energy、Engineering、Materials Science。
@@ -10,8 +10,11 @@
 - Corpus：`primary_location.source.is_core:true`。
 - 日期口径：只使用 `publication_date`，不混用 Created Date 或 Updated Date。
 - 观察窗口：近90天、近360天。
-- 图表：每日新增 Works 与7日滚动增长率两张独立 Altair 折线图。
-- 排名：基于完整日序列求和，支持六学科合并或单 Field 筛选。
+- 图表：近90天按连续7天聚合，近360天按自然月聚合；Works 与 Growth Rate 两张图共享相同时间分桶。
+- 增长率：90天使用上一等长周期周环比；360天使用月环比，当前月使用 MTD 同期比较。
+- 排名：基于完整日序列求和，支持六学科合并或单 Field 独立计算 TOP 5 / TOP 10。
+- 增长率排序：使用最新周度或月度聚合增长率在当前 Field 内排名。
+- 中文名称：1,063个 V1.4 Topic 全覆盖；已审核名称与待审核候选名称保留明确状态，英文原名保留在 Tooltip 和详情中。
 - 缺失处理：查询失败和未完成回填保持缺失，不会自动补0；完整游标查询中未返回的 Topic 才记录为真实0。
 
 首页数据通过 Repository 从本地 SQLite 读取，不会在页面请求中直接调用 OpenAlex。
@@ -84,6 +87,26 @@ python -m unittest discover -s tests -v
 
 当前自动化测试覆盖数据库迁移、Topic 映射、趋势查询、缺失值处理、90/360天切换和 Streamlit 页面加载。
 
+V1.4.2 当前测试结果为40/40通过。真实开发数据库审计覆盖六个 Field、两种时间窗口、Works/增长率排序、TOP 5/TOP 10及自定义选择，共60组检查。详细结果见 [V1_4_2_FIELD_FILTER_AND_CHINESE_TOPIC_FIX_REPORT.md](V1_4_2_FIELD_FILTER_AND_CHINESE_TOPIC_FIX_REPORT.md)。
+
+真实数据库审计：
+
+```powershell
+python -m scripts.audit_v142_dashboard `
+  --database C:\path\to\radar.db `
+  --output work\v142_dashboard_audit.json
+```
+
+浏览器验收使用独立测试实例和开发依赖：
+
+```powershell
+python -m pip install -r requirements-dev.txt
+python -m scripts.browser_audit_v142 `
+  --url http://127.0.0.1:8505 `
+  --output-dir work\browser-v142 `
+  --output work\v142_browser_audit.json
+```
+
 ## 部署与安全
 
 - `.env`、`.streamlit/secrets.toml`、SQLite 数据库、WAL/SHM、日志和备份均由 `.gitignore` 排除。
@@ -93,4 +116,4 @@ python -m unittest discover -s tests -v
 
 ## 审计资料
 
-仓库保留 V1.1 至 V1.4 的 Topic、Subfield、Field 审计 CSV 与报告，用于复核分类版本、统计口径、API成本和历史决策。生产数据库不提交到 GitHub。
+仓库保留 V1.1 至 V1.4.2 的 Topic、Subfield、Field 审计 CSV、中文候选目录与报告，用于复核分类版本、统计口径、API成本和历史决策。生产数据库不提交到 GitHub。
