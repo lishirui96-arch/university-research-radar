@@ -267,9 +267,9 @@ class StorageMigrationTests(unittest.TestCase):
         initialize_database(self.path)
         initialize_database(self.path)
         with closing(sqlite3.connect(self.path)) as db:
-            self.assertEqual(db.execute("SELECT value FROM schema_metadata").fetchone()[0], "2")
+            self.assertEqual(db.execute("SELECT value FROM schema_metadata").fetchone()[0], "6")
             self.assertEqual(db.execute("SELECT COUNT(*) FROM scan_runs").fetchone()[0], 1)
-            self.assertEqual(db.execute("SELECT COUNT(*) FROM schema_migrations").fetchone()[0], 2)
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM schema_migrations").fetchone()[0], 6)
             self.assertEqual(db.execute("PRAGMA integrity_check").fetchone()[0], "ok")
 
     def test_deduplicates_works_and_preserves_multiple_affiliations(self) -> None:
@@ -297,7 +297,7 @@ class StorageMigrationTests(unittest.TestCase):
                 "candidate",
             )
             self.assertEqual(db.execute("SELECT COUNT(*) FROM topic_snapshots").fetchone()[0], 1)
-        self.assertEqual(database_summary(self.path)["schema_version"], 2)
+        self.assertEqual(database_summary(self.path)["schema_version"], 6)
 
     def test_failed_run_does_not_remove_last_success(self) -> None:
         success = {

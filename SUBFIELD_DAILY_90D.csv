@@ -1,0 +1,451 @@
+﻿date,period_rank,field_id,field_name,field_name_zh,subfield_id,subfield_name,subfield_name_zh,legend_label,daily_works_count,query_status,query_as_of,mapping_version,revision_no,is_current
+2026-08-21,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),360,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-21,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",294,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-21,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),236,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-21,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),128,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-21,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),235,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-22,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),254,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-22,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",204,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-22,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),495,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-22,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),88,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-22,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),149,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-23,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),140,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-23,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",70,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-23,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),57,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-23,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),32,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-23,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),28,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-24,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),412,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-24,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",347,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-24,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),629,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-24,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),175,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-24,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),222,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-25,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),357,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-25,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",322,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-25,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),267,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-25,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),197,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-25,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),203,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-26,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),378,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-26,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",342,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-26,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),294,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-26,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),190,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-26,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),209,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-27,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),332,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-27,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",326,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-27,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),288,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-27,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),273,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-27,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),246,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-28,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),380,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-28,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",305,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-28,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),232,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-28,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),195,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-28,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),210,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-29,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),182,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-29,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",167,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-29,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),118,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-29,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),90,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-29,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),124,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-30,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),121,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-30,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",80,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-30,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),62,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-30,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),80,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-30,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),60,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-31,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),392,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-31,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",352,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-31,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),441,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-31,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),306,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-08-31,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),294,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-01,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),1601,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-01,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",1676,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-01,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),3193,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-01,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),2042,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-01,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),2092,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-02,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),600,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-02,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",358,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-02,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),248,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-02,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),153,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-02,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),180,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-03,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),362,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-03,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",360,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-03,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),265,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-03,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),167,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-03,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),241,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-04,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),332,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-04,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",308,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-04,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),298,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-04,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),167,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-04,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),192,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-05,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),120,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-05,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",221,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-05,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),209,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-05,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),103,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-05,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),174,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-06,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),115,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-06,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",84,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-06,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),95,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-06,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),46,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-06,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),59,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-07,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),322,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-07,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",249,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-07,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),223,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-07,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),121,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-07,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),139,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-08,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),367,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-08,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",325,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-08,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),194,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-08,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),157,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-08,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),205,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-09,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),332,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-09,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",333,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-09,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),349,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-09,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),205,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-09,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),207,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-10,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),350,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-10,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",289,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-10,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),249,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-10,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),182,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-10,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),196,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-11,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),367,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-11,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",354,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-11,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),289,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-11,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),186,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-11,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),209,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-12,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),189,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-12,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",172,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-12,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),132,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-12,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),58,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-12,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),90,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-13,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),60,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-13,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",60,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-13,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),46,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-13,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),49,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-13,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),24,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-14,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),266,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-14,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",278,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-14,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),331,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-14,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),219,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-14,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),186,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-15,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),353,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-15,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",386,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-15,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),278,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-15,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),146,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-15,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),242,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-16,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),408,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-16,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",327,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-16,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),272,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-16,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),199,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-16,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),197,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-17,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),360,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-17,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",362,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-17,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),250,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-17,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),196,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-17,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),218,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-18,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),304,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-18,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",323,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-18,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),268,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-18,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),203,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-18,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),212,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-19,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),188,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-19,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",155,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-19,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),117,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-19,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),85,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-19,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),115,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-20,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),117,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-20,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",105,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-20,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),71,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-20,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),50,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-20,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),62,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-21,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),369,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-21,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",360,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-21,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),323,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-21,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),145,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-21,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),179,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-22,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),380,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-22,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",398,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-22,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),263,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-22,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),155,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-22,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),250,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-23,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),425,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-23,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",446,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-23,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),282,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-23,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),193,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-23,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),212,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-24,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),466,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-24,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",352,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-24,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),247,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-24,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),178,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-24,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),216,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-25,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),319,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-25,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",355,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-25,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),290,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-25,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),203,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-25,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),445,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-26,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),180,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-26,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",160,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-26,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),114,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-26,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),83,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-26,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),97,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-27,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),152,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-27,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",118,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-27,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),101,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-27,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),46,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-27,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),43,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-28,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),368,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-28,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",335,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-28,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),281,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-28,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),142,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-28,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),229,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-29,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),476,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-29,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",742,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-29,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),286,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-29,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),212,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-29,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),228,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-30,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),541,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-30,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",408,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-30,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),307,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-30,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),225,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-09-30,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),263,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-01,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),1251,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-01,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",1849,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-01,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),2997,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-01,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),5110,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-01,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),2598,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-02,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),183,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-02,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",220,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-02,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),143,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-02,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),118,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-02,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),174,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-03,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),125,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-03,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",135,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-03,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),84,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-03,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),61,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-03,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),53,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-04,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),92,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-04,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",66,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-04,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),43,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-04,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),31,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-04,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),35,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-05,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),314,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-05,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",257,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-05,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),220,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-05,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),113,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-05,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),160,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-06,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),335,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-06,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",279,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-06,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),199,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-06,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),148,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-06,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),148,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-07,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),340,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-07,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",335,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-07,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),254,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-07,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),173,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-07,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),231,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-08,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),404,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-08,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",357,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-08,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),232,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-08,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),159,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-08,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),193,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-09,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),305,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-09,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",350,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-09,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),247,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-09,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),159,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-09,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),232,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-10,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),186,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-10,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",162,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-10,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),110,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-10,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),99,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-10,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),83,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-11,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),98,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-11,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",83,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-11,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),64,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-11,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),40,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-11,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),50,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-12,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),369,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-12,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",324,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-12,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),254,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-12,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),119,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-12,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),170,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-13,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),309,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-13,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",346,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-13,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),267,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-13,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),186,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-13,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),167,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-14,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),331,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-14,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",352,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-14,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),278,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-14,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),187,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-14,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),223,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-15,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),367,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-15,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",348,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-15,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),275,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-15,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),166,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-15,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),225,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-16,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),233,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-16,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",310,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-16,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),225,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-16,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),148,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-16,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),189,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-17,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),157,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-17,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",156,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-17,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),109,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-17,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),183,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-17,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),118,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-18,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),106,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-18,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",102,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-18,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),63,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-18,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),38,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-18,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),209,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-19,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),301,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-19,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",278,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-19,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),245,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-19,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),128,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-19,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),307,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-20,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),303,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-20,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",307,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-20,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),178,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-20,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),144,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-20,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),163,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-21,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),361,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-21,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",355,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-21,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),235,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-21,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),148,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-21,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),183,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-22,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),348,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-22,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",331,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-22,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),259,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-22,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),169,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-22,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),214,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-23,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),326,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-23,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",356,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-23,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),258,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-23,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),176,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-23,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),222,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-24,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),177,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-24,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",191,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-24,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),96,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-24,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),90,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-24,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),96,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-25,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),97,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-25,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",78,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-25,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),60,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-25,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),50,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-25,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),45,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-26,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),332,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-26,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",295,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-26,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),245,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-26,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),162,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-26,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),188,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-27,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),393,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-27,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",362,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-27,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),205,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-27,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),181,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-27,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),204,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-28,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),396,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-28,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",340,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-28,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),276,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-28,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),172,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-28,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),229,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-29,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),381,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-29,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",384,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-29,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),241,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-29,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),150,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-29,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),203,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-30,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),382,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-30,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",358,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-30,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),215,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-30,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),186,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-30,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),185,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-31,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),186,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-31,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",186,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-31,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),176,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-31,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),1298,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-10-31,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),123,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-01,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),963,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-01,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",1130,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-01,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),1315,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-01,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),890,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-01,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),2516,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-02,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),313,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-02,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",405,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-02,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),407,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-02,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),2504,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-02,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),239,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-03,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),288,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-03,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",308,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-03,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),247,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-03,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),139,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-03,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),176,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-04,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),336,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-04,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",358,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-04,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),224,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-04,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),131,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-04,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),178,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-05,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),427,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-05,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",315,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-05,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),231,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-05,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),156,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-05,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),182,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-06,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),282,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-06,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",276,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-06,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),216,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-06,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),123,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-06,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),162,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-07,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),164,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-07,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",121,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-07,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),90,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-07,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),94,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-07,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),87,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-08,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),39,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-08,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",44,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-08,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),41,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-08,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),37,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-08,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),21,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-09,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),259,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-09,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",254,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-09,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),202,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-09,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),137,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-09,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),158,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-10,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),261,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-10,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",299,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-10,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),205,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-10,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),176,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-10,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),187,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-11,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),277,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-11,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",347,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-11,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),208,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-11,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),126,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-11,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),158,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-12,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),273,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-12,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",242,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-12,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),194,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-12,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),152,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-12,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),183,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-13,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),253,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-13,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",300,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-13,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),164,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-13,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),176,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-13,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),171,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-14,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),115,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-14,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",117,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-14,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),88,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-14,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),62,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-14,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),70,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-15,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),72,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-15,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",81,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-15,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),45,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-15,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),29,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-15,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),44,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-16,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),307,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-16,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",227,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-16,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),177,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-16,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),119,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-16,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),123,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-17,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),17,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-17,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",11,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-17,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),6,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-17,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),9,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-17,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),10,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-18,1,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,电气与电子工程 / Electrical and Electronic Engineering (Engineering),0,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-18,2,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,"分子生物学 / Molecular Biology (Biochemistry, Genetics and Molecular Biology)",3,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-18,3,27,Medicine,医学,2746,Surgery,外科学,外科学 / Surgery (Medicine),0,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-18,4,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,心脏病学与心血管医学 / Cardiology and Cardiovascular Medicine (Medicine),0,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1
+2026-11-18,5,27,Medicine,医学,2730,Oncology,肿瘤学,肿瘤学 / Oncology (Medicine),0,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2,1,1

@@ -13,7 +13,14 @@ from typing import Any
 
 import pandas as pd
 
-from migrations import LATEST_SCHEMA_VERSION, MIGRATION_2_SQL
+from migrations import (
+    LATEST_SCHEMA_VERSION,
+    MIGRATION_2_SQL,
+    MIGRATION_3_SQL,
+    MIGRATION_4_SQL,
+    MIGRATION_5_SQL,
+    MIGRATION_6_SQL,
+)
 
 
 DEFAULT_DB_PATH = Path("persistent/data/radar.db")
@@ -136,6 +143,51 @@ def initialize_database(path: Path | None = None) -> Path:
                     + "UPDATE schema_metadata SET value='2' WHERE key='schema_version';\n"
                     + "COMMIT;"
                 )
+                version = 2
+            if version < 3:
+                now = datetime.now().astimezone().isoformat()
+                connection.executescript(
+                    "BEGIN IMMEDIATE;\n"
+                    + MIGRATION_3_SQL
+                    + "\nINSERT OR REPLACE INTO schema_migrations(version, name, applied_at) "
+                    + f"VALUES (3, 'global 30-day trend analytics', '{now}');\n"
+                    + "UPDATE schema_metadata SET value='3' WHERE key='schema_version';\n"
+                    + "COMMIT;"
+                )
+                version = 3
+            if version < 4:
+                now = datetime.now().astimezone().isoformat()
+                connection.executescript(
+                    "BEGIN IMMEDIATE;\n"
+                    + MIGRATION_4_SQL
+                    + "\nINSERT OR REPLACE INTO schema_migrations(version, name, applied_at) "
+                    + f"VALUES (4, 'trend data origin audit fields', '{now}');\n"
+                    + "UPDATE schema_metadata SET value='4' WHERE key='schema_version';\n"
+                    + "COMMIT;"
+                )
+                version = 4
+            if version < 5:
+                now = datetime.now().astimezone().isoformat()
+                connection.executescript(
+                    "BEGIN IMMEDIATE;\n"
+                    + MIGRATION_5_SQL
+                    + "\nINSERT OR REPLACE INTO schema_migrations(version, name, applied_at) "
+                    + f"VALUES (5, 'OpenAlex Topic hotspot analytics', '{now}');\n"
+                    + "UPDATE schema_metadata SET value='5' WHERE key='schema_version';\n"
+                    + "COMMIT;"
+                )
+                version = 5
+            if version < 6:
+                now = datetime.now().astimezone().isoformat()
+                connection.executescript(
+                    "BEGIN IMMEDIATE;\n"
+                    + MIGRATION_6_SQL
+                    + "\nINSERT OR REPLACE INTO schema_migrations(version, name, applied_at) "
+                    + f"VALUES (6, 'versioned OpenAlex taxonomy scope', '{now}');\n"
+                    + "UPDATE schema_metadata SET value='6' WHERE key='schema_version';\n"
+                    + "COMMIT;"
+                )
+                version = 6
         _INITIALIZED_PATHS.add(path_key)
     return db_path
 

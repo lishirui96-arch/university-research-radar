@@ -25,6 +25,17 @@ ENTITY_TABLES = (
     "author_snapshots",
 )
 
+TREND_CATEGORY_IDS = (
+    "robotics_embodied",
+    "ai_chip_packaging",
+    "new_energy_storage",
+    "advanced_materials",
+    "bio_manufacturing",
+)
+
+V14_TAXONOMY_VERSION = "openalex-taxonomy-2026-11-18-v1.4"
+V14_FIELD_IDS = ("15", "16", "17", "21", "22", "25")
+
 
 def _connect_read_only(path: str | Path) -> sqlite3.Connection:
     db_path = Path(path).resolve()
@@ -251,6 +262,542 @@ def _load_global_trend(
             """
         ).fetchall()
     )
+
+
+def get_global_research_trend(
+    path: str | Path, days: int = 30
+) -> dict[str, Any]:
+    """Read current, successfully published 30-day trend snapshots."""
+    if days not in {30, 90, 365}:
+        raise ValueError("days must be one of 30, 90, or 365")
+
+    columns = [
+        "date",
+        *TREND_CATEGORY_IDS,
+        "data_status",
+        "latest_updated_at",
+        "complete_categories",
+    ]
+    unavailable = {
+        "data": pd.DataFrame(columns=columns),
+        "status": "unavailable",
+        "latest_updated_at": None,
+        "integrity": {
+            "requested_days": days,
+            "available_days": 0,
+            "complete_days": 0,
+            "missing_days": days,
+            "expected_categories": list(TREND_CATEGORY_IDS),
+            "mapping_versions": [],
+            "query_versions": [],
+            "calculation_versions": [],
+        },
+    }
+
+
+    db_path = Path(path)
+    if not db_path.exists():
+        return unavailable
+
+    with closing(_connect_read_only(db_path)) as connection:
+        tables = _table_names(connection)
+        required = {"trend_30d_snapshots", "trend_backfill_runs"}
+        if not required.issubset(tables):
+            return unavailable
+
+        latest_date = connection.execute(
+            """
+            SELECT MAX(s.snapshot_date)
+            FROM trend_30d_snapshots s
+            JOIN trend_backfill_runs r ON r.run_id=s.run_id
+            WHERE s.is_current=1 AND s.data_status='success' AND r.status='success'
+            """
+        ).fetchone()[0]
+        if not latest_date:
+            return unavailable
+
+        end = date.fromisoformat(str(latest_date))
+        start = end - timedelta(days=days - 1)
+        rows = connection.execute(
+            """
+            SELECT s.snapshot_date, s.category_id, s.works_count,
+                   s.updated_at, s.topic_mapping_version, s.query_version,
+                   s.calculation_version
+            FROM trend_30d_snapshots s
+            JOIN trend_backfill_runs r ON r.run_id=s.run_id
+            WHERE s.is_current=1
+              AND s.data_status='success'
+              AND r.status='success'
+              AND s.snapshot_date BETWEEN ? AND ?
+            ORDER BY s.snapshot_date, s.category_id
+            """,
+            (start.isoformat(), end.isoformat()),
+        ).fetchall()
+
+    raw = _dataframe(rows)
+    if raw.empty:
+        return unavailable
+
+    expected_index = pd.date_range(start=start, end=end, freq="D")
+    pivot = raw.pivot(
+        index="snapshot_date", columns="category_id", values="works_count"
+    )
+    pivot.index = pd.to_datetime(pivot.index)
+    pivot = pivot.reindex(expected_index)
+    for category_id in TREND_CATEGORY_IDS:
+        if category_id not in pivot.columns:
+            pivot[category_id] = pd.NA
+    pivot = pivot[list(TREND_CATEGORY_IDS)]
+
+    updated = raw.groupby("snapshot_date")["updated_at"].max()
+    updated.index = pd.to_datetime(updated.index)
+    complete_categories = pivot.notna().sum(axis=1)
+    result = pivot.reset_index(names="date")
+    result["complete_categories"] = complete_categories.to_numpy()
+    result["data_status"] = result["complete_categories"].map(
+        lambda count: "complete" if count == len(TREND_CATEGORY_IDS) else (
+            "partial" if count > 0 else "missing"
+        )
+    )
+    result["latest_updated_at"] = result["date"].map(updated)
+    result = result[columns]
+
+    available_days = int((result["complete_categories"] > 0).sum())
+    complete_days = int((result["complete_categories"] == len(TREND_CATEGORY_IDS)).sum())
+    status = "complete" if complete_days == days else "partial"
+    return {
+        "data": result,
+        "status": status,
+        "latest_updated_at": raw["updated_at"].max(),
+        "integrity": {
+            "requested_days": days,
+            "available_days": available_days,
+            "complete_days": complete_days,
+            "missing_days": days - available_days,
+            "expected_categories": list(TREND_CATEGORY_IDS),
+            "mapping_versions": sorted(raw["topic_mapping_version"].unique().tolist()),
+            "query_versions": sorted(raw["query_version"].unique().tolist()),
+            "calculation_versions": sorted(raw["calculation_version"].unique().tolist()),
+        },
+    }
+
+
+def get_topic_hotspot_ranking(
+    path: str | Path, period_days: int = 90
+) -> dict[str, Any]:
+    """Return the current published TOP 10 for one ranking period."""
+    if period_days not in {90, 360}:
+        raise ValueError("period_days must be 90 or 360")
+    columns = [
+        "rank", "topic_id", "topic_name", "topic_name_zh", "subfield_id",
+        "subfield_name", "field_id", "field_name", "domain_id", "domain_name",
+        "period_works_count", "window_start", "window_end", "query_as_of",
+        "taxonomy_version",
+    ]
+    unavailable = {
+        "data": pd.DataFrame(columns=columns), "status": "unavailable",
+        "period_days": period_days, "ranking_date": None,
+        "latest_updated_at": None,
+    }
+    db_path = Path(path)
+    if not db_path.exists():
+        return unavailable
+    with closing(_connect_read_only(db_path)) as connection:
+        required = {"topic_ranking_snapshots", "openalex_topics", "topic_update_runs"}
+        if not required.issubset(_table_names(connection)):
+            return unavailable
+        ranking_date = connection.execute(
+            """
+            SELECT MAX(r.ranking_date)
+            FROM topic_ranking_snapshots r
+            JOIN topic_update_runs u ON u.run_id=r.source_run_id
+            WHERE r.period_days=? AND r.is_current=1 AND u.status='published'
+            """,
+            (period_days,),
+        ).fetchone()[0]
+        if not ranking_date:
+            return unavailable
+        rows = connection.execute(
+            """
+            SELECT r.rank, r.topic_id, t.topic_name, t.topic_name_zh,
+                   t.subfield_id, t.subfield_name, t.field_id, t.field_name,
+                   t.domain_id, t.domain_name, r.period_works_count,
+                   r.window_start, r.window_end, r.query_as_of,
+                   t.taxonomy_version, r.updated_at
+            FROM topic_ranking_snapshots r
+            JOIN openalex_topics t ON t.topic_id=r.topic_id
+            JOIN topic_update_runs u ON u.run_id=r.source_run_id
+            WHERE r.ranking_date=? AND r.period_days=? AND r.is_current=1
+              AND u.status='published' AND r.rank<=10
+            ORDER BY r.rank
+            """,
+            (ranking_date, period_days),
+        ).fetchall()
+    frame = _dataframe(rows)
+    if frame.empty:
+        return unavailable
+    latest_updated = frame["updated_at"].max()
+    return {
+        "data": frame[columns],
+        "status": "complete" if len(frame) == 10 else "partial",
+        "period_days": period_days, "ranking_date": str(ranking_date),
+        "latest_updated_at": latest_updated,
+    }
+
+
+def get_topic_daily_trends(
+    path: str | Path, period_days: int = 90
+) -> dict[str, Any]:
+    """Return daily new Works for the selected period's own TOP 10 Topics."""
+    ranking_result = get_topic_hotspot_ranking(path, period_days)
+    empty = pd.DataFrame(columns=[
+        "date", "rank", "topic_id", "topic_name", "topic_name_zh",
+        "subfield_name", "field_name", "daily_works_count", "query_as_of",
+    ])
+    if ranking_result["status"] != "complete":
+        return {
+            **ranking_result, "data": empty,
+            "integrity": {
+                "expected_rows": period_days * 10, "available_rows": 0,
+                "expected_dates": period_days, "available_dates": 0,
+                "missing_rows": period_days * 10, "duplicate_rows": 0,
+            },
+        }
+    ranking = ranking_result["data"]
+    start, end = str(ranking.iloc[0]["window_start"]), str(ranking.iloc[0]["window_end"])
+    topic_ids = ranking["topic_id"].astype(str).tolist()
+    placeholders = ",".join("?" for _ in topic_ids)
+    with closing(_connect_read_only(path)) as connection:
+        rows = connection.execute(
+            f"""
+            SELECT d.date, r.rank, d.topic_id, t.topic_name, t.topic_name_zh,
+                   t.subfield_name, t.field_name, d.daily_works_count,
+                   d.query_as_of, d.updated_at
+            FROM topic_daily_counts d
+            JOIN openalex_topics t ON t.topic_id=d.topic_id
+            JOIN topic_update_runs du ON du.run_id=d.source_run_id
+            JOIN topic_ranking_snapshots r
+              ON r.topic_id=d.topic_id AND r.ranking_date=?
+             AND r.period_days=? AND r.is_current=1
+            JOIN topic_update_runs u ON u.run_id=r.source_run_id
+            WHERE d.is_current=1 AND d.query_status='success' AND du.status='published'
+              AND u.status='published' AND d.date BETWEEN ? AND ?
+              AND d.topic_id IN ({placeholders})
+            ORDER BY d.date, r.rank
+            """,
+            (ranking_result["ranking_date"], period_days, start, end, *topic_ids),
+        ).fetchall()
+    frame = _dataframe(rows)
+    expected_rows = period_days * 10
+    available_rows = len(frame)
+    available_dates = int(frame["date"].nunique()) if not frame.empty else 0
+    duplicates = int(frame.duplicated(["date", "topic_id"]).sum()) if not frame.empty else 0
+    topic_counts = frame.groupby("topic_id")["date"].nunique() if not frame.empty else pd.Series(dtype=int)
+    complete = (
+        available_rows == expected_rows and available_dates == period_days
+        and len(topic_counts) == 10 and bool((topic_counts == period_days).all())
+        and duplicates == 0
+    )
+    latest_updated = frame["updated_at"].max() if not frame.empty else None
+    if not frame.empty:
+        frame = frame.drop(columns=["updated_at"])
+    return {
+        "data": frame, "ranking": ranking,
+        "status": "complete" if complete else ("partial" if available_rows else "unavailable"),
+        "period_days": period_days, "ranking_date": ranking_result["ranking_date"],
+        "latest_updated_at": latest_updated,
+        "latest_date_ingesting": end == ranking_result["ranking_date"],
+        "integrity": {
+            "expected_rows": expected_rows, "available_rows": available_rows,
+            "expected_dates": period_days, "available_dates": available_dates,
+            "missing_rows": expected_rows - available_rows, "duplicate_rows": duplicates,
+        },
+    }
+
+
+def get_v14_hotspot_dashboard(
+    path: str | Path,
+    *,
+    period_days: int = 90,
+    field_id: str | None = None,
+    sort_by: str = "works",
+) -> dict[str, Any]:
+    """Return the V1.4 six-Field dashboard from published local snapshots.
+
+    Counts use publication_date and primary_topic snapshots imported in V1.3.4.
+    Missing daily rows remain NA. Period growth is unavailable until the matching
+    previous 90/360-day snapshots have been collected.
+    """
+    if period_days not in {90, 360}:
+        raise ValueError("period_days must be 90 or 360")
+    if field_id is not None and str(field_id) not in V14_FIELD_IDS:
+        raise ValueError("field_id must be one of the six V1.4 Fields")
+    if sort_by not in {"works", "growth"}:
+        raise ValueError("sort_by must be works or growth")
+
+    empty = {
+        "status": "unavailable",
+        "taxonomy_version": V14_TAXONOMY_VERSION,
+        "period_days": period_days,
+        "field_id": field_id,
+        "ranking_date": None,
+        "ranking": pd.DataFrame(),
+        "all_topics": pd.DataFrame(),
+        "daily": pd.DataFrame(),
+        "fields": pd.DataFrame(),
+        "metrics": {},
+        "integrity": {},
+        "growth_sort_available": False,
+    }
+    db_path = Path(path)
+    if not db_path.exists():
+        return empty
+
+    with closing(_connect_read_only(db_path)) as connection:
+        required = {
+            "taxonomy_versions", "field_scope_versions", "topic_taxonomy_versions",
+            "topic_ranking_snapshots", "topic_daily_counts", "topic_update_runs",
+        }
+        if not required.issubset(_table_names(connection)):
+            return empty
+        version = connection.execute(
+            """
+            SELECT taxonomy_version, topic_count, field_count, imported_at
+            FROM taxonomy_versions
+            WHERE taxonomy_version=? AND is_current=1
+            """,
+            (V14_TAXONOMY_VERSION,),
+        ).fetchone()
+        if version is None:
+            return empty
+        fields = _dataframe(
+            connection.execute(
+                """
+                SELECT field_id, field_name, field_name_zh, topic_count
+                FROM field_scope_versions
+                WHERE taxonomy_version=?
+                ORDER BY CAST(field_id AS INTEGER)
+                """,
+                (V14_TAXONOMY_VERSION,),
+            ).fetchall()
+        )
+        ranking_date = connection.execute(
+            """
+            SELECT MAX(r.ranking_date)
+            FROM topic_ranking_snapshots r
+            JOIN topic_update_runs u ON u.run_id=r.source_run_id
+            WHERE r.period_days=? AND r.is_current=1 AND u.status='published'
+            """,
+            (period_days,),
+        ).fetchone()[0]
+        if not ranking_date:
+            return {**empty, "fields": fields}
+
+        parameters: list[Any] = [V14_TAXONOMY_VERSION, ranking_date, period_days]
+        field_clause = ""
+        if field_id is not None:
+            field_clause = " AND t.field_id=?"
+            parameters.append(str(field_id))
+        ranking_rows = connection.execute(
+            """
+            SELECT r.topic_id, t.topic_name, t.topic_name_zh,
+                   t.subfield_id, t.subfield_name, t.field_id, t.field_name,
+                   f.field_name_zh, r.period_works_count, r.window_start,
+                   r.window_end, r.query_as_of, r.updated_at
+            FROM topic_ranking_snapshots r
+            JOIN topic_taxonomy_versions t
+              ON t.topic_id=r.topic_id AND t.taxonomy_version=?
+            JOIN field_scope_versions f
+              ON f.taxonomy_version=t.taxonomy_version AND f.field_id=t.field_id
+            JOIN topic_update_runs u ON u.run_id=r.source_run_id
+            WHERE r.ranking_date=? AND r.period_days=? AND r.is_current=1
+              AND u.status='published'
+            """ + field_clause + " ORDER BY r.period_works_count DESC, r.topic_id",
+            parameters,
+        ).fetchall()
+        all_topics = _dataframe(ranking_rows)
+        if all_topics.empty:
+            return {**empty, "fields": fields, "ranking_date": str(ranking_date)}
+        all_topics.insert(0, "rank", range(1, len(all_topics) + 1))
+        all_topics["period_growth_rate"] = pd.NA
+        all_topics["trend"] = "无可比基期"
+
+        window_start = str(all_topics.iloc[0]["window_start"])
+        window_end = str(all_topics.iloc[0]["window_end"])
+        extra_start = (pd.Timestamp(window_start) - pd.Timedelta(days=14)).date().isoformat()
+        daily_parameters: list[Any] = [V14_TAXONOMY_VERSION, extra_start, window_end]
+        daily_field_clause = ""
+        if field_id is not None:
+            daily_field_clause = " AND t.field_id=?"
+            daily_parameters.append(str(field_id))
+        daily_rows = connection.execute(
+            """
+            SELECT d.date, d.topic_id, t.topic_name, t.topic_name_zh,
+                   t.subfield_id, t.subfield_name, t.field_id, t.field_name,
+                   f.field_name_zh, d.daily_works_count, d.query_as_of,
+                   d.updated_at
+            FROM topic_daily_counts d
+            JOIN topic_taxonomy_versions t
+              ON t.topic_id=d.topic_id AND t.taxonomy_version=?
+            JOIN field_scope_versions f
+              ON f.taxonomy_version=t.taxonomy_version AND f.field_id=t.field_id
+            JOIN topic_update_runs u ON u.run_id=d.source_run_id
+            WHERE d.is_current=1 AND d.query_status='success'
+              AND u.status='published' AND d.date BETWEEN ? AND ?
+            """ + daily_field_clause + " ORDER BY d.topic_id, d.date",
+            daily_parameters,
+        ).fetchall()
+        daily_raw = _dataframe(daily_rows)
+
+        daily_parts: list[pd.DataFrame] = []
+        if not daily_raw.empty:
+            daily_raw["date"] = pd.to_datetime(daily_raw["date"])
+            full_dates = pd.date_range(extra_start, window_end, freq="D")
+            metadata_columns = [
+                "topic_id", "topic_name", "topic_name_zh", "subfield_id",
+                "subfield_name", "field_id", "field_name", "field_name_zh",
+            ]
+            for topic_id, topic_rows in daily_raw.groupby("topic_id", sort=False):
+                metadata = topic_rows.iloc[0][metadata_columns].to_dict()
+                indexed = topic_rows.set_index("date").reindex(full_dates)
+                indexed.index.name = "date"
+                for key, value in metadata.items():
+                    indexed[key] = value
+                indexed["query_status"] = indexed["daily_works_count"].map(
+                    lambda value: "success" if pd.notna(value) else "missing"
+                )
+                current_7d = indexed["daily_works_count"].rolling(7, min_periods=7).sum()
+                previous_7d = current_7d.shift(7)
+                indexed["growth_rate_7d"] = (
+                    current_7d.div(previous_7d).sub(1)
+                ).where(previous_7d > 0)
+                daily_parts.append(indexed.reset_index())
+        daily = pd.concat(daily_parts, ignore_index=True) if daily_parts else pd.DataFrame()
+        if not daily.empty:
+            daily = daily[
+                (daily["date"] >= pd.Timestamp(window_start))
+                & (daily["date"] <= pd.Timestamp(window_end))
+            ].reset_index(drop=True)
+
+        period_matrix_complete = (
+            not daily.empty
+            and len(daily) == len(all_topics) * period_days
+            and not daily["daily_works_count"].isna().any()
+            and int(daily["topic_id"].nunique()) == len(all_topics)
+            and bool(
+                (
+                    daily.groupby("topic_id")["date"].nunique()
+                    == period_days
+                ).all()
+            )
+        )
+        ranking_source = "period_snapshot"
+        if period_matrix_complete:
+            latest_totals = daily.groupby("topic_id")["daily_works_count"].sum()
+            all_topics["period_works_count"] = (
+                all_topics["topic_id"].map(latest_totals).astype(int)
+            )
+            all_topics = all_topics.sort_values(
+                ["period_works_count", "topic_id"], ascending=[False, True]
+            ).reset_index(drop=True)
+            all_topics["rank"] = range(1, len(all_topics) + 1)
+            ranking_source = "complete_daily_sum"
+
+        full_360 = connection.execute(
+            """
+            SELECT r.window_start, r.window_end, SUM(r.period_works_count)
+            FROM topic_ranking_snapshots r
+            JOIN topic_taxonomy_versions t
+              ON t.topic_id=r.topic_id AND t.taxonomy_version=?
+            JOIN topic_update_runs u ON u.run_id=r.source_run_id
+            WHERE r.ranking_date=? AND r.period_days=360 AND r.is_current=1
+              AND u.status='published'
+            """,
+            (V14_TAXONOMY_VERSION, ranking_date),
+        ).fetchone()
+        completeness_start = str(full_360[0]) if full_360 and full_360[0] else window_start
+        completeness_end = str(full_360[1]) if full_360 and full_360[1] else window_end
+        scope_topic_count = len(all_topics)
+        available_360_rows = connection.execute(
+            """
+            SELECT COUNT(*)
+            FROM topic_daily_counts d
+            JOIN topic_taxonomy_versions t
+              ON t.topic_id=d.topic_id AND t.taxonomy_version=?
+            JOIN topic_update_runs u ON u.run_id=d.source_run_id
+            WHERE d.is_current=1 AND d.query_status='success' AND u.status='published'
+              AND d.date BETWEEN ? AND ?
+            """ + (" AND t.field_id=?" if field_id is not None else ""),
+            (
+                V14_TAXONOMY_VERSION,
+                completeness_start,
+                completeness_end,
+                *((str(field_id),) if field_id is not None else ()),
+            ),
+        ).fetchone()[0]
+        works_rows = connection.execute("SELECT COUNT(*) FROM works").fetchone()[0]
+        failed_runs = connection.execute(
+            "SELECT COUNT(*) FROM topic_update_runs WHERE status='failed'"
+        ).fetchone()[0]
+        latest_run = connection.execute(
+            """
+            SELECT status, query_as_of, completed_at
+            FROM topic_update_runs ORDER BY COALESCE(completed_at, updated_at) DESC LIMIT 1
+            """
+        ).fetchone()
+
+    expected_360_rows = scope_topic_count * 360
+    completeness = (
+        float(available_360_rows) / expected_360_rows if expected_360_rows else 0.0
+    )
+    ranking = all_topics.head(10).copy()
+    if sort_by == "growth":
+        ranking = ranking.iloc[0:0].copy()
+    available_topic_ids = (
+        set(daily.loc[daily["query_status"] == "success", "topic_id"].astype(str))
+        if not daily.empty else set()
+    )
+    metrics = {
+        "period_works_count": int(all_topics["period_works_count"].sum()),
+        "covered_topics": scope_topic_count,
+        "covered_fields": int(all_topics["field_id"].nunique()),
+        "active_topics": int((all_topics["period_works_count"] > 0).sum()),
+        "top_topic": all_topics.iloc[0].to_dict(),
+        "daily_completeness_360": completeness,
+        "available_daily_topics": len(available_topic_ids),
+        "local_work_records": int(works_rows),
+        "failed_update_runs": int(failed_runs),
+        "latest_run_status": str(latest_run["status"]) if latest_run else None,
+        "latest_success_at": (
+            str(latest_run["query_as_of"] or latest_run["completed_at"])
+            if latest_run else None
+        ),
+        "data_through": window_end,
+        "ranking_source": ranking_source,
+    }
+    status = "complete" if completeness == 1.0 else "partial"
+    return {
+        "status": status,
+        "taxonomy_version": V14_TAXONOMY_VERSION,
+        "period_days": period_days,
+        "field_id": field_id,
+        "ranking_date": str(ranking_date),
+        "ranking": ranking,
+        "all_topics": all_topics,
+        "daily": daily,
+        "fields": fields,
+        "metrics": metrics,
+        "integrity": {
+            "expected_daily_rows_360": expected_360_rows,
+            "available_daily_rows_360": int(available_360_rows),
+            "missing_daily_rows_360": expected_360_rows - int(available_360_rows),
+            "daily_completeness_360": completeness,
+            "daily_topic_ids": sorted(available_topic_ids),
+            "missing_is_zero_filled": False,
+            "publication_date_only": True,
+        },
+        "growth_sort_available": False,
+    }
 
 
 def _load_topic_ranking(

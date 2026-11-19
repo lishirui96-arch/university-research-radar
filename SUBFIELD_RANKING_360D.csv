@@ -1,0 +1,128 @@
+﻿rank,window_days,window_start,window_end,field_id,field_name,field_name_zh,subfield_id,subfield_name,subfield_name_zh,topic_count,works_count,daily_sum,query_status,query_as_of,mapping_version
+1,360,2025-11-24,2026-11-18,22,Engineering,工程,2208,Electrical and Electronic Engineering,电气与电子工程,117,151873,151873,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+2,360,2025-11-24,2026-11-18,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1312,Molecular Biology,分子生物学,135,119763,119763,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+3,360,2025-11-24,2026-11-18,27,Medicine,医学,2746,Surgery,外科学,96,114427,114427,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+4,360,2025-11-24,2026-11-18,27,Medicine,医学,2730,Oncology,肿瘤学,34,95359,95359,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+5,360,2025-11-24,2026-11-18,27,Medicine,医学,2705,Cardiology and Cardiovascular Medicine,心脏病学与心血管医学,29,91321,91321,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+6,360,2025-11-24,2026-11-18,17,Computer Science,计算机科学,1702,Artificial Intelligence,人工智能,77,86017,86017,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+7,360,2025-11-24,2026-11-18,27,Medicine,医学,2739,"Public Health, Environmental and Occupational Health",公共卫生、环境与职业健康,54,83450,83450,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+8,360,2025-11-24,2026-11-18,11,Agricultural and Biological Sciences,农业与生物科学,1110,Plant Science,植物科学,90,77241,77241,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+9,360,2025-11-24,2026-11-18,33,Social Sciences,社会科学,3304,Education,,137,76984,76984,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+10,360,2025-11-24,2026-11-18,22,Engineering,工程,2210,Mechanical Engineering,,79,71603,71603,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+11,360,2025-11-24,2026-11-18,17,Computer Science,计算机科学,1707,Computer Vision and Pattern Recognition,,35,66288,66288,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+12,360,2025-11-24,2026-11-18,27,Medicine,医学,2728,Neurology,,22,64529,64529,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+13,360,2025-11-24,2026-11-18,22,Engineering,工程,2205,Civil and Structural Engineering,,42,63896,63896,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+14,360,2025-11-24,2026-11-18,33,Social Sciences,社会科学,3312,Sociology and Political Science,,224,58939,58939,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+15,360,2025-11-24,2026-11-18,22,Engineering,工程,2207,Control and Systems Engineering,,44,49933,49933,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+16,360,2025-11-24,2026-11-18,22,Engineering,工程,2204,Biomedical Engineering,,72,49850,49850,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+17,360,2025-11-24,2026-11-18,27,Medicine,医学,2740,Pulmonary and Respiratory Medicine,,52,48654,48654,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+18,360,2025-11-24,2026-11-18,27,Medicine,医学,2725,Infectious Diseases,,21,45667,45667,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+19,360,2025-11-24,2026-11-18,27,Medicine,医学,2712,"Endocrinology, Diabetes and Metabolism",,18,37865,37865,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+20,360,2025-11-24,2026-11-18,11,Agricultural and Biological Sciences,农业与生物科学,1106,Food Science,,32,34516,34516,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+21,360,2025-11-24,2026-11-18,27,Medicine,医学,2738,Psychiatry and Mental health,,16,33859,33859,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+22,360,2025-11-24,2026-11-18,27,Medicine,医学,2720,Hematology,,12,32981,32981,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+23,360,2025-11-24,2026-11-18,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1311,Genetics,,40,32284,32284,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+24,360,2025-11-24,2026-11-18,23,Environmental Science,环境科学,2312,Water Science and Technology,,24,32059,32059,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+25,360,2025-11-24,2026-11-18,27,Medicine,医学,2741,"Radiology, Nuclear Medicine and Imaging",,30,31826,31826,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+26,360,2025-11-24,2026-11-18,27,Medicine,医学,2713,Epidemiology,,42,28984,28984,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+27,360,2025-11-24,2026-11-18,23,Environmental Science,环境科学,2306,Global and Planetary Change,,30,28492,28492,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+28,360,2025-11-24,2026-11-18,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1306,Cancer Research,,13,28441,28441,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+29,360,2025-11-24,2026-11-18,17,Computer Science,计算机科学,1710,Information Systems,,78,27740,27740,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+30,360,2025-11-24,2026-11-18,23,Environmental Science,环境科学,2303,Ecology,,33,27669,27669,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+31,360,2025-11-24,2026-11-18,27,Medicine,医学,2715,Gastroenterology,,5,27448,27448,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+32,360,2025-11-24,2026-11-18,22,Engineering,工程,2211,Mechanics of Materials,,29,27369,27369,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+33,360,2025-11-24,2026-11-18,27,Medicine,医学,2731,Ophthalmology,,12,27172,27172,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+34,360,2025-11-24,2026-11-18,22,Engineering,工程,2202,Aerospace Engineering,,44,27048,27048,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+35,360,2025-11-24,2026-11-18,23,Environmental Science,环境科学,2305,Environmental Engineering,,19,25114,25114,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+36,360,2025-11-24,2026-11-18,17,Computer Science,计算机科学,1705,Computer Networks and Communications,,43,24992,24992,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+37,360,2025-11-24,2026-11-18,27,Medicine,医学,2732,Orthopedics and Sports Medicine,,7,24664,24664,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+38,360,2025-11-24,2026-11-18,23,Environmental Science,环境科学,2310,Pollution,,11,24368,24368,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+39,360,2025-11-24,2026-11-18,27,Medicine,医学,2737,Physiology,,30,24280,24280,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+40,360,2025-11-24,2026-11-18,27,Medicine,医学,2708,Dermatology,,13,23662,23662,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+41,360,2025-11-24,2026-11-18,22,Engineering,工程,2209,Industrial and Manufacturing Engineering,,17,23184,23184,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+42,360,2025-11-24,2026-11-18,27,Medicine,医学,2721,Hepatology,,6,22900,22900,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+43,360,2025-11-24,2026-11-18,27,Medicine,医学,2727,Nephrology,,7,22784,22784,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+44,360,2025-11-24,2026-11-18,11,Agricultural and Biological Sciences,农业与生物科学,1103,Animal Science and Zoology,,8,22651,22651,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+45,360,2025-11-24,2026-11-18,22,Engineering,工程,2215,Building and Construction,,22,22281,22281,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+46,360,2025-11-24,2026-11-18,27,Medicine,医学,2745,Rheumatology,,24,21344,21344,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+47,360,2025-11-24,2026-11-18,22,Engineering,工程,2206,Computational Mechanics,,30,21047,21047,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+48,360,2025-11-24,2026-11-18,33,Social Sciences,社会科学,3320,Political Science and International Relations,,118,20512,20512,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+49,360,2025-11-24,2026-11-18,23,Environmental Science,环境科学,2307,"Health, Toxicology and Mutagenesis",,16,20383,20383,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+50,360,2025-11-24,2026-11-18,27,Medicine,医学,2735,"Pediatrics, Perinatology and Child Health",,20,20364,20364,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+51,360,2025-11-24,2026-11-18,11,Agricultural and Biological Sciences,农业与生物科学,1105,"Ecology, Evolution, Behavior and Systematics",,33,20207,20207,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+52,360,2025-11-24,2026-11-18,27,Medicine,医学,2748,Urology,,5,18875,18875,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+53,360,2025-11-24,2026-11-18,11,Agricultural and Biological Sciences,农业与生物科学,1111,Soil Science,,12,18241,18241,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+54,360,2025-11-24,2026-11-18,27,Medicine,医学,2718,Health Informatics,,1,18118,18118,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+55,360,2025-11-24,2026-11-18,27,Medicine,医学,2729,Obstetrics and Gynecology,,8,17116,17116,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+56,360,2025-11-24,2026-11-18,27,Medicine,医学,2743,Reproductive Medicine,,8,16487,16487,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+57,360,2025-11-24,2026-11-18,22,Engineering,工程,2203,Automotive Engineering,,12,16061,16061,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+58,360,2025-11-24,2026-11-18,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1307,Cell Biology,,17,15445,15445,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+59,360,2025-11-24,2026-11-18,27,Medicine,医学,2706,Critical Care and Intensive Care Medicine,,5,15035,15035,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+60,360,2025-11-24,2026-11-18,27,Medicine,医学,2736,Pharmacology,,22,14903,14903,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+61,360,2025-11-24,2026-11-18,33,Social Sciences,社会科学,3306,Health,,14,14622,14622,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+62,360,2025-11-24,2026-11-18,27,Medicine,医学,2703,Anesthesiology and Pain Medicine,,4,13637,13637,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+63,360,2025-11-24,2026-11-18,17,Computer Science,计算机科学,1703,Computational Theory and Mathematics,,24,12368,12368,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+64,360,2025-11-24,2026-11-18,11,Agricultural and Biological Sciences,农业与生物科学,1109,Insect Science,,14,11975,11975,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+65,360,2025-11-24,2026-11-18,27,Medicine,医学,2717,Geriatrics and Gerontology,,3,11546,11546,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+66,360,2025-11-24,2026-11-18,23,Environmental Science,环境科学,2308,"Management, Monitoring, Policy and Law",,34,11411,11411,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+67,360,2025-11-24,2026-11-18,33,Social Sciences,社会科学,3318,Gender Studies,,21,11143,11143,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+68,360,2025-11-24,2026-11-18,22,Engineering,工程,2213,"Safety, Risk, Reliability and Quality",,12,10926,10926,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+69,360,2025-11-24,2026-11-18,33,Social Sciences,社会科学,3313,Transportation,,9,10628,10628,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+70,360,2025-11-24,2026-11-18,27,Medicine,医学,2711,Emergency Medicine,,11,10609,10609,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+71,360,2025-11-24,2026-11-18,23,Environmental Science,环境科学,2304,Environmental Chemistry,,11,10206,10206,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+72,360,2025-11-24,2026-11-18,33,Social Sciences,社会科学,3309,Library and Information Sciences,,2,10193,10193,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+73,360,2025-11-24,2026-11-18,33,Social Sciences,社会科学,3308,Law,,40,10188,10188,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+74,360,2025-11-24,2026-11-18,27,Medicine,医学,2734,Pathology and Forensic Medicine,,23,9880,9880,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+75,360,2025-11-24,2026-11-18,33,Social Sciences,社会科学,3322,Urban Studies,,19,9679,9679,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+76,360,2025-11-24,2026-11-18,27,Medicine,医学,2707,Complementary and alternative medicine,,20,9519,9519,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+77,360,2025-11-24,2026-11-18,27,Medicine,医学,2733,Otorhinolaryngology,,3,8841,8841,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+78,360,2025-11-24,2026-11-18,11,Agricultural and Biological Sciences,农业与生物科学,1104,Aquatic Science,,7,8643,8643,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+79,360,2025-11-24,2026-11-18,27,Medicine,医学,2726,Microbiology,,1,8322,8322,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+80,360,2025-11-24,2026-11-18,27,Medicine,医学,2724,Internal Medicine,,1,7721,7721,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+81,360,2025-11-24,2026-11-18,33,Social Sciences,社会科学,3315,Communication,,16,7689,7689,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+82,360,2025-11-24,2026-11-18,23,Environmental Science,环境科学,2309,Nature and Landscape Conservation,,12,7652,7652,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+83,360,2025-11-24,2026-11-18,22,Engineering,工程,2212,Ocean Engineering,,23,7633,7633,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+84,360,2025-11-24,2026-11-18,11,Agricultural and Biological Sciences,农业与生物科学,1102,Agronomy and Crop Science,,11,7538,7538,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+85,360,2025-11-24,2026-11-18,17,Computer Science,计算机科学,1709,Human-Computer Interaction,,8,7328,7328,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+86,360,2025-11-24,2026-11-18,23,Environmental Science,环境科学,2311,Waste Management and Disposal,,9,7254,7254,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+87,360,2025-11-24,2026-11-18,17,Computer Science,计算机科学,1711,Signal Processing,,10,7219,7219,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+88,360,2025-11-24,2026-11-18,17,Computer Science,计算机科学,1704,Computer Graphics and Computer-Aided Design,,4,6562,6562,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+89,360,2025-11-24,2026-11-18,33,Social Sciences,社会科学,3310,Linguistics and Language,,6,6248,6248,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+90,360,2025-11-24,2026-11-18,27,Medicine,医学,2716,Genetics,,9,6124,6124,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+91,360,2025-11-24,2026-11-18,27,Medicine,医学,2742,Rehabilitation,,7,5348,5348,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+92,360,2025-11-24,2026-11-18,17,Computer Science,计算机科学,1708,Hardware and Architecture,,8,5306,5306,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+93,360,2025-11-24,2026-11-18,11,Agricultural and Biological Sciences,农业与生物科学,1107,Forestry,,7,5167,5167,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+94,360,2025-11-24,2026-11-18,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1304,Biophysics,,6,5109,5109,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+95,360,2025-11-24,2026-11-18,11,Agricultural and Biological Sciences,农业与生物科学,1100,General Agricultural and Biological Sciences,,20,4819,4819,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+96,360,2025-11-24,2026-11-18,17,Computer Science,计算机科学,1712,Software,,5,4611,4611,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+97,360,2025-11-24,2026-11-18,33,Social Sciences,社会科学,3307,Human Factors and Ergonomics,,3,4488,4488,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+98,360,2025-11-24,2026-11-18,33,Social Sciences,社会科学,3314,Anthropology,,25,4428,4428,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+99,360,2025-11-24,2026-11-18,33,Social Sciences,社会科学,3305,"Geography, Planning and Development",,15,4319,4319,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+100,360,2025-11-24,2026-11-18,17,Computer Science,计算机科学,1706,Computer Science Applications,,10,4239,4239,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+101,360,2025-11-24,2026-11-18,33,Social Sciences,社会科学,3316,Cultural Studies,,38,4211,4211,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+102,360,2025-11-24,2026-11-18,27,Medicine,医学,2723,Immunology and Allergy,,3,4137,4137,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+103,360,2025-11-24,2026-11-18,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1305,Biotechnology,,8,3803,3803,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+104,360,2025-11-24,2026-11-18,27,Medicine,医学,2747,Transplantation,,2,3785,3785,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+105,360,2025-11-24,2026-11-18,33,Social Sciences,社会科学,3317,Demography,,27,3708,3708,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+106,360,2025-11-24,2026-11-18,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1303,Biochemistry,,7,3628,3628,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+107,360,2025-11-24,2026-11-18,27,Medicine,医学,2704,Biochemistry,,3,3558,3558,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+108,360,2025-11-24,2026-11-18,33,Social Sciences,社会科学,3321,Public Administration,,3,3519,3519,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+109,360,2025-11-24,2026-11-18,27,Medicine,医学,2714,Family Practice,,2,3128,3128,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+110,360,2025-11-24,2026-11-18,33,Social Sciences,社会科学,3311,Safety Research,,19,2851,2851,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+111,360,2025-11-24,2026-11-18,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1308,Clinical Biochemistry,,4,2506,2506,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+112,360,2025-11-24,2026-11-18,22,Engineering,工程,2216,Architecture,,4,2312,2312,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+113,360,2025-11-24,2026-11-18,33,Social Sciences,社会科学,3303,Development,,8,2305,2305,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+114,360,2025-11-24,2026-11-18,22,Engineering,工程,2214,Media Technology,,12,2184,2184,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+115,360,2025-11-24,2026-11-18,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1315,Structural Biology,,1,2163,2163,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+116,360,2025-11-24,2026-11-18,33,Social Sciences,社会科学,3302,Archeology,,2,2123,2123,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+117,360,2025-11-24,2026-11-18,23,Environmental Science,环境科学,2302,Ecological Modeling,,3,1940,1940,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+118,360,2025-11-24,2026-11-18,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1302,Aging,,1,1602,1602,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+119,360,2025-11-24,2026-11-18,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1314,Physiology,,4,1594,1594,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+120,360,2025-11-24,2026-11-18,33,Social Sciences,社会科学,3319,Life-span and Life-course Studies,,2,1369,1369,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+121,360,2025-11-24,2026-11-18,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1310,Endocrinology,,7,1025,1025,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+122,360,2025-11-24,2026-11-18,27,Medicine,医学,2702,Anatomy,,1,954,954,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+123,360,2025-11-24,2026-11-18,33,Social Sciences,社会科学,3300,General Social Sciences,,16,930,930,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+124,360,2025-11-24,2026-11-18,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1313,Molecular Medicine,,3,807,807,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+125,360,2025-11-24,2026-11-18,13,"Biochemistry, Genetics and Molecular Biology",生物化学、遗传学与分子生物学,1309,Developmental Biology,,2,434,434,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+126,360,2025-11-24,2026-11-18,11,Agricultural and Biological Sciences,农业与生物科学,1108,Horticulture,,1,166,166,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2
+127,360,2025-11-24,2026-11-18,22,Engineering,工程,2200,General Engineering,,1,53,53,success,2026-11-18T07:42:02Z,openalex-topic-hierarchy-2026-10-v2

@@ -66,9 +66,9 @@ def apply_global_styles(app_dir: Path) -> None:
             border: 1px solid rgba(66, 160, 224, .28);
             border-radius: 6px;
             box-shadow: 0 14px 34px rgba(7, 31, 59, .16);
-            min-height: 245px;
+            min-height: 190px;
             overflow: hidden;
-            padding: 3.25rem 3rem 2.5rem;
+            padding: 2.2rem 2.4rem 1.8rem;
         }}
         .radar-hero-copy {{ max-width: 760px; }}
         .radar-hero-kicker {{
@@ -110,6 +110,35 @@ def apply_global_styles(app_dir: Path) -> None:
             color: #2d4764;
             font-size: .88rem;
             font-weight: 650;
+        }}
+        [class*="st-key-kpi_v14_"] {{
+            min-height: 142px;
+            padding: .9rem 1rem .7rem;
+        }}
+        .radar-kpi-value {{
+            color: var(--radar-ink);
+            font-size: clamp(1.15rem, 1.45vw, 1.75rem);
+            font-weight: 760;
+            line-height: 1.2;
+            margin: .45rem 0 .35rem;
+            overflow-wrap: anywhere;
+        }}
+        .st-key-panel_v14_works,
+        .st-key-panel_v14_growth,
+        .st-key-panel_v14_ranking,
+        .st-key-panel_v14_insights,
+        .st-key-panel_v14_status {{
+            background: #ffffff;
+            border-color: var(--radar-border) !important;
+            border-radius: 7px;
+            box-shadow: 0 7px 20px rgba(37, 77, 121, .06);
+        }}
+        .st-key-panel_v14_status [data-testid="stMetric"] {{
+            background: #f6faff;
+            border: 1px solid #e0ebf7;
+            border-radius: 6px;
+            min-height: 88px;
+            padding: .55rem .7rem;
         }}
 
         [class*="st-key-panel_"], .st-key-taxonomy_panel, .st-key-technology_panel {{

@@ -7,87 +7,132 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 
-from dashboard_repository import load_dashboard_data, load_topic_observations
-from research_taxonomy import find_direction, find_domain, load_research_taxonomy
+from dashboard_repository import get_v14_hotspot_dashboard
 from storage import database_path
 
 
-@st.cache_data(ttl="5m", max_entries=8, show_spinner=False)
-def _load_dashboard(path: str, signature: tuple[int, int]) -> dict[str, Any]:
+FIELD_LABEL_ALL = "六大学科（全部）"
+COLORS = [
+    "#0B63CE", "#16A4D8", "#0E9F6E", "#7C3AED", "#F59E0B",
+    "#E83E8C", "#65A30D", "#DC2626", "#475569", "#14B8A6",
+]
+
+
+@st.cache_data(ttl="5m", max_entries=24, show_spinner=False)
+def _load_v14(
+    path: str,
+    signature: tuple[int, int],
+    period_days: int,
+    field_id: str | None,
+    sort_by: str,
+) -> dict[str, Any]:
     del signature
-    return load_dashboard_data(path)
+    return get_v14_hotspot_dashboard(
+        path, period_days=period_days, field_id=field_id, sort_by=sort_by
+    )
 
 
-@st.cache_data(ttl="5m", max_entries=8, show_spinner=False)
-def _load_observations(path: str, signature: tuple[int, int]) -> pd.DataFrame:
-    del signature
-    return load_topic_observations(path)
-
-
-@st.cache_data
-def _load_taxonomy() -> dict[str, Any]:
-    return load_research_taxonomy()
-
-
-def _scope_label(scope: str) -> str:
-    return {
-        "complete": "完整计数",
-        "sample": "样本观察",
-        "verified": "已核实",
-        "unavailable": "数据不足",
-    }.get(scope, scope)
-
-
-def _metric_value(metric: dict[str, Any]) -> str:
-    value = metric.get("value")
-    return "--" if value is None else f"{int(value):,}"
-
-
-def _display_time(value: str | None) -> str:
-    if not value:
-        return "尚无全球快照"
+def _display_time(value: Any) -> str:
     parsed = pd.to_datetime(value, errors="coerce")
     if pd.isna(parsed):
-        return str(value)
+        return "暂无"
     return parsed.strftime("%Y-%m-%d %H:%M")
 
 
-def _format_growth(value: Any) -> str:
-    if value is None or pd.isna(value):
-        return "--"
-    return f"{float(value):+.1%}"
+def _topic_label(row: pd.Series | dict[str, Any]) -> str:
+    zh = row.get("topic_name_zh")
+    return str(zh) if pd.notna(zh) and str(zh).strip() else str(row["topic_name"])
 
 
-def _open_topic_analysis(topic: dict[str, Any]) -> None:
-    st.session_state["analysis_requested_topic"] = topic
-    st.switch_page("app_pages/topic_analysis.py")
+def _topic_options(frame: pd.DataFrame) -> tuple[list[str], dict[str, str]]:
+    labels: list[str] = []
+    label_to_id: dict[str, str] = {}
+    for row in frame.to_dict("records"):
+        label = f"{_topic_label(row)} · {row['topic_id']}"
+        labels.append(label)
+        label_to_id[label] = str(row["topic_id"])
+    return labels, label_to_id
 
 
-def _find_observation(
-    observations: pd.DataFrame, technology: dict[str, Any]
-) -> pd.Series | None:
-    if observations.empty or "topic" not in observations:
-        return None
-    candidates = [technology["label"], *technology.get("aliases", [])]
-    normalized = observations["topic"].fillna("").astype(str).str.casefold()
-    mask = pd.Series(False, index=observations.index)
-    for candidate in candidates:
-        term = str(candidate).casefold().strip()
-        if term:
-            mask |= normalized.eq(term)
-    matches = observations[mask].sort_values("completed_at", ascending=False)
-    return None if matches.empty else matches.iloc[0]
+def _prepare_chart_data(daily: pd.DataFrame, selected_ids: list[str]) -> pd.DataFrame:
+    if daily.empty or not selected_ids:
+        return pd.DataFrame()
+    chart_data = daily[daily["topic_id"].astype(str).isin(selected_ids)].copy()
+    if chart_data.empty:
+        return chart_data
+    chart_data["topic_label"] = chart_data.apply(_topic_label, axis=1)
+    chart_data["date"] = pd.to_datetime(chart_data["date"])
+    return chart_data
+
+
+def _works_chart(frame: pd.DataFrame, topic_order: list[str]) -> alt.Chart:
+    return (
+        alt.Chart(frame)
+        .mark_line(point=alt.OverlayMarkDef(size=30, filled=True), strokeWidth=2)
+        .encode(
+            x=alt.X(
+                "date:T", title=None,
+                axis=alt.Axis(format="%Y-%m-%d", labelOverlap="greedy", tickCount=7),
+            ),
+            y=alt.Y(
+                "daily_works_count:Q", title="每日新增 Works",
+                axis=alt.Axis(format=",d"),
+            ),
+            color=alt.Color(
+                "topic_label:N", title=None, sort=topic_order,
+                scale=alt.Scale(domain=topic_order, range=COLORS[: len(topic_order)]),
+                legend=alt.Legend(orient="bottom", columns=2),
+            ),
+            tooltip=[
+                alt.Tooltip("date:T", title="日期", format="%Y-%m-%d"),
+                alt.Tooltip("topic_label:N", title="Topic"),
+                alt.Tooltip("topic_id:N", title="Topic ID"),
+                alt.Tooltip("daily_works_count:Q", title="当日新增 Works", format=",d"),
+                alt.Tooltip("query_status:N", title="数据状态"),
+            ],
+        )
+        .properties(height=330)
+        .interactive(bind_y=False)
+    )
+
+
+def _growth_chart(frame: pd.DataFrame, topic_order: list[str]) -> alt.LayerChart:
+    lines = (
+        alt.Chart(frame)
+        .mark_line(point=alt.OverlayMarkDef(size=28, filled=True), strokeWidth=2)
+        .encode(
+            x=alt.X(
+                "date:T", title=None,
+                axis=alt.Axis(format="%Y-%m-%d", labelOverlap="greedy", tickCount=7),
+            ),
+            y=alt.Y(
+                "growth_rate_7d:Q", title="7日滚动增长率",
+                axis=alt.Axis(format="+.0%"),
+            ),
+            color=alt.Color(
+                "topic_label:N", title=None, sort=topic_order,
+                scale=alt.Scale(domain=topic_order, range=COLORS[: len(topic_order)]),
+                legend=alt.Legend(orient="bottom", columns=2),
+            ),
+            tooltip=[
+                alt.Tooltip("date:T", title="日期", format="%Y-%m-%d"),
+                alt.Tooltip("topic_label:N", title="Topic"),
+                alt.Tooltip("topic_id:N", title="Topic ID"),
+                alt.Tooltip("growth_rate_7d:Q", title="7日滚动增长率", format="+.1%"),
+            ],
+        )
+    )
+    baseline = alt.Chart(pd.DataFrame({"baseline": [0]})).mark_rule(
+        color="#64748B", strokeDash=[5, 4], opacity=0.8
+    ).encode(y="baseline:Q")
+    return (lines + baseline).properties(height=330).interactive(bind_y=False)
 
 
 db_path = Path(database_path())
 signature = (
     (db_path.stat().st_mtime_ns, db_path.stat().st_size)
-    if db_path.exists()
-    else (0, 0)
+    if db_path.exists() else (0, 0)
 )
-data = _load_dashboard(str(db_path), signature)
-observations = _load_observations(str(db_path), signature)
-taxonomy = _load_taxonomy()
 
 with st.container(key="research_hero"):
     st.html(
@@ -100,258 +145,218 @@ with st.container(key="research_hero"):
         """
     )
 
-last_success = data.get("last_success_at") or {}
-last_updated = (
-    data.get("as_of_date")
-    or last_success.get("completed_at")
-    or last_success.get("updated_at")
-)
-
-with st.container(horizontal=True, vertical_alignment="bottom"):
-    period = st.segmented_control(
-        "观察窗口",
-        ["近30天", "近90天", "近365天"],
-        default="近30天",
-        key="home_period",
+control_columns = st.columns([1.1, 1.35, 1.1, 1.6, 1.15], gap="small")
+with control_columns[0]:
+    period_label = st.segmented_control(
+        "观察窗口", ["近90天", "近360天"], default="近90天", key="v14_period"
     )
-    region_options = ["全球", "中国"] + [
-        code for code in data.get("countries", []) if code != "CN"
-    ]
-    region = st.selectbox("地域", region_options, key="home_region")
-    count_mode = st.segmented_control(
-        "统计口径",
-        ["完整计数", "样本计数"],
-        default="完整计数",
-        key="home_count_mode",
+with control_columns[1]:
+    field_label = st.selectbox(
+        "学科范围",
+        [
+            FIELD_LABEL_ALL,
+            "化学工程 · Chemical Engineering", "化学 · Chemistry",
+            "计算机科学 · Computer Science", "能源 · Energy",
+            "工程学 · Engineering", "材料科学 · Materials Science",
+        ],
+        key="v14_field",
+    )
+with control_columns[2]:
+    sort_label = st.segmented_control(
+        "榜单口径", ["增长量", "增长率"], default="增长量", key="v14_sort"
+    )
+with control_columns[3]:
+    st.text_input(
+        "数据版本", value="openalex-taxonomy-2026-11-18-v1.4",
+        disabled=True, key="v14_version",
     )
 
-if data["coverage_status"] == "unavailable":
-    st.warning(data["coverage_message"], icon=":material/database_off:")
-else:
-    st.caption(data["coverage_message"])
+field_ids = {
+    FIELD_LABEL_ALL: None,
+    "化学工程 · Chemical Engineering": "15", "化学 · Chemistry": "16",
+    "计算机科学 · Computer Science": "17", "能源 · Energy": "21",
+    "工程学 · Engineering": "22", "材料科学 · Materials Science": "25",
+}
+period_days = 360 if period_label == "近360天" else 90
+sort_by = "growth" if sort_label == "增长率" else "works"
+with st.spinner("正在读取本地科研热点数据..."):
+    result = _load_v14(
+        str(db_path), signature, period_days, field_ids[field_label], sort_by
+    )
+with control_columns[4]:
+    st.text_input(
+        "更新时间", value=_display_time(result.get("metrics", {}).get("latest_success_at")),
+        disabled=True, key="v14_updated_at",
+    )
 
-st.html('<div class="radar-section-label">全球科研数据总览</div>')
-kpis = data["kpis"]
+if result["status"] == "unavailable":
+    st.error(
+        "V1.4 分类版本尚未导入当前数据库，首页不会回退到旧版 1,126 Topic 分类。",
+        icon=":material/database_off:",
+    )
+    st.stop()
+if sort_by == "growth" and not result["growth_sort_available"]:
+    st.warning(
+        "尚未采集前一等长窗口，90/360天榜单增长率不可计算。当前表格保留 Works 排名，增长率显示 NA。",
+        icon=":material/info:",
+    )
+
+metrics = result["metrics"]
+top_topic = metrics["top_topic"]
+completeness = metrics["daily_completeness_360"]
+field_names = "化学工程、化学、计算机科学、能源、工程学、材料科学"
 kpi_specs = [
-    ("works", "近30天新增论文", ":material/article:"),
-    ("institutions", "活跃科研机构", ":material/account_balance:"),
-    ("topics", "新兴研究主题", ":material/layers:"),
-    ("groups", "活跃高校课题组", ":material/groups:"),
+    ("period_works", f"近{period_days}天新增论文", f"{metrics['period_works_count']:,}", "Publication Date"),
+    ("topic_coverage", "覆盖 Topic 数量", f"{metrics['covered_topics']:,}", result["taxonomy_version"]),
+    ("field_coverage", "覆盖学科", f"{metrics['covered_fields']}", field_names if metrics["covered_fields"] == 6 else str(field_label)),
+    ("active_topics", "活跃 Topic 数量", f"{metrics['active_topics']:,}", f"近{period_days}天 Works > 0"),
+    ("top_topic", "热门研究主题", _topic_label(top_topic), f"{int(top_topic['period_works_count']):,} Works"),
+    ("completeness", "数据完整性", f"{completeness:.1%}", "360天日序列" if completeness == 1 else "回填中"),
 ]
-for column, (key, label, icon) in zip(st.columns(4, gap="medium"), kpi_specs):
-    metric = kpis.get(key, {})
+for column, (key, label, value, caption) in zip(st.columns(6, gap="small"), kpi_specs):
     with column:
-        with st.container(key=f"kpi_{key}"):
-            st.markdown(f"{icon} **{label}**")
-            st.metric(
-                label,
-                _metric_value(metric),
-                delta=metric.get("delta"),
-                label_visibility="collapsed",
-            )
-            st.caption(_scope_label(metric.get("scope", "unavailable")))
-            st.caption(f"更新：{_display_time(last_updated)}")
+        with st.container(key=f"kpi_v14_{key}"):
+            st.markdown(f"**{label}**")
+            st.markdown(f'<div class="radar-kpi-value">{value}</div>', unsafe_allow_html=True)
+            st.caption(caption)
 
-trend_column, hot_column = st.columns([1.65, 1], gap="medium")
-with trend_column:
-    with st.container(key="panel_trend", height=430):
-        with st.container(horizontal=True, horizontal_alignment="distribute"):
-            st.subheader(f"近期科研热点趋势（{region}）")
-            st.badge(count_mode, color="blue" if count_mode == "完整计数" else "orange")
-        trend = data["trend"].copy()
-        if trend.empty:
-            st.info(
-                "尚无相同口径的全球历史快照。趋势图不会使用示例曲线补位。",
-                icon=":material/timeline:",
-            )
+st.html('<div class="radar-section-label">全球科研热点监测</div>')
+works_ranking = result["all_topics"].head(10).copy()
+display_ranking = result["ranking"].copy()
+if display_ranking.empty:
+    display_ranking = works_ranking
+
+selection_mode = st.segmented_control(
+    "Topic 对比范围", ["TOP 5", "TOP 10", "自定义"],
+    default="TOP 5", key="v14_topic_mode",
+)
+all_labels, label_to_id = _topic_options(result["all_topics"])
+if selection_mode == "TOP 10":
+    selected_ids = display_ranking.head(10)["topic_id"].astype(str).tolist()
+elif selection_mode == "自定义":
+    defaults = set(display_ranking.head(5)["topic_id"].astype(str))
+    selected_labels = st.multiselect(
+        "选择要比较的 Topic", all_labels,
+        default=[label for label in all_labels if label_to_id[label] in defaults],
+        max_selections=10, key="v14_custom_topics",
+    )
+    selected_ids = [label_to_id[label] for label in selected_labels]
+else:
+    selected_ids = display_ranking.head(5)["topic_id"].astype(str).tolist()
+
+chart_data = _prepare_chart_data(result["daily"], selected_ids)
+available_ids = (
+    set(chart_data.loc[chart_data["query_status"] == "success", "topic_id"].astype(str))
+    if not chart_data.empty else set()
+)
+pending_ids = [topic_id for topic_id in selected_ids if topic_id not in available_ids]
+indexed_topics = result["all_topics"].set_index("topic_id")
+selected_rows = indexed_topics.loc[
+    [topic_id for topic_id in selected_ids if topic_id in indexed_topics.index]
+] if selected_ids else pd.DataFrame()
+topic_order = [_topic_label(row) for row in selected_rows.to_dict("records")]
+if pending_ids:
+    pending_names = [_topic_label(indexed_topics.loc[topic_id]) for topic_id in pending_ids]
+    st.info(
+        "以下 Topic 的日序列尚在回填，图表不会将缺失值补成 0：" + "、".join(pending_names),
+        icon=":material/pending:",
+    )
+
+chart_columns = st.columns(2, gap="medium")
+with chart_columns[0]:
+    with st.container(key="panel_v14_works", border=True, height=505):
+        st.subheader(":material/query_stats: 热点增长量趋势（Works）")
+        st.caption("选定 Topic 的每日新增论文数量 · Publication Date")
+        if chart_data.empty or chart_data["daily_works_count"].notna().sum() == 0:
+            st.info("所选 Topic 暂无已完成回填的日序列。", icon=":material/timeline:")
         else:
-            trend["date"] = pd.to_datetime(trend["date"])
-            selected_scope = "complete" if count_mode == "完整计数" else "sample"
-            trend = trend[trend["count_scope"] == selected_scope]
-            if region != "全球":
-                trend = trend[trend["region"] == ("CN" if region == "中国" else region)]
-            if trend.empty:
-                st.info("当前筛选没有可比较的时间序列。")
-            else:
-                chart = (
-                    alt.Chart(trend)
-                    .mark_line(point=alt.OverlayMarkDef(size=55), strokeWidth=2.5)
-                    .encode(
-                        x=alt.X("date:T", title=None),
-                        y=alt.Y("value:Q", title="论文数量"),
-                        color=alt.Color(
-                            "region:N",
-                            title="地域",
-                            scale=alt.Scale(
-                                range=["#0B63CE", "#7C3AED", "#0E9F6E", "#F59E0B"]
-                            ),
-                        ),
-                        tooltip=["date:T", "region:N", "value:Q", "count_scope:N"],
-                    )
-                    .properties(height=300)
-                )
-                st.altair_chart(chart)
-        st.caption(f"窗口：{period} · 完整计数与样本计数不混用")
-
-with hot_column:
-    with st.container(key="panel_hotspots", height=430):
-        st.subheader("近期热点速览")
-        topics = data["topics"].copy()
-        if topics.empty:
-            st.info(
-                "当前没有通过数据质量与排名门槛的新兴主题。",
-                icon=":material/local_fire_department:",
-            )
+            st.altair_chart(_works_chart(chart_data, topic_order), key="v14_works_chart")
+with chart_columns[1]:
+    with st.container(key="panel_v14_growth", border=True, height=505):
+        st.subheader(":material/trending_up: 热点增长率趋势（Growth Rate）")
+        st.caption("近7日 Works 相对前7日的变化率；无可比基期显示 NA")
+        if chart_data.empty or chart_data["growth_rate_7d"].notna().sum() == 0:
+            st.info("当前日序列不足以计算 7 日滚动增长率。", icon=":material/timeline:")
         else:
-            for rank, row in enumerate(topics.head(6).to_dict("records"), start=1):
-                rank_col, topic_col, growth_col = st.columns([0.45, 3.6, 1.2])
-                rank_col.markdown(f'<span class="radar-hot-rank">{rank}</span>', unsafe_allow_html=True)
-                if topic_col.button(
-                    str(row["topic"]),
-                    key=f"hot_topic_{row.get('topic_key', rank)}",
-                    width="stretch",
-                ):
-                    _open_topic_analysis(
-                        {"label": row["topic"], "id": row.get("topic_key"), "source": "ranking"}
-                    )
-                growth_col.markdown(f"**{_format_growth(row.get('growth'))}**")
-                growth_col.caption(str(row.get("category") or "趋势观察"))
-        st.caption("仅展示通过 score_coverage 与 data_confidence 门槛的真实结果")
+            st.altair_chart(_growth_chart(chart_data, topic_order), key="v14_growth_chart")
 
-taxonomy_column, technology_column = st.columns([1.12, 1], gap="medium")
-
-domain_ids = [item["id"] for item in taxonomy["domains"]]
-st.session_state.setdefault("home_domain_id", domain_ids[0])
-if st.session_state.home_domain_id not in domain_ids:
-    st.session_state.home_domain_id = domain_ids[0]
-selected_domain = find_domain(taxonomy, st.session_state.home_domain_id)
-
-direction_ids = [item["id"] for item in selected_domain["directions"]]
-st.session_state.setdefault("home_direction_id", direction_ids[0])
-if st.session_state.home_direction_id not in direction_ids:
-    st.session_state.home_direction_id = direction_ids[0]
-selected_direction = find_direction(selected_domain, st.session_state.home_direction_id)
-
-technology_ids = [item["id"] for item in selected_direction["technologies"]]
-st.session_state.setdefault("home_technology_id", technology_ids[0])
-if st.session_state.home_technology_id not in technology_ids:
-    st.session_state.home_technology_id = technology_ids[0]
-selected_technology = next(
-    item
-    for item in selected_direction["technologies"]
-    if item["id"] == st.session_state.home_technology_id
+st.caption(
+    f"数据截止：{metrics['data_through']} · 来源：OpenAlex · "
+    "口径：core corpus、primary_topic.id、publication_date。最新日期可能仍在收录中。"
 )
 
-with taxonomy_column:
-    with st.container(key="taxonomy_panel"):
-        with st.container(horizontal=True, horizontal_alignment="distribute"):
-            st.subheader("科研主题三级分类")
-            st.badge("初始分类", color="gray", icon=":material/account_tree:")
-        st.caption(taxonomy["notice"])
-        level_one, level_two, level_three = st.columns([1, 1.05, 1.1], gap="small")
-        with level_one:
-            st.markdown("**一级领域**")
-            for domain in taxonomy["domains"]:
-                if st.button(
-                    domain["label"],
-                    icon=f":material/{domain['icon']}:",
-                    type="primary" if domain["id"] == selected_domain["id"] else "secondary",
-                    key=f"domain_{domain['id']}",
-                    width="stretch",
-                ):
-                    st.session_state.home_domain_id = domain["id"]
-                    st.session_state.home_direction_id = domain["directions"][0]["id"]
-                    st.session_state.home_technology_id = domain["directions"][0]["technologies"][0]["id"]
-                    st.rerun()
-        with level_two:
-            st.markdown("**二级研究方向**")
-            for direction in selected_domain["directions"]:
-                if st.button(
-                    direction["label"],
-                    type="primary" if direction["id"] == selected_direction["id"] else "secondary",
-                    key=f"direction_{direction['id']}",
-                    width="stretch",
-                ):
-                    st.session_state.home_direction_id = direction["id"]
-                    st.session_state.home_technology_id = direction["technologies"][0]["id"]
-                    st.rerun()
-        with level_three:
-            st.markdown("**三级细分技术**")
-            for technology in selected_direction["technologies"]:
-                if st.button(
-                    technology["label"],
-                    icon=":material/arrow_forward:",
-                    type="primary" if technology["id"] == selected_technology["id"] else "secondary",
-                    key=f"technology_{technology['id']}",
-                    width="stretch",
-                ):
-                    st.session_state.home_technology_id = technology["id"]
-                    _open_topic_analysis(
-                        {
-                            **technology,
-                            "domain": selected_domain["label"],
-                            "direction": selected_direction["label"],
-                            "source": "taxonomy",
-                        }
-                    )
+bottom_columns = st.columns([1.5, 1], gap="medium")
+with bottom_columns[0]:
+    with st.container(key="panel_v14_ranking", border=True):
+        st.subheader(":material/emoji_events: 科研热点 TOP 10")
+        st.caption(f"六学科范围内近{period_days}天 Works 排名；点击行查看 Topic 详情")
+        table = display_ranking.head(10).copy()
+        table["Topic"] = table.apply(_topic_label, axis=1)
+        table["所属学科"] = table["field_name_zh"] + " · " + table["field_name"]
+        table[f"{period_days}天 Works"] = table["period_works_count"]
+        table["增长率"] = pd.NA
+        table["趋势"] = "无可比基期"
+        table = table.rename(columns={"rank": "排名"})[
+            ["排名", "Topic", "所属学科", f"{period_days}天 Works", "增长率", "趋势"]
+        ]
+        event = st.dataframe(
+            table, hide_index=True, on_select="rerun", selection_mode="single-row",
+            key="v14_ranking_table",
+            column_config={
+                f"{period_days}天 Works": st.column_config.NumberColumn(format="localized"),
+                "增长率": st.column_config.NumberColumn(format="%.1f%%"),
+            },
+        )
+        selected_index = event.selection.rows[0] if event.selection.rows else 0
+        detail = display_ranking.head(10).iloc[selected_index]
+        st.markdown(f"**Topic 详情：{_topic_label(detail)}**")
+        detail_columns = st.columns(4)
+        detail_columns[0].metric("Topic ID", str(detail["topic_id"]))
+        detail_columns[1].metric(f"{period_days}天 Works", f"{int(detail['period_works_count']):,}")
+        detail_columns[2].metric("Field", str(detail["field_name"]))
+        detail_columns[3].metric("增长率", "NA")
+        st.caption(
+            f"OpenAlex：{detail['topic_name']} · Subfield：{detail['subfield_name']} · "
+            "前一等长窗口尚未采集，排名增长率不可计算。"
+        )
 
-with technology_column:
-    with st.container(key="technology_panel"):
-        with st.container(horizontal=True, horizontal_alignment="distribute"):
-            st.subheader(f"研究方向关键指标 — {selected_technology['label']}")
-            st.badge("数据库实值", color="blue", icon=":material/verified:")
-        observation = _find_observation(observations, selected_technology)
-        paper_count = None if observation is None else observation.get("current_count")
-        growth = None if observation is None else observation.get("growth")
-        confidence = None if observation is None else observation.get("data_confidence")
-        metrics = st.columns(4, gap="small")
-        metrics[0].metric(
-            "近一年论文数量",
-            "--" if paper_count is None or pd.isna(paper_count) else f"{int(paper_count):,}",
+with bottom_columns[1]:
+    with st.container(key="panel_v14_insights", border=True):
+        st.subheader(":material/insights: 近期热点速览")
+        first = result["all_topics"].iloc[0]
+        st.markdown(
+            f"- **{_topic_label(first)}** 位列当前范围第一，近{period_days}天 "
+            f"Works 为 **{int(first['period_works_count']):,}**。"
         )
-        metrics[1].metric("近一年增长率", _format_growth(growth))
-        metrics[2].metric("新进入研究高校", "--")
-        metrics[3].metric("跨学科研究程度", "--")
-
-        technology_period = st.segmented_control(
-            "论文趋势",
-            ["近30天", "近90天", "近365天"],
-            default="近365天",
-            key="technology_period",
-        )
-        st.info(
-            "当前数据库尚未形成该技术的标准化周期快照。缺失值保持为空，"
-            "后续需要补充主题周期、高校进入和跨学科指标。",
-            icon=":material/data_alert:",
-        )
-        with st.container(horizontal=True, horizontal_alignment="distribute"):
-            st.caption(f"当前窗口：{technology_period}")
-            st.caption(
-                "数据置信度：--"
-                if confidence is None or pd.isna(confidence)
-                else f"数据置信度：{float(confidence):.0f}/100"
+        other_period = 360 if period_days == 90 else 90
+        other = _load_v14(str(db_path), signature, other_period, field_ids[field_label], "works")
+        if not other["all_topics"].empty:
+            current_top = set(result["all_topics"].head(10)["topic_id"].astype(str))
+            other_top = set(other["all_topics"].head(10)["topic_id"].astype(str))
+            st.markdown(
+                f"- 当前 TOP 10 中有 **{len(current_top & other_top)}** 个 Topic "
+                f"同时进入近{other_period}天 TOP 10。"
             )
-        if st.button(
-            "查看主题深度分析",
-            type="primary",
-            icon=":material/arrow_forward:",
-            key="view_selected_technology",
-        ):
-            _open_topic_analysis(
-                {
-                    **selected_technology,
-                    "domain": selected_domain["label"],
-                    "direction": selected_direction["label"],
-                    "source": "taxonomy",
-                }
-            )
+        st.markdown(
+            f"- 当前筛选覆盖 **{metrics['covered_topics']:,}** 个 Topic，其中 "
+            f"**{metrics['active_topics']:,}** 个在窗口内有成果。"
+        )
+        st.caption("增长加速/放缓结论需前一等长窗口；数据不足时不生成推断。")
 
-with st.expander("数据口径与覆盖说明", icon=":material/info:"):
-    st.markdown(
-        """
-- 首页只读取本地 SQLite 已保存结果，筛选和分类切换不会触发 OpenAlex 请求。
-- 完整计数、样本观察、已核实实体和缺失状态分别展示；样本不会冒充全球总体。
-- 三级分类是可扩展导航配置，不代表实时热点排名；热点速览只接受通过质量门槛的数据库结果。
-- 中国按论文至少一个中国机构署名统计；跨国论文可进入多个国家，全球总量只去重一次。
-"""
-    )
+    with st.container(key="panel_v14_status", border=True):
+        st.subheader(":material/database: 数据采集状态")
+        status_columns = st.columns(2)
+        status_columns[0].metric("上次成功更新", _display_time(metrics["latest_success_at"]))
+        status_columns[1].metric("数据截止日期", metrics["data_through"])
+        status_columns[0].metric("已覆盖 Topic", f"{metrics['covered_topics']:,}")
+        status_columns[1].metric("360天完整率", f"{completeness:.1%}")
+        status_columns[0].metric("本地 Works 明细", f"{metrics['local_work_records']:,}")
+        status_columns[1].metric("失败更新任务", f"{metrics['failed_update_runs']:,}")
+        st.badge(
+            "完整" if result["status"] == "complete" else "回填中",
+            color="green" if result["status"] == "complete" else "orange",
+            icon=":material/sync:",
+        )
+        st.caption(
+            "当前库保存 OpenAlex 汇总计数而非 Works 明细；所有趋势均基于 Publication Date。"
+        )
