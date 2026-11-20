@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import gc
-import io
 import json
 import sqlite3
 import tempfile
@@ -10,7 +9,6 @@ from datetime import date, timedelta
 from pathlib import Path
 from unittest.mock import patch
 
-import pyarrow.ipc as pa_ipc
 import pandas as pd
 from streamlit.testing.v1 import AppTest
 
@@ -142,9 +140,45 @@ def _seed_complete_trend(db_path: Path) -> None:
 
 
 def _chart_dataframe(app: AppTest):
-    chart = app.get("vega_lite_chart")[0]
-    arrow_bytes = chart.proto.datasets[0].data.data
-    return pa_ipc.open_stream(io.BytesIO(arrow_bytes)).read_pandas()
+    spec = json.loads(app.get("plotly_chart")[0].proto.spec)
+    rows = []
+    for trace in spec["data"]:
+        for point_date, customdata in zip(trace["x"], trace["customdata"], strict=True):
+            works = pd.to_numeric(str(customdata[8]).replace(",", ""), errors="coerce")
+            rows.append(
+                {
+                    "date": pd.Timestamp(point_date),
+                    "period_start": pd.Timestamp(customdata[1]),
+                    "period_end": pd.Timestamp(customdata[2]),
+                    "period_days": int(customdata[3]),
+                    "topic_label": customdata[4],
+                    "topic_id": customdata[7],
+                    "period_works_count": works,
+                    "query_status": customdata[10],
+                }
+            )
+    return pd.DataFrame(rows)
+
+
+def _chart_x_constraints(app: AppTest) -> list[dict]:
+    return [
+        json.loads(chart.proto.spec)["layout"]["xaxis"]
+        for chart in app.get("plotly_chart")
+    ]
+
+
+def _chart_specs(app: AppTest) -> list[dict]:
+    return [json.loads(chart.proto.spec) for chart in app.get("plotly_chart")]
+
+
+def _chart_configs(app: AppTest) -> list[dict]:
+    return [json.loads(chart.proto.config) for chart in app.get("plotly_chart")]
+
+
+def _domain_date(value) -> date:
+    if isinstance(value, dict):
+        return date(int(value["year"]), int(value["month"]), int(value["date"]))
+    return pd.Timestamp(value).date()
 
 
 def _seed_v14_taxonomy(root: Path, db_path: Path) -> None:
@@ -300,10 +334,17 @@ class DashboardPageTests(unittest.TestCase):
                 app = AppTest.from_file(root / "streamlit_app.py", default_timeout=15)
                 app.run()
                 self.assertEqual(len(app.exception), 0)
-                self.assertEqual(len(app.get("vega_lite_chart")), 0)
+                self.assertEqual(len(app.get("plotly_chart")), 0)
                 self.assertTrue(any("V1.4" in item.value for item in app.error))
                 hero_html = "\n".join(element.proto.body for element in app.get("html"))
+                self.assertIn("radar-brand-header", hero_html)
+                self.assertIn("全球高校科研热点与产业创新情报平台", hero_html)
+                self.assertIn('aria-current="page"', hero_html)
+                self.assertIn('aria-label="个人设置"', hero_html)
                 self.assertIn("radar-hero-copy", hero_html)
+                self.assertNotIn("热点监测</a>", hero_html)
+                self.assertNotIn("历史记录</a>", hero_html)
+                self.assertNotIn("数据管理</a>", hero_html)
 
     def test_topic_hotspot_switches_90_and_360_days(self) -> None:
         root = Path(__file__).resolve().parents[1]
@@ -316,6 +357,9 @@ class DashboardPageTests(unittest.TestCase):
                 app = AppTest.from_file(root / "streamlit_app.py", default_timeout=30)
                 app.run()
                 self.assertEqual(len(app.exception), 0)
+                labels = {item.label for item in app.text_input}
+                self.assertNotIn("数据版本", labels)
+                self.assertIn("更新时间", labels)
                 ninety = _chart_dataframe(app)
                 self.assertEqual(len(ninety), 52)
                 self.assertEqual(ninety["date"].nunique(), 13)
@@ -326,6 +370,22 @@ class DashboardPageTests(unittest.TestCase):
                         lambda label: any("\u4e00" <= char <= "\u9fff" for char in label)
                     ).all()
                 )
+                ninety_axes = _chart_x_constraints(app)
+                self.assertEqual(len(ninety_axes), 2)
+                self.assertEqual(ninety_axes[0], ninety_axes[1])
+                self.assertEqual(
+                    _domain_date(ninety_axes[0]["maxallowed"]), date(2026, 11, 18)
+                )
+                self.assertEqual(
+                    _domain_date(ninety_axes[0]["minallowed"]), date(2026, 8, 21)
+                )
+                self.assertTrue(all(axis["fixedrange"] is False for axis in ninety_axes))
+                self.assertTrue(
+                    all(spec["layout"]["dragmode"] == "zoom" for spec in _chart_specs(app))
+                )
+                self.assertTrue(
+                    all(config["scrollZoom"] is True for config in _chart_configs(app))
+                )
 
                 app.segmented_control(key="v14_period").set_value("近360天").run()
                 self.assertEqual(len(app.exception), 0)
@@ -334,6 +394,16 @@ class DashboardPageTests(unittest.TestCase):
                 self.assertEqual(year["date"].nunique(), 13)
                 self.assertEqual(year["topic_id"].nunique(), 4)
                 self.assertEqual(year.iloc[-1]["period_days"], 18)
+                year_axes = _chart_x_constraints(app)
+                self.assertEqual(len(year_axes), 2)
+                self.assertEqual(year_axes[0], year_axes[1])
+                self.assertEqual(
+                    _domain_date(year_axes[0]["maxallowed"]), date(2026, 11, 18)
+                )
+                self.assertEqual(
+                    _domain_date(year_axes[0]["minallowed"]), date(2025, 11, 24)
+                )
+                self.assertTrue(all(axis["fixedrange"] is False for axis in year_axes))
 
                 app.segmented_control(key="v14_period").set_value("近90天").run()
                 self.assertEqual(len(app.exception), 0)

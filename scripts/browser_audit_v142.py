@@ -4,7 +4,6 @@ import argparse
 from datetime import datetime
 import json
 from pathlib import Path
-import re
 
 from playwright.sync_api import Page, sync_playwright
 
@@ -18,6 +17,7 @@ FIELDS = {
     "25": ("材料科学 · Materials Science", 144),
 }
 PERIODS = {90: "近90天", 360: "近360天"}
+CHART_SELECTOR = '[data-testid="stPlotlyChart"] .js-plotly-plot'
 
 
 def _click_segment(page: Page, label: str) -> None:
@@ -27,76 +27,73 @@ def _click_segment(page: Page, label: str) -> None:
 
 def _wait_for_lines(page: Page, expected: int, period_days: int) -> None:
     page.wait_for_function(
-        r"""
+        """
         options => {
-          const charts = [...document.querySelectorAll('[data-testid="stVegaLiteChart"]')];
-          const pattern = options.periodDays === 90 ? /^\d{2}-\d{2}$/ : /^\d{4}-\d{2}$/;
+          const charts = [...document.querySelectorAll(options.selector)];
           return charts.length === 2
-            && charts.every(chart => {
-              const ticks = [...chart.querySelectorAll('svg text')]
-                .map(element => (element.textContent || '').trim())
-                .filter(text => pattern.test(text));
-              return chart.querySelectorAll('.mark-line').length === options.expected
-                && ticks.length === 13;
-            });
+            && charts.every(chart => chart.data?.length === options.expected
+              && chart._fullLayout?.xaxis?.fixedrange === false
+              && chart._fullLayout.xaxis.minallowed
+              && chart._fullLayout.xaxis.maxallowed);
         }
         """,
-        arg={"expected": expected, "periodDays": period_days},
+        arg={
+            "selector": CHART_SELECTOR,
+            "expected": expected,
+            "periodDays": period_days,
+        },
         timeout=120_000,
     )
 
 
 def _chart_state(page: Page, expected_lines: int, period_days: int) -> dict:
-    charts = page.locator('[data-testid="stVegaLiteChart"]')
+    charts = page.locator(CHART_SELECTOR)
     states = []
-    tick_pattern = re.compile(r"^\d{2}-\d{2}$" if period_days == 90 else r"^\d{4}-\d{2}$")
     for index in range(2):
         chart = charts.nth(index)
         chart.scroll_into_view_if_needed()
-        texts = [
-            text.strip()
-            for text in chart.locator("svg text").evaluate_all(
-                "elements => elements.map(element => element.textContent)"
-            )
-            if text is not None
-        ]
-        ticks = [text for text in texts if tick_pattern.fullmatch(text)]
-        legend = [
-            text.strip()
-            for text in chart.locator(".role-legend text").evaluate_all(
-                "elements => elements.map(element => element.textContent)"
-            )
-            if text is not None and text.strip()
-        ]
-        states.append(
-            {
-                "line_count": chart.locator(".mark-line").count(),
-                "point_count": chart.locator(".mark-symbol path").count(),
-                "ticks": ticks,
-                "legend": legend,
-                "legend_is_chinese": bool(legend) and all(
-                    any("\u4e00" <= char <= "\u9fff" for char in label)
-                    for label in legend
-                ),
-            }
+        state = chart.evaluate(
+            """element => ({
+              line_count: element.data.length,
+              point_count: element.data.reduce(
+                (count, trace) => count + (trace.x?.length || 0), 0
+              ),
+              ticks: [...element.querySelectorAll('.xtick text')]
+                .map(node => (node.textContent || '').trim()).filter(Boolean),
+              legend: [...element.querySelectorAll('.legendtext')]
+                .map(node => (node.textContent || '').trim()).filter(Boolean),
+              minallowed: String(element._fullLayout.xaxis.minallowed),
+              maxallowed: String(element._fullLayout.xaxis.maxallowed),
+              fixedrange: element._fullLayout.xaxis.fixedrange,
+            })"""
         )
+        state["legend_is_chinese"] = bool(state["legend"]) and all(
+            any("\u4e00" <= char <= "\u9fff" for char in label)
+            for label in state["legend"]
+        )
+        states.append(state)
     if any(state["line_count"] != expected_lines for state in states):
         raise AssertionError(f"Expected {expected_lines} lines per chart: {states}")
-    if states[0]["ticks"] != states[1]["ticks"] or len(states[0]["ticks"]) != 13:
-        raise AssertionError(f"Chart time buckets differ: {states}")
+    if states[0]["ticks"] != states[1]["ticks"]:
+        raise AssertionError(f"Chart date axes differ: {states}")
+    if states[0]["minallowed"] != states[1]["minallowed"]:
+        raise AssertionError(f"Chart minimum boundaries differ: {states}")
+    if states[0]["maxallowed"] != states[1]["maxallowed"]:
+        raise AssertionError(f"Chart maximum boundaries differ: {states}")
+    if any(state["fixedrange"] is not False for state in states):
+        raise AssertionError(f"Chart interaction is unexpectedly fixed: {states}")
     if not all(state["legend_is_chinese"] for state in states):
         raise AssertionError(f"Non-Chinese legend found: {states}")
     return {"works_chart": states[0], "growth_chart": states[1]}
 
 
 def _verify_tooltip(page: Page) -> str:
-    point = page.locator('[data-testid="stVegaLiteChart"]').first.locator(
-        ".mark-symbol path"
-    ).first
+    chart = page.locator(CHART_SELECTOR).first
+    point = chart.locator(".scatterlayer .point").first
     point.hover(force=True)
-    tooltip = page.locator(".vg-tooltip")
+    tooltip = chart.locator(".hovertext").first
     tooltip.wait_for(state="visible", timeout=10_000)
-    text = tooltip.inner_text()
+    text = tooltip.text_content() or ""
     for expected in ("统计周期", "新增 Works", "环比", "OpenAlex 英文名称", "中文名称状态"):
         if expected not in text:
             raise AssertionError(f"Tooltip is missing {expected}: {text}")

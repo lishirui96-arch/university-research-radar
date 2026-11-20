@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+from html import escape
 from pathlib import Path
 from typing import Any
 
-import altair as alt
 import pandas as pd
+import plotly.graph_objects as go
 import streamlit as st
 
 from dashboard_repository import get_v14_hotspot_dashboard
@@ -79,96 +80,165 @@ def _prepare_chart_data(trend: pd.DataFrame, selected_ids: list[str]) -> pd.Data
     return chart_data
 
 
-def _time_axis(frame: pd.DataFrame, period_days: int) -> alt.X:
-    dates = sorted(pd.to_datetime(frame["date"].dropna().unique()))
-    values = [pd.Timestamp(value).to_pydatetime() for value in dates]
-    return alt.X(
-        "date:T",
-        title=None,
-        scale=alt.Scale(domain=[values[0], values[-1]]) if values else alt.Undefined,
-        axis=alt.Axis(
-            format="%m-%d" if period_days == 90 else "%Y-%m",
-            values=values,
-            labelOverlap="greedy",
-        ),
+def _date_bounds(frame: pd.DataFrame, data_through: Any) -> tuple[pd.Timestamp, pd.Timestamp]:
+    starts = pd.to_datetime(frame.get("period_start"), errors="coerce").dropna()
+    last_valid_date = pd.to_datetime(data_through, errors="coerce")
+    if starts.empty or pd.isna(last_valid_date):
+        raise ValueError("Chart date boundaries require valid period dates")
+    return starts.min().normalize(), last_valid_date.normalize()
+
+
+def _display_count(value: Any) -> str:
+    return "NA" if pd.isna(value) else f"{int(value):,}"
+
+
+def _display_rate(value: Any) -> str:
+    return "NA" if pd.isna(value) else f"{float(value):+.1%}"
+
+
+def _plotly_config() -> dict[str, Any]:
+    return {
+        "displayModeBar": True,
+        "displaylogo": False,
+        "scrollZoom": True,
+        "doubleClick": "reset+autosize",
+        "modeBarButtonsToAdd": ["pan2d", "select2d"],
+        "responsive": True,
+    }
+
+
+def _base_figure(
+    frame: pd.DataFrame, period_days: int, data_through: Any, y_title: str
+) -> go.Figure:
+    earliest, latest = _date_bounds(frame, data_through)
+    tick_values = sorted(pd.to_datetime(frame["date"].dropna().unique()))
+    tick_text = [
+        pd.Timestamp(value).strftime("%m-%d" if period_days == 90 else "%Y-%m")
+        for value in tick_values
+    ]
+    figure = go.Figure()
+    figure.update_layout(
+        template="plotly_white",
+        height=330,
+        margin={"l": 60, "r": 18, "t": 8, "b": 92},
+        hovermode="closest",
+        dragmode="zoom",
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="#F8FAFD",
+        font={"color": "#14263B", "size": 12},
+        legend={
+            "orientation": "h", "yanchor": "top", "y": -0.2,
+            "xanchor": "left", "x": 0,
+        },
     )
+    figure.update_xaxes(
+        title=None,
+        type="date",
+        range=[earliest.isoformat(), latest.isoformat()],
+        autorange=False,
+        fixedrange=False,
+        minallowed=earliest.isoformat(),
+        maxallowed=latest.isoformat(),
+        tickmode="array",
+        tickvals=tick_values,
+        ticktext=tick_text,
+        showgrid=False,
+        zeroline=False,
+    )
+    figure.update_yaxes(
+        title=y_title,
+        fixedrange=False,
+        gridcolor="#E3EBF4",
+        zeroline=False,
+    )
+    return figure
 
 
 def _works_chart(
-    frame: pd.DataFrame, topic_order: list[str], period_days: int
-) -> alt.Chart:
+    frame: pd.DataFrame, topic_order: list[str], period_days: int,
+    data_through: Any,
+) -> go.Figure:
     y_title = "7天新增 Works" if period_days == 90 else "月度新增 Works"
-    return (
-        alt.Chart(frame)
-        .mark_line(point=alt.OverlayMarkDef(size=30, filled=True), strokeWidth=2)
-        .encode(
-            x=_time_axis(frame, period_days),
-            y=alt.Y(
-                "period_works_count:Q", title=y_title,
-                axis=alt.Axis(format=",d"),
-            ),
-            color=alt.Color(
-                "topic_label:N", title=None, sort=topic_order,
-                scale=alt.Scale(domain=topic_order, range=COLORS[: len(topic_order)]),
-                legend=alt.Legend(orient="bottom", columns=2),
-            ),
-            tooltip=[
-                alt.Tooltip("period_label:N", title="统计周期"),
-                alt.Tooltip("period_start:T", title="开始日期", format="%Y-%m-%d"),
-                alt.Tooltip("period_end:T", title="结束日期", format="%Y-%m-%d"),
-                alt.Tooltip("period_days:Q", title="统计天数"),
-                alt.Tooltip("topic_label:N", title="Topic"),
-                alt.Tooltip("topic_name:N", title="OpenAlex 英文名称"),
-                alt.Tooltip("translation_status_label:N", title="中文名称状态"),
-                alt.Tooltip("topic_id:N", title="Topic ID"),
-                alt.Tooltip("period_works_count:Q", title="新增 Works", format=",d"),
-                alt.Tooltip("growth_rate:Q", title="环比", format="+.1%"),
-                alt.Tooltip("query_status:N", title="数据状态"),
-            ],
+    figure = _base_figure(frame, period_days, data_through, y_title)
+    color_by_topic = dict(zip(topic_order, COLORS, strict=False))
+    for topic_label in topic_order:
+        rows = frame[frame["topic_label"] == topic_label].sort_values("date")
+        if rows.empty:
+            continue
+        customdata = [
+            [
+                escape(str(row.period_label)), row.period_start.strftime("%Y-%m-%d"),
+                row.period_end.strftime("%Y-%m-%d"), int(row.period_days),
+                escape(str(row.topic_label)), escape(str(row.topic_name)),
+                escape(str(row.translation_status_label)), escape(str(row.topic_id)),
+                _display_count(row.period_works_count), _display_rate(row.growth_rate),
+                escape(str(row.query_status)),
+            ]
+            for row in rows.itertuples()
+        ]
+        figure.add_trace(
+            go.Scatter(
+                x=rows["date"], y=rows["period_works_count"],
+                mode="lines+markers", name=topic_label,
+                line={"color": color_by_topic[topic_label], "width": 2},
+                marker={"color": color_by_topic[topic_label], "size": 6},
+                customdata=customdata, connectgaps=False,
+                hovertemplate=(
+                    "统计周期：%{customdata[0]}<br>开始日期：%{customdata[1]}<br>"
+                    "结束日期：%{customdata[2]}<br>统计天数：%{customdata[3]}<br>"
+                    "Topic：%{customdata[4]}<br>OpenAlex 英文名称：%{customdata[5]}<br>"
+                    "中文名称状态：%{customdata[6]}<br>Topic ID：%{customdata[7]}<br>"
+                    "新增 Works：%{customdata[8]}<br>环比：%{customdata[9]}<br>"
+                    "数据状态：%{customdata[10]}<extra></extra>"
+                ),
+            )
         )
-        .properties(height=330)
-        .interactive(bind_y=False)
-    )
+    return figure
 
 
 def _growth_chart(
-    frame: pd.DataFrame, topic_order: list[str], period_days: int
-) -> alt.LayerChart:
+    frame: pd.DataFrame, topic_order: list[str], period_days: int,
+    data_through: Any,
+) -> go.Figure:
     y_title = "周环比增长率" if period_days == 90 else "月环比增长率"
-    lines = (
-        alt.Chart(frame)
-        .mark_line(point=alt.OverlayMarkDef(size=28, filled=True), strokeWidth=2)
-        .encode(
-            x=_time_axis(frame, period_days),
-            y=alt.Y(
-                "growth_rate:Q", title=y_title,
-                axis=alt.Axis(format="+.0%"),
-            ),
-            color=alt.Color(
-                "topic_label:N", title=None, sort=topic_order,
-                scale=alt.Scale(domain=topic_order, range=COLORS[: len(topic_order)]),
-                legend=alt.Legend(orient="bottom", columns=2),
-            ),
-            tooltip=[
-                alt.Tooltip("period_label:N", title="统计周期"),
-                alt.Tooltip("period_start:T", title="开始日期", format="%Y-%m-%d"),
-                alt.Tooltip("period_end:T", title="结束日期", format="%Y-%m-%d"),
-                alt.Tooltip("period_days:Q", title="统计天数"),
-                alt.Tooltip("topic_label:N", title="Topic"),
-                alt.Tooltip("topic_name:N", title="OpenAlex 英文名称"),
-                alt.Tooltip("translation_status_label:N", title="中文名称状态"),
-                alt.Tooltip("topic_id:N", title="Topic ID"),
-                alt.Tooltip("period_works_count:Q", title="本期 Works", format=",d"),
-                alt.Tooltip("comparison_works_count:Q", title="对比期 Works", format=",d"),
-                alt.Tooltip("growth_rate:Q", title=y_title, format="+.1%"),
-                alt.Tooltip("growth_status:N", title="增长率状态"),
-            ],
+    figure = _base_figure(frame, period_days, data_through, y_title)
+    figure.update_yaxes(tickformat="+.0%", zeroline=True, zerolinecolor="#64748B")
+    color_by_topic = dict(zip(topic_order, COLORS, strict=False))
+    for topic_label in topic_order:
+        rows = frame[frame["topic_label"] == topic_label].sort_values("date")
+        if rows.empty:
+            continue
+        customdata = [
+            [
+                escape(str(row.period_label)), row.period_start.strftime("%Y-%m-%d"),
+                row.period_end.strftime("%Y-%m-%d"), int(row.period_days),
+                escape(str(row.topic_label)), escape(str(row.topic_name)),
+                escape(str(row.translation_status_label)), escape(str(row.topic_id)),
+                _display_count(row.period_works_count),
+                _display_count(row.comparison_works_count),
+                _display_rate(row.growth_rate), escape(str(row.growth_status)),
+            ]
+            for row in rows.itertuples()
+        ]
+        figure.add_trace(
+            go.Scatter(
+                x=rows["date"], y=rows["growth_rate"],
+                mode="lines+markers", name=topic_label,
+                line={"color": color_by_topic[topic_label], "width": 2},
+                marker={"color": color_by_topic[topic_label], "size": 6},
+                customdata=customdata, connectgaps=False,
+                hovertemplate=(
+                    "统计周期：%{customdata[0]}<br>开始日期：%{customdata[1]}<br>"
+                    "结束日期：%{customdata[2]}<br>统计天数：%{customdata[3]}<br>"
+                    "Topic：%{customdata[4]}<br>OpenAlex 英文名称：%{customdata[5]}<br>"
+                    "中文名称状态：%{customdata[6]}<br>Topic ID：%{customdata[7]}<br>"
+                    "本期 Works：%{customdata[8]}<br>对比期 Works：%{customdata[9]}<br>"
+                    f"{y_title}：%{{customdata[10]}}<br>"
+                    "增长率状态：%{customdata[11]}<extra></extra>"
+                ),
+            )
         )
-    )
-    baseline = alt.Chart(pd.DataFrame({"baseline": [0]})).mark_rule(
-        color="#64748B", strokeDash=[5, 4], opacity=0.8
-    ).encode(y="baseline:Q")
-    return (lines + baseline).properties(height=330).interactive(bind_y=False)
+    return figure
 
 
 db_path = Path(database_path())
@@ -188,7 +258,7 @@ with st.container(key="research_hero"):
         """
     )
 
-control_columns = st.columns([1.1, 1.35, 1.1, 1.6, 1.15], gap="small")
+control_columns = st.columns([1.05, 1.45, 1.05, 1.15], gap="small")
 with control_columns[0]:
     period_label = st.segmented_control(
         "观察窗口", ["近90天", "近360天"], default="近90天", key="v14_period"
@@ -208,12 +278,6 @@ with control_columns[2]:
     sort_label = st.segmented_control(
         "榜单口径", ["增长量", "增长率"], default="增长量", key="v14_sort"
     )
-with control_columns[3]:
-    st.text_input(
-        "数据版本", value="openalex-taxonomy-2026-11-18-v1.4",
-        disabled=True, key="v14_version",
-    )
-
 field_ids = {
     FIELD_LABEL_ALL: None,
     "化学工程 · Chemical Engineering": "15", "化学 · Chemistry": "16",
@@ -226,7 +290,7 @@ with st.spinner("正在读取本地科研热点数据..."):
     result = _load_v14(
         str(db_path), signature, period_days, field_ids[field_label], sort_by
     )
-with control_columns[4]:
+with control_columns[3]:
     st.text_input(
         "更新时间", value=_display_time(result.get("metrics", {}).get("latest_success_at")),
         disabled=True, key="v14_updated_at",
@@ -329,8 +393,12 @@ with chart_columns[0]:
         if chart_data.empty or chart_data["period_works_count"].notna().sum() == 0:
             st.info("所选 Topic 暂无已完成回填的日序列。", icon=":material/timeline:")
         else:
-            st.altair_chart(
-                _works_chart(chart_data, topic_order, period_days), key="v14_works_chart"
+            st.plotly_chart(
+                _works_chart(
+                    chart_data, topic_order, period_days, metrics["data_through"]
+                ),
+                key="v14_works_chart",
+                config=_plotly_config(),
             )
 with chart_columns[1]:
     with st.container(key="panel_v14_growth", border=True, height=505):
@@ -343,8 +411,12 @@ with chart_columns[1]:
         if chart_data.empty or chart_data["growth_rate"].notna().sum() == 0:
             st.info("当前日序列不足以计算周期增长率。", icon=":material/timeline:")
         else:
-            st.altair_chart(
-                _growth_chart(chart_data, topic_order, period_days), key="v14_growth_chart"
+            st.plotly_chart(
+                _growth_chart(
+                    chart_data, topic_order, period_days, metrics["data_through"]
+                ),
+                key="v14_growth_chart",
+                config=_plotly_config(),
             )
 
 st.caption(

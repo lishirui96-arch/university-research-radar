@@ -35,62 +35,136 @@ def apply_global_styles(app_dir: Path) -> None:
         [data-testid="stAppViewContainer"] {{ background: var(--radar-canvas); }}
         [data-testid="stMainBlockContainer"] {{
             max-width: 1760px;
-            padding-top: 1.1rem;
+            padding-top: .9rem;
             padding-bottom: 3rem;
         }}
 
         header[data-testid="stHeader"] {{
-            background: var(--radar-navy);
-            border-bottom: 1px solid rgba(255,255,255,.12);
-            min-height: 3.5rem;
+            display: none;
         }}
-        header[data-testid="stHeader"]::before {{
-            content: "全球高校科研热点与产业创新情报平台";
+        .radar-brand-header {{
+            align-items: center;
+            background: #ffffff;
+            border: 1px solid #e4edf6;
+            border-radius: 8px;
+            box-shadow: 0 5px 18px rgba(28, 73, 121, .07);
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+            margin-bottom: 1rem;
+            min-height: 82px;
+            padding: .85rem 1.35rem;
+        }}
+        .radar-brand-lockup {{
+            align-items: center;
+            display: flex;
+            gap: .9rem;
+            min-width: 0;
+        }}
+        .radar-brand-mark {{
+            align-items: center;
+            background: #0b72e7;
+            border-radius: 7px;
+            box-shadow: 0 7px 16px rgba(11, 99, 206, .22);
             color: #ffffff;
-            font-size: 1.02rem;
-            font-weight: 700;
-            position: absolute;
-            left: 1.25rem;
-            top: 1rem;
+            display: flex;
+            flex: 0 0 46px;
+            height: 46px;
+            justify-content: center;
+        }}
+        .radar-brand-glyph {{
+            font-size: 1.45rem;
+            font-weight: 760;
+            line-height: 1;
+        }}
+        .radar-brand-copy {{
+            border-left: 1px solid #cbd9e8;
+            min-width: 0;
+            padding-left: .9rem;
+        }}
+        .radar-brand-name {{
+            color: #0b2748;
+            font-size: 1.05rem;
+            font-weight: 760;
+            line-height: 1.25;
             white-space: nowrap;
         }}
-        header[data-testid="stHeader"] nav {{ padding-left: 24rem; }}
-        header[data-testid="stHeader"] a,
-        header[data-testid="stHeader"] button,
-        header[data-testid="stHeader"] span {{ color: #eef6ff !important; }}
+        .radar-brand-subtitle {{
+            color: #6d829a;
+            font-size: .66rem;
+            font-weight: 700;
+            letter-spacing: .06em !important;
+            margin-top: .22rem;
+        }}
+        .radar-home-link {{
+            align-items: center;
+            background: #0b72e7;
+            border-radius: 7px;
+            box-shadow: 0 6px 16px rgba(11, 99, 206, .2);
+            color: #ffffff !important;
+            display: inline-flex;
+            font-size: .95rem;
+            font-weight: 700;
+            gap: .42rem;
+            justify-content: center;
+            min-height: 42px;
+            padding: 0 1.25rem;
+            text-decoration: none !important;
+        }}
+        .radar-home-link:hover {{ background: #075fca; color: #ffffff !important; }}
+        .radar-user-entry {{
+            align-items: center;
+            background: #f1f6fc;
+            border: 1px solid #dce8f4;
+            border-radius: 50%;
+            color: #173f6c;
+            cursor: default;
+            display: flex;
+            height: 42px;
+            justify-content: center;
+            justify-self: end;
+            padding: 0;
+            position: relative;
+            width: 42px;
+        }}
+        .radar-user-entry span {{ font-size: 1rem; font-weight: 700; }}
 
         .st-key-research_hero {{
-            background-image: url("{hero_uri}");
-            background-position: center;
+            background-image:
+                linear-gradient(90deg, rgba(3, 27, 58, .98) 0%, rgba(3, 35, 76, .92) 43%, rgba(2, 42, 91, .28) 72%, rgba(0, 42, 91, .06) 100%),
+                url("{hero_uri}");
+            background-position: center, center right;
             background-size: cover;
             border: 1px solid rgba(66, 160, 224, .28);
-            border-radius: 6px;
+            border-radius: 8px;
             box-shadow: 0 14px 34px rgba(7, 31, 59, .16);
-            min-height: 190px;
+            min-height: 260px;
             overflow: hidden;
-            padding: 2.2rem 2.4rem 1.8rem;
+            padding: 2.35rem 3rem 2.15rem;
         }}
-        .radar-hero-copy {{ max-width: 760px; }}
+        .radar-hero-copy {{ max-width: 64%; }}
         .radar-hero-kicker {{
             color: #7dd3fc;
-            font-size: .78rem;
+            font-size: .76rem;
             font-weight: 700;
-            margin-bottom: .8rem;
+            letter-spacing: .04em !important;
+            margin-bottom: 1.2rem;
             text-transform: uppercase;
         }}
         .radar-hero-copy h1 {{
             color: #ffffff;
-            font-size: 2.25rem;
-            line-height: 1.24;
-            margin: 0 0 .85rem;
-            max-width: 700px;
+            font-size: 2.45rem;
+            font-weight: 760;
+            line-height: 1.3;
+            margin: 0 0 1rem;
+            max-width: 1000px;
         }}
         .radar-hero-copy p {{
             color: #c6d9ed;
             font-size: 1rem;
-            line-height: 1.7;
+            line-height: 1.65;
             margin: 0;
-            max-width: 680px;
+            max-width: 800px;
         }}
 
         [class*="st-key-kpi_"] {{
@@ -202,14 +276,41 @@ def apply_global_styles(app_dir: Path) -> None:
             padding: .65rem .8rem;
         }}
 
+        @media (max-width: 1280px) {{
+            .radar-brand-name {{ font-size: .95rem; }}
+            .radar-hero-copy {{ max-width: 70%; }}
+            .radar-hero-copy h1 {{ font-size: 2rem; }}
+        }}
         @media (max-width: 900px) {{
-            header[data-testid="stHeader"]::before {{ display: none; }}
-            header[data-testid="stHeader"] nav {{ padding-left: 0; }}
             [data-testid="stMainBlockContainer"] {{ padding: .8rem .8rem 2rem; }}
-            .st-key-research_hero {{ min-height: 310px; padding: 2rem 1.35rem; }}
+            .radar-brand-header {{
+                gap: .75rem;
+                grid-template-columns: minmax(0, 1fr) auto auto;
+                min-height: 72px;
+                padding: .7rem .8rem;
+            }}
+            .radar-brand-mark {{ flex-basis: 40px; height: 40px; }}
+            .radar-brand-name {{ font-size: .82rem; white-space: normal; }}
+            .radar-brand-subtitle {{ font-size: .58rem; }}
+            .radar-home-link {{ min-height: 38px; padding: 0 .8rem; }}
+            .radar-user-entry {{ height: 38px; width: 38px; }}
+            .st-key-research_hero {{ min-height: 280px; padding: 2rem 1.35rem; }}
+            .radar-hero-copy {{ max-width: 88%; }}
             .radar-hero-copy h1 {{ font-size: 1.75rem; }}
             .radar-hero-copy p {{ font-size: .9rem; max-width: 92%; }}
             [class*="st-key-kpi_"] {{ min-height: 155px; }}
+        }}
+        @media (max-width: 620px) {{
+            .radar-brand-header {{ grid-template-columns: minmax(0, 1fr) auto; }}
+            .radar-brand-subtitle {{ display: none; }}
+            .radar-home-link {{ display: none; }}
+            .radar-brand-mark {{ flex-basis: 38px; height: 38px; }}
+            .st-key-research_hero {{
+                background-position: center, 64% center;
+                min-height: 310px;
+            }}
+            .radar-hero-copy {{ max-width: 100%; }}
+            .radar-hero-copy h1 {{ font-size: 1.55rem; }}
         }}
         </style>
         """

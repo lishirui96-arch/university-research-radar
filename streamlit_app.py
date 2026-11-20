@@ -46,7 +46,29 @@ page = st.navigation(
             icon=":material/database:",
         ),
     ],
-    position="top",
+    position="hidden",
+)
+
+st.html(
+    """
+    <header class="radar-brand-header" aria-label="平台主导航">
+      <div class="radar-brand-lockup">
+        <div class="radar-brand-mark" aria-hidden="true">
+          <span class="radar-brand-glyph">研</span>
+        </div>
+        <div class="radar-brand-copy">
+          <div class="radar-brand-name">全球高校科研热点与产业创新情报平台</div>
+          <div class="radar-brand-subtitle">GLOBAL RESEARCH INTELLIGENCE</div>
+        </div>
+      </div>
+      <a class="radar-home-link" href="/" aria-current="page">
+        <span>首页</span>
+      </a>
+      <button class="radar-user-entry" type="button" title="个人设置" aria-label="个人设置">
+        <span aria-hidden="true">人</span>
+      </button>
+    </header>
+    """
 )
 
 page.run()
