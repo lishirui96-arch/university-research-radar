@@ -597,91 +597,45 @@ st.caption(
     + "最新日期可能仍在收录中。"
 )
 
-bottom_columns = st.columns([1.5, 1], gap="medium")
-with bottom_columns[0]:
-    with st.container(key="panel_v14_ranking", border=True):
-        st.subheader(":material/emoji_events: 科研热点 TOP 10")
-        ranking_scope = "六学科范围" if result["field_id"] is None else str(field_label).split(" · ")[0]
-        ranking_basis = "最新周期增长率" if sort_by == "growth" else f"近{period_days}天 Works"
-        st.caption(f"{ranking_scope}内按{ranking_basis}排名；点击行查看 Topic 详情")
-        table = display_ranking.head(10).copy()
-        table["Topic"] = table.apply(_topic_label, axis=1)
-        table["所属学科"] = table["field_name_zh"] + " · " + table["field_name"]
-        table[f"{period_days}天 Works"] = table["period_works_count"]
-        table["增长率"] = pd.to_numeric(
-            table["period_growth_rate"], errors="coerce"
-        ).mul(100)
-        table["趋势"] = table["trend"]
-        table = table.rename(columns={"rank": "排名"})[
-            ["排名", "Topic", "所属学科", f"{period_days}天 Works", "增长率", "趋势"]
-        ]
-        event = st.dataframe(
-            table, hide_index=True, on_select="rerun", selection_mode="single-row",
-            key="v14_ranking_table",
-            column_config={
-                f"{period_days}天 Works": st.column_config.NumberColumn(format="localized"),
-                "增长率": st.column_config.NumberColumn(format="%.1f%%"),
-            },
-        )
-        selected_index = event.selection.rows[0] if event.selection.rows else 0
-        detail = display_ranking.head(10).iloc[selected_index]
-        st.markdown(f"**Topic 详情：{_topic_label(detail)}**")
-        detail_columns = st.columns(4)
-        detail_columns[0].metric("Topic ID", str(detail["topic_id"]))
-        detail_columns[1].metric(f"{period_days}天 Works", f"{int(detail['period_works_count']):,}")
-        detail_columns[2].metric("Field", str(detail["field_name"]))
-        detail_growth = pd.to_numeric(detail["period_growth_rate"], errors="coerce")
-        detail_columns[3].metric(
-            "增长率", f"{detail_growth:+.1%}" if pd.notna(detail_growth) else "NA"
-        )
-        detail_translation = topic_translation(
-            detail["topic_id"], detail["topic_name"], detail.get("topic_name_zh")
-        )
-        st.caption(
-            f"OpenAlex：{detail['topic_name']} · Subfield：{detail['subfield_name']} · "
-            f"中文名称状态：{detail_translation['translation_status_label']}。"
-        )
-
-with bottom_columns[1]:
-    with st.container(key="panel_v14_insights", border=True):
-        st.subheader(":material/insights: 近期热点速览")
-        first = result["all_topics"].iloc[0]
-        st.markdown(
-            f"- **{_topic_label(first)}** 位列当前范围第一，近{period_days}天 "
-            f"Works 为 **{int(first['period_works_count']):,}**。"
-        )
-        other_period = 360 if period_days == 90 else 90
-        other = _load_dashboard(
-            str(db_path), signature, str(region_code), other_period,
-            field_ids[field_label], "works",
-        )
-        if not other["all_topics"].empty:
-            current_top = set(result["all_topics"].head(10)["topic_id"].astype(str))
-            other_top = set(other["all_topics"].head(10)["topic_id"].astype(str))
-            st.markdown(
-                f"- 当前 TOP 10 中有 **{len(current_top & other_top)}** 个 Topic "
-                f"同时进入近{other_period}天 TOP 10。"
-            )
-        st.markdown(
-            f"- 当前筛选覆盖 **{metrics['covered_topics']:,}** 个 Topic，其中 "
-            f"**{metrics['active_topics']:,}** 个在窗口内有成果。"
-        )
-        st.caption("增长加速/放缓结论需前一等长窗口；数据不足时不生成推断。")
-
-    with st.container(key="panel_v14_status", border=True):
-        st.subheader(":material/database: 数据采集状态")
-        status_columns = st.columns(2)
-        status_columns[0].metric("上次成功更新", _display_time(metrics["latest_success_at"]))
-        status_columns[1].metric("数据截止日期", metrics["data_through"])
-        status_columns[0].metric("已覆盖 Topic", f"{metrics['covered_topics']:,}")
-        status_columns[1].metric("360天完整率", f"{completeness:.1%}")
-        status_columns[0].metric("本地 Works 明细", f"{metrics['local_work_records']:,}")
-        status_columns[1].metric("失败更新任务", f"{metrics['failed_update_runs']:,}")
-        st.badge(
-            "完整" if result["status"] == "complete" else "回填中",
-            color="green" if result["status"] == "complete" else "orange",
-            icon=":material/sync:",
-        )
-        st.caption(
-            "当前库保存 OpenAlex 汇总计数而非 Works 明细；所有趋势均基于 Publication Date。"
-        )
+with st.container(key="panel_v14_ranking", border=True):
+    st.subheader(":material/emoji_events: 科研热点 TOP 10")
+    ranking_scope = "六学科范围" if result["field_id"] is None else str(field_label).split(" · ")[0]
+    ranking_basis = "最新周期增长率" if sort_by == "growth" else f"近{period_days}天 Works"
+    st.caption(f"{ranking_scope}内按{ranking_basis}排名；点击行查看 Topic 详情")
+    table = display_ranking.head(10).copy()
+    table["Topic"] = table.apply(_topic_label, axis=1)
+    table["所属学科"] = table["field_name_zh"] + " · " + table["field_name"]
+    table[f"{period_days}天 Works"] = table["period_works_count"]
+    table["增长率"] = pd.to_numeric(
+        table["period_growth_rate"], errors="coerce"
+    ).mul(100)
+    table["趋势"] = table["trend"]
+    table = table.rename(columns={"rank": "排名"})[
+        ["排名", "Topic", "所属学科", f"{period_days}天 Works", "增长率", "趋势"]
+    ]
+    event = st.dataframe(
+        table, hide_index=True, on_select="rerun", selection_mode="single-row",
+        key="v14_ranking_table",
+        column_config={
+            f"{period_days}天 Works": st.column_config.NumberColumn(format="localized"),
+            "增长率": st.column_config.NumberColumn(format="%.1f%%"),
+        },
+    )
+    selected_index = event.selection.rows[0] if event.selection.rows else 0
+    detail = display_ranking.head(10).iloc[selected_index]
+    st.markdown(f"**Topic 详情：{_topic_label(detail)}**")
+    detail_columns = st.columns(4)
+    detail_columns[0].metric("Topic ID", str(detail["topic_id"]))
+    detail_columns[1].metric(f"{period_days}天 Works", f"{int(detail['period_works_count']):,}")
+    detail_columns[2].metric("Field", str(detail["field_name"]))
+    detail_growth = pd.to_numeric(detail["period_growth_rate"], errors="coerce")
+    detail_columns[3].metric(
+        "增长率", f"{detail_growth:+.1%}" if pd.notna(detail_growth) else "NA"
+    )
+    detail_translation = topic_translation(
+        detail["topic_id"], detail["topic_name"], detail.get("topic_name_zh")
+    )
+    st.caption(
+        f"OpenAlex：{detail['topic_name']} · Subfield：{detail['subfield_name']} · "
+        f"中文名称状态：{detail_translation['translation_status_label']}。"
+    )

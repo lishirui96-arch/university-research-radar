@@ -465,6 +465,13 @@ class DashboardPageTests(unittest.TestCase):
                 app = AppTest.from_file(root / "streamlit_app.py", default_timeout=30)
                 app.run()
                 self.assertEqual(len(app.exception), 0)
+                subheaders = [item.value for item in app.subheader]
+                self.assertFalse(
+                    any("近期热点速览" in value for value in subheaders)
+                )
+                self.assertFalse(
+                    any("数据采集状态" in value for value in subheaders)
+                )
                 labels = {item.label for item in app.text_input}
                 self.assertNotIn("数据版本", labels)
                 self.assertIn("更新时间", labels)
