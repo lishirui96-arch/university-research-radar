@@ -175,12 +175,6 @@ def _chart_configs(app: AppTest) -> list[dict]:
     return [json.loads(chart.proto.config) for chart in app.get("plotly_chart")]
 
 
-def _domain_date(value) -> date:
-    if isinstance(value, dict):
-        return date(int(value["year"]), int(value["month"]), int(value["date"]))
-    return pd.Timestamp(value).date()
-
-
 def _seed_v14_taxonomy(root: Path, db_path: Path) -> None:
     ranking = pd.read_csv(root / "TOPIC_RANKING_90D.csv", dtype={"topic_id": "string"})
     by_id = ranking.set_index("topic_id")
@@ -373,15 +367,21 @@ class DashboardPageTests(unittest.TestCase):
                 ninety_axes = _chart_x_constraints(app)
                 self.assertEqual(len(ninety_axes), 2)
                 self.assertEqual(ninety_axes[0], ninety_axes[1])
-                self.assertEqual(
-                    _domain_date(ninety_axes[0]["maxallowed"]), date(2026, 11, 18)
-                )
-                self.assertEqual(
-                    _domain_date(ninety_axes[0]["minallowed"]), date(2026, 8, 21)
-                )
+                self.assertNotIn("maxallowed", ninety_axes[0])
+                self.assertNotIn("minallowed", ninety_axes[0])
+                self.assertTrue(ninety_axes[0]["automargin"])
+                self.assertEqual(ninety_axes[0]["ticklabeloverflow"], "allow")
+                self.assertEqual(ninety_axes[0]["tickangle"], 0)
                 self.assertTrue(all(axis["fixedrange"] is False for axis in ninety_axes))
                 self.assertTrue(
-                    all(spec["layout"]["dragmode"] == "zoom" for spec in _chart_specs(app))
+                    all(spec["layout"]["dragmode"] == "pan" for spec in _chart_specs(app))
+                )
+                self.assertTrue(
+                    all(
+                        trace["cliponaxis"] is False
+                        for spec in _chart_specs(app)
+                        for trace in spec["data"]
+                    )
                 )
                 self.assertTrue(
                     all(config["scrollZoom"] is True for config in _chart_configs(app))
@@ -397,12 +397,8 @@ class DashboardPageTests(unittest.TestCase):
                 year_axes = _chart_x_constraints(app)
                 self.assertEqual(len(year_axes), 2)
                 self.assertEqual(year_axes[0], year_axes[1])
-                self.assertEqual(
-                    _domain_date(year_axes[0]["maxallowed"]), date(2026, 11, 18)
-                )
-                self.assertEqual(
-                    _domain_date(year_axes[0]["minallowed"]), date(2025, 11, 24)
-                )
+                self.assertNotIn("maxallowed", year_axes[0])
+                self.assertNotIn("minallowed", year_axes[0])
                 self.assertTrue(all(axis["fixedrange"] is False for axis in year_axes))
 
                 app.segmented_control(key="v14_period").set_value("近90天").run()

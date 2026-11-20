@@ -21,6 +21,109 @@ COLORS = [
 ]
 
 
+_PLOTLY_RIGHT_BOUNDARY_GUARD = st.components.v2.component(
+    "plotly_right_boundary_guard",
+    js=r"""
+export default function(component) {
+  const { data } = component;
+  const latestDate = new Date(`${data.latestDate}T00:00:00`).getTime();
+  const attached = new Map();
+  let stopped = false;
+
+  const plotlyDate = (timestamp) => {
+    const value = new Date(timestamp);
+    const pad = (part) => String(part).padStart(2, "0");
+    return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}`
+      + `T${pad(value.getHours())}:${pad(value.getMinutes())}:${pad(value.getSeconds())}`;
+  };
+
+  const attach = () => {
+    if (stopped) return;
+    for (const selector of data.chartSelectors) {
+      const chart = document.querySelector(`${selector} .js-plotly-plot`);
+      if (!chart || attached.has(chart) || typeof chart.on !== "function") continue;
+
+      let correcting = false;
+      let animationFrame = null;
+      const selectedTraces = new Set();
+      const constrainRightEdge = () => {
+        animationFrame = null;
+        if (correcting) return;
+        const range = chart._fullLayout?.xaxis?.range;
+        if (!Array.isArray(range) || range.length !== 2) return;
+
+        const currentStart = new Date(range[0]).getTime();
+        const currentEnd = new Date(range[1]).getTime();
+        if (!Number.isFinite(currentStart) || !Number.isFinite(currentEnd)) return;
+        if (currentEnd <= latestDate + 1) return;
+
+        const visibleSpan = currentEnd - currentStart;
+        const correctedStart = plotlyDate(latestDate - visibleSpan);
+        const correctedEnd = `${data.latestDate}T00:00:00`;
+        const plotly = globalThis.Plotly;
+        if (!plotly?.relayout) return;
+
+        correcting = true;
+        Promise.resolve(plotly.relayout(chart, {
+          "xaxis.range[0]": correctedStart,
+          "xaxis.range[1]": correctedEnd,
+          "xaxis.autorange": false,
+        })).finally(() => {
+          correcting = false;
+        });
+      };
+      const onRelayout = () => {
+        if (correcting || animationFrame !== null) return;
+        animationFrame = requestAnimationFrame(constrainRightEdge);
+      };
+      const onLegendClick = (event) => {
+        const plotly = globalThis.Plotly;
+        if (!plotly?.restyle) return false;
+        if (selectedTraces.has(event.curveNumber)) {
+          selectedTraces.delete(event.curveNumber);
+        } else {
+          selectedTraces.add(event.curveNumber);
+        }
+        const traceIndices = chart.data.map((_, index) => index);
+        const visibility = traceIndices.map(
+          (index) => selectedTraces.has(index) ? true : "legendonly"
+        );
+        plotly.restyle(chart, { visible: visibility }, traceIndices);
+        return false;
+      };
+      const onLegendDoubleClick = () => false;
+
+      chart.on("plotly_relayout", onRelayout);
+      chart.on("plotly_legendclick", onLegendClick);
+      chart.on("plotly_legenddoubleclick", onLegendDoubleClick);
+      attached.set(chart, { onRelayout, onLegendClick, onLegendDoubleClick });
+      constrainRightEdge();
+    }
+  };
+
+  const observer = new MutationObserver(attach);
+  observer.observe(document.body, { childList: true, subtree: true });
+  const retryTimer = window.setInterval(attach, 100);
+  attach();
+
+  return () => {
+    stopped = true;
+    observer.disconnect();
+    window.clearInterval(retryTimer);
+    for (const [chart, listeners] of attached) {
+      if (typeof chart.removeListener === "function") {
+        chart.removeListener("plotly_relayout", listeners.onRelayout);
+        chart.removeListener("plotly_legendclick", listeners.onLegendClick);
+        chart.removeListener("plotly_legenddoubleclick", listeners.onLegendDoubleClick);
+      }
+    }
+    attached.clear();
+  };
+}
+""",
+)
+
+
 @st.cache_data(ttl="5m", max_entries=24, show_spinner=False)
 def _load_v14(
     path: str,
@@ -120,9 +223,9 @@ def _base_figure(
     figure.update_layout(
         template="plotly_white",
         height=330,
-        margin={"l": 60, "r": 18, "t": 8, "b": 92},
+        margin={"l": 60, "r": 42, "t": 8, "b": 92},
         hovermode="closest",
-        dragmode="zoom",
+        dragmode="pan",
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="#F8FAFD",
         font={"color": "#14263B", "size": 12},
@@ -137,11 +240,12 @@ def _base_figure(
         range=[earliest.isoformat(), latest.isoformat()],
         autorange=False,
         fixedrange=False,
-        minallowed=earliest.isoformat(),
-        maxallowed=latest.isoformat(),
         tickmode="array",
         tickvals=tick_values,
         ticktext=tick_text,
+        tickangle=0,
+        automargin=True,
+        ticklabeloverflow="allow",
         showgrid=False,
         zeroline=False,
     )
@@ -182,7 +286,7 @@ def _works_chart(
                 mode="lines+markers", name=topic_label,
                 line={"color": color_by_topic[topic_label], "width": 2},
                 marker={"color": color_by_topic[topic_label], "size": 6},
-                customdata=customdata, connectgaps=False,
+                customdata=customdata, connectgaps=False, cliponaxis=False,
                 hovertemplate=(
                     "统计周期：%{customdata[0]}<br>开始日期：%{customdata[1]}<br>"
                     "结束日期：%{customdata[2]}<br>统计天数：%{customdata[3]}<br>"
@@ -226,7 +330,7 @@ def _growth_chart(
                 mode="lines+markers", name=topic_label,
                 line={"color": color_by_topic[topic_label], "width": 2},
                 marker={"color": color_by_topic[topic_label], "size": 6},
-                customdata=customdata, connectgaps=False,
+                customdata=customdata, connectgaps=False, cliponaxis=False,
                 hovertemplate=(
                     "统计周期：%{customdata[0]}<br>开始日期：%{customdata[1]}<br>"
                     "结束日期：%{customdata[2]}<br>统计天数：%{customdata[3]}<br>"
@@ -322,7 +426,7 @@ kpi_specs = [
 ]
 for column, (key, label, value, caption) in zip(st.columns(6, gap="small"), kpi_specs):
     with column:
-        with st.container(key=f"kpi_v14_{key}"):
+        with st.container(key=f"kpi_v14_{key}", height="stretch"):
             st.markdown(f"**{label}**")
             st.markdown(f'<div class="radar-kpi-value">{value}</div>', unsafe_allow_html=True)
             st.caption(caption)
@@ -418,6 +522,18 @@ with chart_columns[1]:
                 key="v14_growth_chart",
                 config=_plotly_config(),
             )
+
+if not chart_data.empty:
+    _PLOTLY_RIGHT_BOUNDARY_GUARD(
+        key=f"v14_plotly_boundary_{period_days}_{field_ids[field_label] or 'all'}",
+        data={
+            "latestDate": pd.Timestamp(metrics["data_through"]).strftime("%Y-%m-%d"),
+            "chartSelectors": [
+                ".st-key-v14_works_chart",
+                ".st-key-v14_growth_chart",
+            ],
+        },
+    )
 
 st.caption(
     f"数据截止：{metrics['data_through']} · 来源：OpenAlex · "

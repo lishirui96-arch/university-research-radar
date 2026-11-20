@@ -186,7 +186,7 @@ def apply_global_styles(app_dir: Path) -> None:
             font-weight: 650;
         }}
         [class*="st-key-kpi_v14_"] {{
-            min-height: 142px;
+            min-height: 155px;
             padding: .9rem 1rem .7rem;
         }}
         .radar-kpi-value {{

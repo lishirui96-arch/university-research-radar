@@ -33,8 +33,7 @@ def _wait_for_lines(page: Page, expected: int, period_days: int) -> None:
           return charts.length === 2
             && charts.every(chart => chart.data?.length === options.expected
               && chart._fullLayout?.xaxis?.fixedrange === false
-              && chart._fullLayout.xaxis.minallowed
-              && chart._fullLayout.xaxis.maxallowed);
+              && chart._fullLayout.dragmode === 'pan');
         }
         """,
         arg={
@@ -62,9 +61,8 @@ def _chart_state(page: Page, expected_lines: int, period_days: int) -> dict:
                 .map(node => (node.textContent || '').trim()).filter(Boolean),
               legend: [...element.querySelectorAll('.legendtext')]
                 .map(node => (node.textContent || '').trim()).filter(Boolean),
-              minallowed: String(element._fullLayout.xaxis.minallowed),
-              maxallowed: String(element._fullLayout.xaxis.maxallowed),
               fixedrange: element._fullLayout.xaxis.fixedrange,
+              dragmode: element._fullLayout.dragmode,
             })"""
         )
         state["legend_is_chinese"] = bool(state["legend"]) and all(
@@ -76,12 +74,10 @@ def _chart_state(page: Page, expected_lines: int, period_days: int) -> dict:
         raise AssertionError(f"Expected {expected_lines} lines per chart: {states}")
     if states[0]["ticks"] != states[1]["ticks"]:
         raise AssertionError(f"Chart date axes differ: {states}")
-    if states[0]["minallowed"] != states[1]["minallowed"]:
-        raise AssertionError(f"Chart minimum boundaries differ: {states}")
-    if states[0]["maxallowed"] != states[1]["maxallowed"]:
-        raise AssertionError(f"Chart maximum boundaries differ: {states}")
     if any(state["fixedrange"] is not False for state in states):
         raise AssertionError(f"Chart interaction is unexpectedly fixed: {states}")
+    if any(state["dragmode"] != "pan" for state in states):
+        raise AssertionError(f"Chart does not default to direct pan: {states}")
     if not all(state["legend_is_chinese"] for state in states):
         raise AssertionError(f"Non-Chinese legend found: {states}")
     return {"works_chart": states[0], "growth_chart": states[1]}
