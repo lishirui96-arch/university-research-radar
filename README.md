@@ -1,6 +1,15 @@
-# 全球高校科研热点与产业创新情报平台 V1.4.2
+# 全球高校科研热点与产业创新情报平台 V1.5
 
-`university-research-radar` 是基于 Streamlit、SQLite 和 OpenAlex 的科研热点监测平台。当前首页使用 OpenAlex 官方 Topic 层级，在六个 Physical Sciences Fields 内展示真实的90天与360天科研热点排名、周期新增 Works 和周/月环比增长率。
+`university-research-radar` 是基于 Streamlit、SQLite 和 OpenAlex 的科研热点监测平台。当前首页使用 OpenAlex 官方 Topic 层级，在六个 Physical Sciences Fields 内展示 GLOBAL、CN、US 三个地区的90天与360天科研热点排名、周期新增 Works 和周/月环比增长率。
+
+## V1.5 地区扩展
+
+- `GLOBAL` 完全复用既有 V1.4 排名、日序列和历史快照，不重新请求或重算。
+- `CN` 与 `US` 使用同一个区域批次独立采集、排名和发布，不从 GLOBAL TOP 10 过滤得到。
+- 国家口径为至少一个作者署名机构的 `country_code` 命中目标国家，不增加教育机构类型过滤。
+- 同一国际合作 Work 可以分别进入 CN 和 US；OpenAlex Work 在每个国家查询中只计一次。
+- CN/US 均覆盖全部1,063个 Topic、当前90/360天、前置等长窗口和391天日序列。
+- 页面地区切换只读取本地 SQLite，不会触发 OpenAlex 请求。
 
 ## V1.4.2 首页
 
@@ -29,7 +38,7 @@
 
 ## 数据库版本
 
-当前 Schema 为 v6。V1.4 新增版本化分类表：
+当前 Schema 为 v7。V1.4 的版本化分类表继续保留：
 
 - `taxonomy_versions`
 - `field_scope_versions`
@@ -41,7 +50,15 @@ Topic 排名和日序列继续使用：
 - `topic_daily_counts`
 - `topic_update_runs`
 
-迁移是增量式的，不会重建数据库或删除旧趋势数据。
+V1.5 为 CN/US 新增独立区域表：
+
+- `regional_snapshot_batches`
+- `regional_topic_runs`
+- `regional_topic_period_snapshots`
+- `regional_topic_daily_counts`
+- `regional_query_logs`
+
+区域表从约束层只接受 `CN` 和 `US`。迁移是增量式的，不会重建数据库、迁移 GLOBAL 或删除旧趋势数据。
 
 ## 本地运行
 
@@ -79,6 +96,25 @@ python -m scripts.backfill_v14_daily `
 
 回填器按日期使用 `group_by=primary_topic.id` 游标分页，支持断点续跑、429/5xx指数退避、修订历史和完成后发布。API Key 只从 `OPENALEX_API_KEY` 环境变量读取。
 
+只回填 CN/US 区域数据，并在两国同时通过质量门槛后发布：
+
+```powershell
+python -m scripts.backfill_regional_v15 `
+  --database C:\path\to\radar.db `
+  --ranking-date 2026-11-18 `
+  --batch-id regional-v15-20261118-v1 `
+  --workers 6
+```
+
+该命令拒绝 GLOBAL 作为区域值，且会在采集前后核对既有 GLOBAL 表指纹。正式审计：
+
+```powershell
+python -m scripts.audit_v15_regional `
+  --database C:\path\to\radar-v15.db `
+  --global-source C:\path\to\original-v14.db `
+  --output work\v15-regional-audit.json
+```
+
 ## 测试
 
 ```powershell
@@ -87,7 +123,7 @@ python -m unittest discover -s tests -v
 
 当前自动化测试覆盖数据库迁移、Topic 映射、趋势查询、缺失值处理、90/360天切换和 Streamlit 页面加载。
 
-V1.4.2 当前测试结果为40/40通过。真实开发数据库审计覆盖六个 Field、两种时间窗口、Works/增长率排序、TOP 5/TOP 10及自定义选择，共60组检查。详细结果见 [V1_4_2_FIELD_FILTER_AND_CHINESE_TOPIC_FIX_REPORT.md](V1_4_2_FIELD_FILTER_AND_CHINESE_TOPIC_FIX_REPORT.md)。
+V1.5 当前测试结果为47/47通过。真实开发数据库审计覆盖 CN/US 全部1,063个 Topic、两个相邻窗口、日序列求和、独立排名、零基期和 GLOBAL 指纹；浏览器验收覆盖3地区、2周期、6学科及 TOP 5/TOP 10/自定义/增长率联动。详细结果见 [V1_5_CN_US_REGIONAL_IMPLEMENTATION_REPORT.md](V1_5_CN_US_REGIONAL_IMPLEMENTATION_REPORT.md)。
 
 真实数据库审计：
 

@@ -73,7 +73,7 @@ class TrendAnalyticsTests(unittest.TestCase):
                 connection.execute(
                     "SELECT value FROM schema_metadata WHERE key='schema_version'"
                 ).fetchone()[0],
-            "6",
+            "7",
             )
             tables = {
                 row[0]

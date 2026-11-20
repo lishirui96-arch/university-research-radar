@@ -8,7 +8,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
-from dashboard_repository import get_v14_hotspot_dashboard
+from dashboard_repository import get_v14_hotspot_dashboard, get_v15_regional_dashboard
 from storage import database_path
 from topic_translations import topic_display_name, topic_translation
 from trend_aggregation import diagnose_topic_trends
@@ -135,6 +135,40 @@ def _load_v14(
     del signature
     return get_v14_hotspot_dashboard(
         path, period_days=period_days, field_id=field_id, sort_by=sort_by
+    )
+
+
+@st.cache_data(ttl="5m", max_entries=48, show_spinner=False)
+def _load_v15_region(
+    path: str,
+    signature: tuple[int, int],
+    region_code: str,
+    period_days: int,
+    field_id: str | None,
+    sort_by: str,
+) -> dict[str, Any]:
+    del signature
+    return get_v15_regional_dashboard(
+        path,
+        region_code=region_code,
+        period_days=period_days,
+        field_id=field_id,
+        sort_by=sort_by,
+    )
+
+
+def _load_dashboard(
+    path: str,
+    signature: tuple[int, int],
+    region_code: str,
+    period_days: int,
+    field_id: str | None,
+    sort_by: str,
+) -> dict[str, Any]:
+    if region_code == "GLOBAL":
+        return _load_v14(path, signature, period_days, field_id, sort_by)
+    return _load_v15_region(
+        path, signature, region_code, period_days, field_id, sort_by
     )
 
 
@@ -362,12 +396,18 @@ with st.container(key="research_hero"):
         """
     )
 
-control_columns = st.columns([1.05, 1.45, 1.05, 1.15], gap="small")
+control_columns = st.columns([1.0, 1.15, 1.5, 1.1, 1.15], gap="small")
 with control_columns[0]:
+    region_code = st.segmented_control(
+        "地区范围", ["GLOBAL", "CN", "US"], default="GLOBAL", key="v15_region"
+    )
+    if region_code not in {"GLOBAL", "CN", "US"}:
+        region_code = "GLOBAL"
+with control_columns[1]:
     period_label = st.segmented_control(
         "观察窗口", ["近90天", "近360天"], default="近90天", key="v14_period"
     )
-with control_columns[1]:
+with control_columns[2]:
     field_label = st.selectbox(
         "学科范围",
         [
@@ -378,7 +418,7 @@ with control_columns[1]:
         ],
         key="v14_field",
     )
-with control_columns[2]:
+with control_columns[3]:
     sort_label = st.segmented_control(
         "榜单口径", ["增长量", "增长率"], default="增长量", key="v14_sort"
     )
@@ -391,10 +431,11 @@ field_ids = {
 period_days = 360 if period_label == "近360天" else 90
 sort_by = "growth" if sort_label == "增长率" else "works"
 with st.spinner("正在读取本地科研热点数据..."):
-    result = _load_v14(
-        str(db_path), signature, period_days, field_ids[field_label], sort_by
+    result = _load_dashboard(
+        str(db_path), signature, str(region_code), period_days,
+        field_ids[field_label], sort_by,
     )
-with control_columns[3]:
+with control_columns[4]:
     st.text_input(
         "更新时间", value=_display_time(result.get("metrics", {}).get("latest_success_at")),
         disabled=True, key="v14_updated_at",
@@ -402,7 +443,11 @@ with control_columns[3]:
 
 if result["status"] == "unavailable":
     st.error(
-        "V1.4 分类版本尚未导入当前数据库，首页不会回退到旧版 1,126 Topic 分类。",
+        (
+            "V1.4 分类版本尚未导入当前数据库，首页不会回退到旧版分类。"
+            if region_code == "GLOBAL"
+            else f"{region_code} 区域数据尚未完成同批采集和发布。"
+        ),
         icon=":material/database_off:",
     )
     st.stop()
@@ -431,7 +476,10 @@ for column, (key, label, value, caption) in zip(st.columns(6, gap="small"), kpi_
             st.markdown(f'<div class="radar-kpi-value">{value}</div>', unsafe_allow_html=True)
             st.caption(caption)
 
-st.html('<div class="radar-section-label">全球科研热点监测</div>')
+region_names = {"GLOBAL": "全球", "CN": "中国", "US": "美国"}
+st.html(
+    f'<div class="radar-section-label">{region_names[str(region_code)]}科研热点监测</div>'
+)
 works_ranking = result["all_topics"].head(10).copy()
 display_ranking = result["ranking"].copy()
 if display_ranking.empty:
@@ -525,7 +573,10 @@ with chart_columns[1]:
 
 if not chart_data.empty:
     _PLOTLY_RIGHT_BOUNDARY_GUARD(
-        key=f"v14_plotly_boundary_{period_days}_{field_ids[field_label] or 'all'}",
+        key=(
+            f"v14_plotly_boundary_{region_code}_{period_days}_"
+            f"{field_ids[field_label] or 'all'}"
+        ),
         data={
             "latestDate": pd.Timestamp(metrics["data_through"]).strftime("%Y-%m-%d"),
             "chartSelectors": [
@@ -536,8 +587,14 @@ if not chart_data.empty:
     )
 
 st.caption(
-    f"数据截止：{metrics['data_through']} · 来源：OpenAlex · "
-    "口径：core corpus、primary_topic.id、publication_date。最新日期可能仍在收录中。"
+    f"地区：{region_names[str(region_code)]} · 数据截止：{metrics['data_through']} · "
+    "来源：OpenAlex · 口径：core corpus、primary_topic.id、publication_date"
+    + (
+        "、作者署名机构国家。"
+        if region_code in {"CN", "US"}
+        else "。"
+    )
+    + "最新日期可能仍在收录中。"
 )
 
 bottom_columns = st.columns([1.5, 1], gap="medium")
@@ -594,7 +651,10 @@ with bottom_columns[1]:
             f"Works 为 **{int(first['period_works_count']):,}**。"
         )
         other_period = 360 if period_days == 90 else 90
-        other = _load_v14(str(db_path), signature, other_period, field_ids[field_label], "works")
+        other = _load_dashboard(
+            str(db_path), signature, str(region_code), other_period,
+            field_ids[field_label], "works",
+        )
         if not other["all_topics"].empty:
             current_top = set(result["all_topics"].head(10)["topic_id"].astype(str))
             other_top = set(other["all_topics"].head(10)["topic_id"].astype(str))

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 
-LATEST_SCHEMA_VERSION = 6
+LATEST_SCHEMA_VERSION = 7
 
 
 MIGRATION_2_SQL = """
@@ -478,4 +478,166 @@ ROLLBACK_MIGRATION_6_SQL = """
 DROP TABLE IF EXISTS topic_taxonomy_versions;
 DROP TABLE IF EXISTS field_scope_versions;
 DROP TABLE IF EXISTS taxonomy_versions;
+"""
+
+
+MIGRATION_7_SQL = """
+CREATE TABLE IF NOT EXISTS regional_snapshot_batches (
+    batch_id TEXT PRIMARY KEY,
+    ranking_date TEXT NOT NULL,
+    daily_start TEXT NOT NULL,
+    daily_end TEXT NOT NULL,
+    taxonomy_version TEXT NOT NULL,
+    query_version TEXT NOT NULL,
+    calculation_version TEXT NOT NULL,
+    status TEXT NOT NULL CHECK(status IN (
+        'running', 'partial', 'validated', 'published', 'failed'
+    )),
+    expected_region_count INTEGER NOT NULL DEFAULT 2
+        CHECK(expected_region_count = 2),
+    completed_region_count INTEGER NOT NULL DEFAULT 0
+        CHECK(completed_region_count BETWEEN 0 AND 2),
+    api_request_count INTEGER NOT NULL DEFAULT 0 CHECK(api_request_count >= 0),
+    retry_count INTEGER NOT NULL DEFAULT 0 CHECK(retry_count >= 0),
+    error_message TEXT,
+    started_at TEXT NOT NULL,
+    completed_at TEXT,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY(taxonomy_version) REFERENCES taxonomy_versions(taxonomy_version)
+        ON DELETE RESTRICT
+);
+CREATE INDEX IF NOT EXISTS idx_regional_batches_status_date
+    ON regional_snapshot_batches(status, ranking_date, completed_at);
+
+CREATE TABLE IF NOT EXISTS regional_topic_runs (
+    run_id TEXT PRIMARY KEY,
+    batch_id TEXT NOT NULL,
+    region_code TEXT NOT NULL CHECK(region_code IN ('CN', 'US')),
+    status TEXT NOT NULL CHECK(status IN (
+        'running', 'partial', 'validated', 'published', 'failed'
+    )),
+    query_as_of TEXT,
+    completed_daily_dates INTEGER NOT NULL DEFAULT 0
+        CHECK(completed_daily_dates >= 0),
+    api_request_count INTEGER NOT NULL DEFAULT 0 CHECK(api_request_count >= 0),
+    retry_count INTEGER NOT NULL DEFAULT 0 CHECK(retry_count >= 0),
+    error_message TEXT,
+    started_at TEXT NOT NULL,
+    completed_at TEXT,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    UNIQUE(batch_id, region_code),
+    FOREIGN KEY(batch_id) REFERENCES regional_snapshot_batches(batch_id)
+        ON DELETE RESTRICT
+);
+CREATE INDEX IF NOT EXISTS idx_regional_runs_batch_status
+    ON regional_topic_runs(batch_id, status, region_code);
+
+CREATE TABLE IF NOT EXISTS regional_topic_period_snapshots (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    batch_id TEXT NOT NULL,
+    region_code TEXT NOT NULL CHECK(region_code IN ('CN', 'US')),
+    ranking_date TEXT NOT NULL,
+    period_days INTEGER NOT NULL CHECK(period_days IN (90, 360)),
+    topic_id TEXT NOT NULL,
+    field_id TEXT NOT NULL,
+    window_start TEXT NOT NULL,
+    window_end TEXT NOT NULL,
+    works_count INTEGER NOT NULL CHECK(works_count >= 0),
+    previous_window_start TEXT NOT NULL,
+    previous_window_end TEXT NOT NULL,
+    previous_works_count INTEGER NOT NULL CHECK(previous_works_count >= 0),
+    growth_amount INTEGER NOT NULL,
+    growth_rate REAL,
+    growth_status TEXT NOT NULL CHECK(growth_status IN ('success', 'zero_baseline')),
+    works_rank INTEGER NOT NULL CHECK(works_rank > 0),
+    growth_amount_rank INTEGER NOT NULL CHECK(growth_amount_rank > 0),
+    growth_rate_rank INTEGER CHECK(growth_rate_rank IS NULL OR growth_rate_rank > 0),
+    query_as_of TEXT NOT NULL,
+    taxonomy_version TEXT NOT NULL,
+    query_version TEXT NOT NULL,
+    calculation_version TEXT NOT NULL,
+    source_run_id TEXT NOT NULL,
+    data_status TEXT NOT NULL CHECK(data_status = 'success'),
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    UNIQUE(batch_id, region_code, period_days, topic_id),
+    UNIQUE(batch_id, region_code, period_days, works_rank),
+    UNIQUE(batch_id, region_code, period_days, growth_amount_rank),
+    FOREIGN KEY(batch_id) REFERENCES regional_snapshot_batches(batch_id)
+        ON DELETE RESTRICT,
+    FOREIGN KEY(source_run_id) REFERENCES regional_topic_runs(run_id)
+        ON DELETE RESTRICT,
+    FOREIGN KEY(taxonomy_version, topic_id)
+        REFERENCES topic_taxonomy_versions(taxonomy_version, topic_id)
+        ON DELETE RESTRICT
+);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_regional_period_growth_rate_rank
+    ON regional_topic_period_snapshots(
+        batch_id, region_code, period_days, growth_rate_rank
+    ) WHERE growth_rate_rank IS NOT NULL;
+CREATE INDEX IF NOT EXISTS idx_regional_period_lookup
+    ON regional_topic_period_snapshots(
+        batch_id, region_code, period_days, field_id, topic_id
+    );
+
+CREATE TABLE IF NOT EXISTS regional_topic_daily_counts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    batch_id TEXT NOT NULL,
+    region_code TEXT NOT NULL CHECK(region_code IN ('CN', 'US')),
+    publication_date TEXT NOT NULL,
+    topic_id TEXT NOT NULL,
+    field_id TEXT NOT NULL,
+    daily_works_count INTEGER NOT NULL CHECK(daily_works_count >= 0),
+    query_as_of TEXT NOT NULL,
+    taxonomy_version TEXT NOT NULL,
+    query_version TEXT NOT NULL,
+    source_run_id TEXT NOT NULL,
+    data_status TEXT NOT NULL CHECK(data_status = 'success'),
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    UNIQUE(batch_id, region_code, publication_date, topic_id),
+    FOREIGN KEY(batch_id) REFERENCES regional_snapshot_batches(batch_id)
+        ON DELETE RESTRICT,
+    FOREIGN KEY(source_run_id) REFERENCES regional_topic_runs(run_id)
+        ON DELETE RESTRICT,
+    FOREIGN KEY(taxonomy_version, topic_id)
+        REFERENCES topic_taxonomy_versions(taxonomy_version, topic_id)
+        ON DELETE RESTRICT
+);
+CREATE INDEX IF NOT EXISTS idx_regional_daily_lookup
+    ON regional_topic_daily_counts(
+        batch_id, region_code, topic_id, publication_date
+    );
+CREATE INDEX IF NOT EXISTS idx_regional_daily_field_date
+    ON regional_topic_daily_counts(
+        batch_id, region_code, field_id, publication_date
+    );
+
+CREATE TABLE IF NOT EXISTS regional_query_logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    batch_id TEXT NOT NULL,
+    source_run_id TEXT NOT NULL,
+    region_code TEXT NOT NULL CHECK(region_code IN ('CN', 'US')),
+    query_kind TEXT NOT NULL CHECK(query_kind IN ('period', 'daily')),
+    period_days INTEGER CHECK(period_days IS NULL OR period_days IN (90, 360)),
+    window_role TEXT CHECK(window_role IS NULL OR window_role IN ('current', 'previous')),
+    window_start TEXT NOT NULL,
+    window_end TEXT NOT NULL,
+    query_filter TEXT NOT NULL,
+    request_status TEXT NOT NULL CHECK(request_status IN ('success', 'failed')),
+    response_group_count INTEGER,
+    page_count INTEGER NOT NULL DEFAULT 0 CHECK(page_count >= 0),
+    retry_count INTEGER NOT NULL DEFAULT 0 CHECK(retry_count >= 0),
+    query_as_of TEXT NOT NULL,
+    error_message TEXT,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY(batch_id) REFERENCES regional_snapshot_batches(batch_id)
+        ON DELETE RESTRICT,
+    FOREIGN KEY(source_run_id) REFERENCES regional_topic_runs(run_id)
+        ON DELETE RESTRICT
+);
+CREATE INDEX IF NOT EXISTS idx_regional_query_logs_run_status
+    ON regional_query_logs(source_run_id, request_status, query_kind, window_start);
 """

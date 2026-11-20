@@ -20,6 +20,7 @@ from collector.v14_taxonomy import (
 )
 from dashboard_repository import (
     get_v14_hotspot_dashboard,
+    get_v15_regional_dashboard,
     get_topic_daily_trends,
     get_topic_hotspot_ranking,
     load_dashboard_data,
@@ -259,7 +260,7 @@ class DashboardRepositoryTests(unittest.TestCase):
         self.assertEqual(before, after)
         self.assertEqual(status["integrity"], "ok")
         self.assertEqual(status["foreign_key_violations"], 0)
-        self.assertEqual(str(status["schema_version"]), "6")
+        self.assertEqual(str(status["schema_version"]), "7")
 
     def test_topic_audit_import_is_complete_and_idempotent(self) -> None:
         root = Path(__file__).resolve().parents[1]
@@ -317,6 +318,119 @@ class DashboardRepositoryTests(unittest.TestCase):
         self.assertFalse(growth["ranking"].empty)
         rates = growth["ranking"]["period_growth_rate"].tolist()
         self.assertEqual(rates, sorted(rates, reverse=True))
+
+    def test_v15_region_repository_reads_published_cn_batch_only(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        import_audit_files(root, self.db_path)
+        _seed_v14_taxonomy(root, self.db_path)
+        now = "2026-11-20T00:00:00+08:00"
+        batch_id = "regional-test"
+        ranking_date = date(2026, 11, 18)
+        daily_start = date(2025, 10, 24)
+        with sqlite3.connect(self.db_path) as connection:
+            topics = connection.execute(
+                """
+                SELECT topic_id FROM topic_taxonomy_versions
+                WHERE taxonomy_version='openalex-taxonomy-2026-11-18-v1.4'
+                  AND field_id='15' ORDER BY topic_id
+                """
+            ).fetchall()
+            connection.execute(
+                """
+                INSERT INTO regional_snapshot_batches(
+                    batch_id, ranking_date, daily_start, daily_end,
+                    taxonomy_version, query_version, calculation_version,
+                    status, completed_region_count, started_at, completed_at,
+                    created_at, updated_at
+                ) VALUES (?, ?, ?, ?, 'openalex-taxonomy-2026-11-18-v1.4',
+                          'regional-query-v1', 'regional-calc-v1', 'published', 2,
+                          ?, ?, ?, ?)
+                """,
+                (
+                    batch_id, ranking_date.isoformat(), daily_start.isoformat(),
+                    ranking_date.isoformat(), now, now, now, now,
+                ),
+            )
+            for region in ("CN", "US"):
+                connection.execute(
+                    """
+                    INSERT INTO regional_topic_runs(
+                        run_id, batch_id, region_code, status, query_as_of,
+                        completed_daily_dates, started_at, completed_at,
+                        created_at, updated_at
+                    ) VALUES (?, ?, ?, 'published', ?, 391, ?, ?, ?, ?)
+                    """,
+                    (f"{batch_id}-{region.lower()}", batch_id, region, now, now, now, now, now),
+                )
+            daily_rows = []
+            for offset in range(391):
+                day = daily_start + timedelta(days=offset)
+                for index, (topic_id,) in enumerate(topics, start=1):
+                    daily_rows.append(
+                        (
+                            batch_id, "CN", day.isoformat(), topic_id, "15", index,
+                            now, "openalex-taxonomy-2026-11-18-v1.4",
+                            "regional-query-v1", f"{batch_id}-cn", now, now,
+                        )
+                    )
+            connection.executemany(
+                """
+                INSERT INTO regional_topic_daily_counts(
+                    batch_id, region_code, publication_date, topic_id, field_id,
+                    daily_works_count, query_as_of, taxonomy_version,
+                    query_version, source_run_id, data_status, created_at, updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'success', ?, ?)
+                """,
+                daily_rows,
+            )
+            snapshot_rows = []
+            topic_count = len(topics)
+            for period_days in (90, 360):
+                window_start = ranking_date - timedelta(days=period_days - 1)
+                previous_end = window_start - timedelta(days=1)
+                previous_start = previous_end - timedelta(days=period_days - 1)
+                for index, (topic_id,) in enumerate(topics, start=1):
+                    works = period_days * index
+                    previous = works - index
+                    rank = topic_count - index + 1
+                    snapshot_rows.append(
+                        (
+                            batch_id, "CN", ranking_date.isoformat(), period_days,
+                            topic_id, "15", window_start.isoformat(), ranking_date.isoformat(),
+                            works, previous_start.isoformat(), previous_end.isoformat(),
+                            previous, index, index / previous, "success", rank, rank, rank,
+                            now, "openalex-taxonomy-2026-11-18-v1.4",
+                            "regional-query-v1", "regional-calc-v1", f"{batch_id}-cn", now, now,
+                        )
+                    )
+            connection.executemany(
+                """
+                INSERT INTO regional_topic_period_snapshots(
+                    batch_id, region_code, ranking_date, period_days,
+                    topic_id, field_id, window_start, window_end, works_count,
+                    previous_window_start, previous_window_end, previous_works_count,
+                    growth_amount, growth_rate, growth_status,
+                    works_rank, growth_amount_rank, growth_rate_rank,
+                    query_as_of, taxonomy_version, query_version,
+                    calculation_version, source_run_id, data_status,
+                    created_at, updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+                          ?, ?, ?, ?, ?, 'success', ?, ?)
+                """,
+                snapshot_rows,
+            )
+
+        result = get_v15_regional_dashboard(
+            self.db_path, region_code="CN", period_days=90, field_id="15"
+        )
+        self.assertEqual(result["status"], "complete")
+        self.assertEqual(result["region_code"], "CN")
+        self.assertEqual(len(result["all_topics"]), 24)
+        self.assertEqual(len(result["daily"]), 24 * 90)
+        self.assertEqual(result["metrics"]["daily_completeness_360"], 1.0)
+        self.assertEqual(result["metrics"]["data_through"], "2026-11-18")
+        self.assertEqual(result["integrity"]["region_batch_id"], batch_id)
+        self.assertEqual(len(result["trend"]), 24 * 13)
 
 
 class DashboardPageTests(unittest.TestCase):
@@ -386,6 +500,10 @@ class DashboardPageTests(unittest.TestCase):
                 self.assertTrue(
                     all(config["scrollZoom"] is True for config in _chart_configs(app))
                 )
+
+                app.segmented_control(key="v15_region").set_value(None).run()
+                self.assertEqual(len(app.exception), 0)
+                self.assertEqual(len(_chart_dataframe(app)), 52)
 
                 app.segmented_control(key="v14_period").set_value("近360天").run()
                 self.assertEqual(len(app.exception), 0)

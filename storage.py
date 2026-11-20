@@ -20,6 +20,7 @@ from migrations import (
     MIGRATION_4_SQL,
     MIGRATION_5_SQL,
     MIGRATION_6_SQL,
+    MIGRATION_7_SQL,
 )
 
 
@@ -188,6 +189,17 @@ def initialize_database(path: Path | None = None) -> Path:
                     + "COMMIT;"
                 )
                 version = 6
+            if version < 7:
+                now = datetime.now().astimezone().isoformat()
+                connection.executescript(
+                    "BEGIN IMMEDIATE;\n"
+                    + MIGRATION_7_SQL
+                    + "\nINSERT OR REPLACE INTO schema_migrations(version, name, applied_at) "
+                    + f"VALUES (7, 'CN and US regional Topic analytics', '{now}');\n"
+                    + "UPDATE schema_metadata SET value='7' WHERE key='schema_version';\n"
+                    + "COMMIT;"
+                )
+                version = 7
         _INITIALIZED_PATHS.add(path_key)
     return db_path
 

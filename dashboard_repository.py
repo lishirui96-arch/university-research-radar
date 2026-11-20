@@ -37,6 +37,7 @@ TREND_CATEGORY_IDS = (
 
 V14_TAXONOMY_VERSION = "openalex-taxonomy-2026-11-18-v1.4"
 V14_FIELD_IDS = ("15", "16", "17", "21", "22", "25")
+V15_REGION_CODES = ("CN", "US")
 
 
 def _connect_read_only(path: str | Path) -> sqlite3.Connection:
@@ -833,6 +834,259 @@ def get_v14_hotspot_dashboard(
             "publication_date_only": True,
         },
         "growth_sort_available": growth_sort_available,
+    }
+
+
+def get_v15_regional_dashboard(
+    path: str | Path,
+    *,
+    region_code: str,
+    period_days: int = 90,
+    field_id: str | None = None,
+    sort_by: str = "works",
+) -> dict[str, Any]:
+    """Return one published CN/US regional snapshot without touching GLOBAL tables."""
+    region = str(region_code).upper()
+    if region not in V15_REGION_CODES:
+        raise ValueError("region_code must be CN or US")
+    if period_days not in {90, 360}:
+        raise ValueError("period_days must be 90 or 360")
+    if field_id is not None and str(field_id) not in V14_FIELD_IDS:
+        raise ValueError("field_id must be one of the six V1.4 Fields")
+    if sort_by not in {"works", "growth"}:
+        raise ValueError("sort_by must be works or growth")
+
+    empty = {
+        "status": "unavailable",
+        "region_code": region,
+        "taxonomy_version": V14_TAXONOMY_VERSION,
+        "period_days": period_days,
+        "field_id": field_id,
+        "ranking_date": None,
+        "ranking": pd.DataFrame(),
+        "all_topics": pd.DataFrame(),
+        "daily": pd.DataFrame(),
+        "trend": pd.DataFrame(),
+        "fields": pd.DataFrame(),
+        "metrics": {},
+        "integrity": {},
+        "growth_sort_available": False,
+    }
+    db_path = Path(path)
+    if not db_path.exists():
+        return empty
+
+    with closing(_connect_read_only(db_path)) as connection:
+        required = {
+            "taxonomy_versions",
+            "field_scope_versions",
+            "topic_taxonomy_versions",
+            "regional_snapshot_batches",
+            "regional_topic_runs",
+            "regional_topic_period_snapshots",
+            "regional_topic_daily_counts",
+        }
+        if not required.issubset(_table_names(connection)):
+            return empty
+        fields = _dataframe(
+            connection.execute(
+                """
+                SELECT field_id, field_name, field_name_zh, topic_count
+                FROM field_scope_versions
+                WHERE taxonomy_version=?
+                ORDER BY CAST(field_id AS INTEGER)
+                """,
+                (V14_TAXONOMY_VERSION,),
+            ).fetchall()
+        )
+        batch = connection.execute(
+            """
+            SELECT b.batch_id, b.ranking_date, b.daily_start, b.daily_end,
+                   b.query_version, b.calculation_version, b.completed_at
+            FROM regional_snapshot_batches b
+            JOIN regional_topic_runs r ON r.batch_id=b.batch_id
+            WHERE b.status='published' AND r.status='published'
+              AND r.region_code=? AND b.taxonomy_version=?
+            ORDER BY b.ranking_date DESC, b.completed_at DESC LIMIT 1
+            """,
+            (region, V14_TAXONOMY_VERSION),
+        ).fetchone()
+        if batch is None:
+            return {**empty, "fields": fields}
+
+        batch_id = str(batch["batch_id"])
+        parameters: list[Any] = [V14_TAXONOMY_VERSION, batch_id, region, period_days]
+        field_clause = ""
+        if field_id is not None:
+            field_clause = " AND s.field_id=?"
+            parameters.append(str(field_id))
+        rows = connection.execute(
+            """
+            SELECT s.topic_id, t.topic_name, t.topic_name_zh,
+                   t.subfield_id, t.subfield_name, t.field_id, t.field_name,
+                   f.field_name_zh, s.works_count AS period_works_count,
+                   s.previous_works_count, s.growth_amount,
+                   s.growth_rate AS period_growth_rate, s.growth_status,
+                   s.window_start, s.window_end, s.query_as_of,
+                   s.works_rank, s.growth_amount_rank, s.growth_rate_rank
+            FROM regional_topic_period_snapshots s
+            JOIN topic_taxonomy_versions t
+              ON t.topic_id=s.topic_id AND t.taxonomy_version=?
+            JOIN field_scope_versions f
+              ON f.taxonomy_version=t.taxonomy_version AND f.field_id=t.field_id
+            WHERE s.batch_id=? AND s.region_code=? AND s.period_days=?
+              AND s.data_status='success'
+            """ + field_clause,
+            parameters,
+        ).fetchall()
+        all_topics = _dataframe(rows)
+        if all_topics.empty:
+            return {
+                **empty,
+                "fields": fields,
+                "ranking_date": str(batch["ranking_date"]),
+            }
+
+        growth_available = bool(all_topics["period_growth_rate"].notna().any())
+        if sort_by == "growth" and growth_available:
+            all_topics = all_topics.sort_values(
+                ["period_growth_rate", "period_works_count", "topic_id"],
+                ascending=[False, False, True],
+            ).reset_index(drop=True)
+        else:
+            all_topics = all_topics.sort_values(
+                ["period_works_count", "topic_id"], ascending=[False, True]
+            ).reset_index(drop=True)
+        all_topics.insert(0, "rank", range(1, len(all_topics) + 1))
+        all_topics["trend"] = all_topics["period_growth_rate"].map(
+            lambda value: (
+                "增长" if pd.notna(value) and value > 0
+                else "下降" if pd.notna(value) and value < 0
+                else "持平" if pd.notna(value)
+                else "新出现"
+            )
+        )
+        ranking = all_topics.head(10).copy()
+
+        window_start = str(all_topics.iloc[0]["window_start"])
+        window_end = str(all_topics.iloc[0]["window_end"])
+        extra_start = (pd.Timestamp(window_start) - pd.DateOffset(months=1)).date().isoformat()
+        daily_parameters: list[Any] = [
+            V14_TAXONOMY_VERSION,
+            batch_id,
+            region,
+            extra_start,
+            window_end,
+        ]
+        daily_field_clause = ""
+        if field_id is not None:
+            daily_field_clause = " AND d.field_id=?"
+            daily_parameters.append(str(field_id))
+        daily_rows = connection.execute(
+            """
+            SELECT d.publication_date AS date, d.topic_id,
+                   t.topic_name, t.topic_name_zh, t.subfield_id, t.subfield_name,
+                   t.field_id, t.field_name, f.field_name_zh,
+                   d.daily_works_count, d.query_as_of, d.updated_at
+            FROM regional_topic_daily_counts d
+            JOIN topic_taxonomy_versions t
+              ON t.topic_id=d.topic_id AND t.taxonomy_version=?
+            JOIN field_scope_versions f
+              ON f.taxonomy_version=t.taxonomy_version AND f.field_id=t.field_id
+            WHERE d.batch_id=? AND d.region_code=? AND d.data_status='success'
+              AND d.publication_date BETWEEN ? AND ?
+            """ + daily_field_clause + " ORDER BY d.topic_id, d.publication_date",
+            daily_parameters,
+        ).fetchall()
+        daily_raw = _dataframe(daily_rows)
+        if not daily_raw.empty:
+            daily_raw["date"] = pd.to_datetime(daily_raw["date"])
+            daily_raw["query_status"] = "success"
+        trend = aggregate_topic_trends(
+            daily_raw, period_days, window_start, window_end
+        )
+        daily = daily_raw[
+            (daily_raw["date"] >= pd.Timestamp(window_start))
+            & (daily_raw["date"] <= pd.Timestamp(window_end))
+        ].reset_index(drop=True) if not daily_raw.empty else pd.DataFrame()
+
+        expected_rows = len(all_topics) * period_days
+        available_rows = len(daily)
+        available_topics = int(daily["topic_id"].nunique()) if not daily.empty else 0
+        period_matrix_complete = (
+            available_rows == expected_rows
+            and available_topics == len(all_topics)
+            and not daily["daily_works_count"].isna().any()
+        )
+        start_360 = (pd.Timestamp(window_end) - pd.Timedelta(days=359)).date().isoformat()
+        complete_360_rows = connection.execute(
+            """
+            SELECT COUNT(*)
+            FROM regional_topic_daily_counts d
+            WHERE d.batch_id=? AND d.region_code=? AND d.data_status='success'
+              AND d.publication_date BETWEEN ? AND ?
+            """ + (" AND d.field_id=?" if field_id is not None else ""),
+            (
+                batch_id,
+                region,
+                start_360,
+                window_end,
+                *((str(field_id),) if field_id is not None else ()),
+            ),
+        ).fetchone()[0]
+        run = connection.execute(
+            """
+            SELECT status, query_as_of, api_request_count, retry_count
+            FROM regional_topic_runs WHERE batch_id=? AND region_code=?
+            """,
+            (batch_id, region),
+        ).fetchone()
+
+    metrics = {
+        "period_works_count": int(all_topics["period_works_count"].sum()),
+        "covered_topics": len(all_topics),
+        "covered_fields": int(all_topics["field_id"].nunique()),
+        "active_topics": int((all_topics["period_works_count"] > 0).sum()),
+        "top_topic": all_topics.iloc[0].to_dict(),
+        "daily_completeness_360": (
+            float(complete_360_rows / (len(all_topics) * 360))
+            if len(all_topics) else 0.0
+        ),
+        "available_daily_topics": available_topics,
+        "local_work_records": 0,
+        "failed_update_runs": 0 if run and run["status"] == "published" else 1,
+        "latest_run_status": str(run["status"]) if run else None,
+        "latest_success_at": str(batch["completed_at"]),
+        "data_through": window_end,
+        "ranking_source": "regional_period_snapshot",
+        "batch_id": batch_id,
+        "query_version": str(batch["query_version"]),
+        "calculation_version": str(batch["calculation_version"]),
+    }
+    return {
+        "status": "complete" if period_matrix_complete else "partial",
+        "region_code": region,
+        "taxonomy_version": V14_TAXONOMY_VERSION,
+        "period_days": period_days,
+        "field_id": field_id,
+        "ranking_date": str(batch["ranking_date"]),
+        "ranking": ranking,
+        "all_topics": all_topics,
+        "daily": daily,
+        "trend": trend,
+        "fields": fields,
+        "metrics": metrics,
+        "integrity": {
+            "expected_daily_rows_360": len(all_topics) * 360,
+            "available_daily_rows_360": int(complete_360_rows),
+            "missing_daily_rows_360": len(all_topics) * 360 - int(complete_360_rows),
+            "daily_completeness_360": metrics["daily_completeness_360"],
+            "daily_topic_ids": sorted(daily["topic_id"].astype(str).unique()),
+            "missing_is_zero_filled": False,
+            "publication_date_only": True,
+            "region_batch_id": batch_id,
+        },
+        "growth_sort_available": growth_available,
     }
 
 
