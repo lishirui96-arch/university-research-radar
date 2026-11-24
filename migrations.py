@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 
-LATEST_SCHEMA_VERSION = 7
+LATEST_SCHEMA_VERSION = 9
 
 
 MIGRATION_2_SQL = """
@@ -640,4 +640,110 @@ CREATE TABLE IF NOT EXISTS regional_query_logs (
 );
 CREATE INDEX IF NOT EXISTS idx_regional_query_logs_run_status
     ON regional_query_logs(source_run_id, request_status, query_kind, window_start);
+"""
+
+
+MIGRATION_8_SQL = """
+CREATE TABLE IF NOT EXISTS citation_snapshot_batches (
+    batch_id TEXT PRIMARY KEY,
+    ranking_date TEXT NOT NULL,
+    period_days INTEGER NOT NULL CHECK(period_days IN (90, 360)),
+    window_start TEXT NOT NULL,
+    window_end TEXT NOT NULL,
+    taxonomy_version TEXT NOT NULL,
+    query_version TEXT NOT NULL,
+    calculation_version TEXT NOT NULL,
+    status TEXT NOT NULL CHECK(status IN (
+        'running', 'partial', 'validated', 'published', 'failed'
+    )),
+    query_as_of TEXT,
+    expected_scope_count INTEGER NOT NULL CHECK(expected_scope_count > 0),
+    completed_scope_count INTEGER NOT NULL DEFAULT 0
+        CHECK(completed_scope_count >= 0),
+    citing_work_count INTEGER NOT NULL DEFAULT 0 CHECK(citing_work_count >= 0),
+    citation_edge_count INTEGER NOT NULL DEFAULT 0 CHECK(citation_edge_count >= 0),
+    api_request_count INTEGER NOT NULL DEFAULT 0 CHECK(api_request_count >= 0),
+    error_message TEXT,
+    started_at TEXT NOT NULL,
+    completed_at TEXT,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY(taxonomy_version) REFERENCES taxonomy_versions(taxonomy_version)
+        ON DELETE RESTRICT
+);
+CREATE INDEX IF NOT EXISTS idx_citation_batches_published
+    ON citation_snapshot_batches(status, ranking_date, completed_at);
+
+CREATE TABLE IF NOT EXISTS citation_snapshot_scopes (
+    batch_id TEXT NOT NULL,
+    region_code TEXT NOT NULL CHECK(region_code IN ('GLOBAL', 'CN', 'US')),
+    topic_id TEXT NOT NULL,
+    status TEXT NOT NULL CHECK(status = 'success'),
+    matched_work_count INTEGER NOT NULL CHECK(matched_work_count >= 0),
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    PRIMARY KEY(batch_id, region_code, topic_id),
+    FOREIGN KEY(batch_id) REFERENCES citation_snapshot_batches(batch_id)
+        ON DELETE RESTRICT,
+    FOREIGN KEY(topic_id) REFERENCES openalex_topics(topic_id) ON DELETE RESTRICT
+);
+
+CREATE TABLE IF NOT EXISTS citation_topic_work_snapshots (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    batch_id TEXT NOT NULL,
+    region_code TEXT NOT NULL CHECK(region_code IN ('GLOBAL', 'CN', 'US')),
+    topic_id TEXT NOT NULL,
+    field_id TEXT NOT NULL,
+    openalex_work_id TEXT NOT NULL,
+    title TEXT NOT NULL,
+    doi TEXT,
+    openalex_url TEXT NOT NULL,
+    venue TEXT,
+    publication_date TEXT,
+    window_citation_count INTEGER NOT NULL CHECK(window_citation_count >= 0),
+    query_as_of TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    UNIQUE(batch_id, region_code, topic_id, openalex_work_id),
+    FOREIGN KEY(batch_id) REFERENCES citation_snapshot_batches(batch_id)
+        ON DELETE RESTRICT,
+    FOREIGN KEY(topic_id) REFERENCES openalex_topics(topic_id) ON DELETE RESTRICT
+);
+CREATE INDEX IF NOT EXISTS idx_citation_topic_work_lookup
+    ON citation_topic_work_snapshots(
+        batch_id, region_code, topic_id, window_citation_count
+    );
+"""
+
+
+MIGRATION_9_SQL = """
+ALTER TABLE citation_snapshot_scopes ADD COLUMN candidate_count INTEGER;
+ALTER TABLE citation_snapshot_scopes ADD COLUMN candidates_scanned INTEGER;
+ALTER TABLE citation_snapshot_scopes ADD COLUMN tenth_citation_count INTEGER;
+ALTER TABLE citation_snapshot_scopes ADD COLUMN unchecked_cumulative_upper_bound INTEGER;
+ALTER TABLE citation_snapshot_scopes ADD COLUMN api_request_count INTEGER;
+
+CREATE TABLE IF NOT EXISTS citation_topic_cache (
+    region_code TEXT NOT NULL CHECK(region_code IN ('GLOBAL', 'CN', 'US')),
+    period_days INTEGER NOT NULL CHECK(period_days IN (90, 360)),
+    window_start TEXT NOT NULL,
+    window_end TEXT NOT NULL,
+    topic_id TEXT NOT NULL,
+    field_id TEXT NOT NULL,
+    result_json TEXT NOT NULL,
+    candidate_count INTEGER NOT NULL CHECK(candidate_count >= 0),
+    candidates_scanned INTEGER NOT NULL CHECK(candidates_scanned >= 0),
+    tenth_citation_count INTEGER NOT NULL CHECK(tenth_citation_count >= 0),
+    unchecked_cumulative_upper_bound INTEGER NOT NULL
+        CHECK(unchecked_cumulative_upper_bound >= 0),
+    api_request_count INTEGER NOT NULL CHECK(api_request_count >= 0),
+    query_version TEXT NOT NULL,
+    completed_at TEXT NOT NULL,
+    PRIMARY KEY(
+        region_code, period_days, window_start, window_end, topic_id, query_version
+    ),
+    FOREIGN KEY(topic_id) REFERENCES openalex_topics(topic_id) ON DELETE RESTRICT
+);
+CREATE INDEX IF NOT EXISTS idx_citation_cache_view
+    ON citation_topic_cache(region_code, period_days, window_start, window_end);
 """

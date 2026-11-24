@@ -260,7 +260,7 @@ class DashboardRepositoryTests(unittest.TestCase):
         self.assertEqual(before, after)
         self.assertEqual(status["integrity"], "ok")
         self.assertEqual(status["foreign_key_violations"], 0)
-        self.assertEqual(str(status["schema_version"]), "7")
+        self.assertEqual(str(status["schema_version"]), "9")
 
     def test_topic_audit_import_is_complete_and_idempotent(self) -> None:
         root = Path(__file__).resolve().parents[1]

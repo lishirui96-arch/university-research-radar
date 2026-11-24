@@ -151,7 +151,7 @@ class RegionalSchemaTests(unittest.TestCase):
                 connection.execute(
                     "SELECT value FROM schema_metadata WHERE key='schema_version'"
                 ).fetchone()[0],
-                "7",
+                "9",
             )
             self.assertEqual(connection.execute("PRAGMA integrity_check").fetchone()[0], "ok")
 

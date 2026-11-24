@@ -3,12 +3,17 @@ from __future__ import annotations
 from html import escape
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
-from dashboard_repository import get_v14_hotspot_dashboard, get_v15_regional_dashboard
+from dashboard_repository import (
+    get_citation_ranking,
+    get_v14_hotspot_dashboard,
+    get_v15_regional_dashboard,
+)
 from storage import database_path
 from topic_translations import topic_display_name, topic_translation
 from trend_aggregation import diagnose_topic_trends
@@ -172,6 +177,35 @@ def _load_dashboard(
     )
 
 
+@st.cache_data(ttl="5m", max_entries=96, show_spinner=False)
+def _load_citations(
+    path: str,
+    signature: tuple[int, int],
+    region_code: str,
+    period_days: int,
+    topic_id: str,
+    window_start: str,
+    window_end: str,
+) -> dict[str, Any]:
+    del signature
+    return get_citation_ranking(
+        path,
+        region_code=region_code,
+        period_days=period_days,
+        topic_id=topic_id,
+        window_start=window_start,
+        window_end=window_end,
+    )
+
+
+def _on_topic_select() -> None:
+    event = st.session_state.get("v16_topic_table_event")
+    topic_ids = st.session_state.get("v16_topic_table_ids", [])
+    rows = event.selection.rows if event is not None else []
+    if rows and 0 <= rows[0] < len(topic_ids):
+        st.session_state["v16_selected_topic_id"] = topic_ids[rows[0]]
+
+
 def _display_time(value: Any) -> str:
     parsed = pd.to_datetime(value, errors="coerce")
     if pd.isna(parsed):
@@ -231,6 +265,92 @@ def _display_count(value: Any) -> str:
 
 def _display_rate(value: Any) -> str:
     return "NA" if pd.isna(value) else f"{float(value):+.1%}"
+
+
+def _citation_table_html(papers: pd.DataFrame, period_days: int) -> str:
+    rows: list[str] = []
+    for rank, row in enumerate(papers.itertuples(index=False), start=1):
+        doi = str(row.doi).strip() if pd.notna(row.doi) else ""
+        fallback = str(row.openalex_url).strip()
+        link = doi or fallback
+        if urlparse(link).scheme != "https":
+            link = fallback if urlparse(fallback).scheme == "https" else "https://openalex.org"
+        venue = str(row.venue).strip() if pd.notna(row.venue) else "未知来源"
+        published = pd.to_datetime(row.publication_date, errors="coerce")
+        published_label = published.strftime("%Y-%m-%d") if pd.notna(published) else "日期未知"
+        rows.append(
+            "<tr>"
+            f'<td class="citation-rank">{rank:02d}</td>'
+            '<td class="citation-paper">'
+            f'<a href="{escape(link, quote=True)}" target="_blank" rel="noopener noreferrer">'
+            f'{escape(str(row.title))}</a>'
+            f'<span>{escape(venue)} · {published_label}</span>'
+            "</td>"
+            f'<td class="citation-count">{int(row.window_citation_count):,}</td>'
+            "</tr>"
+        )
+    return f"""
+    <style>
+      .citation-table-wrap {{
+        border: 1px solid #DCE6F2;
+        border-radius: 6px;
+        overflow: hidden;
+        background: #FFFFFF;
+      }}
+      .citation-table {{ width: 100%; border-collapse: collapse; table-layout: fixed; }}
+      .citation-table th {{
+        padding: 9px 10px;
+        background: #EAF1FA;
+        color: #334E68;
+        font-size: 13px;
+        font-weight: 650;
+        text-align: left;
+      }}
+      .citation-table td {{
+        padding: 8px 10px;
+        border-top: 1px solid #DFE7F1;
+        color: #102A43;
+        font-size: 13px;
+        vertical-align: top;
+      }}
+      .citation-table .citation-rank {{ width: 42px; font-weight: 650; }}
+      .citation-table .citation-count {{
+        width: 94px;
+        text-align: right;
+        font-weight: 700;
+        white-space: nowrap;
+      }}
+      .citation-paper a {{
+        display: block;
+        color: #0B4F9C;
+        font-weight: 650;
+        line-height: 1.3;
+        text-decoration: none;
+        overflow-wrap: anywhere;
+      }}
+      .citation-paper a:hover {{ text-decoration: underline; }}
+      .citation-paper span {{
+        display: block;
+        margin-top: 2px;
+        color: #6B7C93;
+        font-size: 11px;
+        line-height: 1.25;
+        overflow-wrap: anywhere;
+      }}
+      @media (max-width: 640px) {{
+        .citation-table th, .citation-table td {{ padding: 7px 8px; }}
+        .citation-table .citation-rank {{ width: 34px; }}
+        .citation-table .citation-count {{ width: 76px; }}
+      }}
+    </style>
+    <div class="citation-table-wrap">
+      <table class="citation-table">
+        <thead><tr><th class="citation-rank">排名</th><th>论文</th>
+        <th class="citation-count">近{period_days}天被引</th></tr></thead>
+        <tbody>{''.join(rows)}</tbody>
+      </table>
+    </div>
+    """
 
 
 def _plotly_config() -> dict[str, Any]:
@@ -597,45 +717,93 @@ st.caption(
     + "最新日期可能仍在收录中。"
 )
 
-with st.container(key="panel_v14_ranking", border=True):
-    st.subheader(":material/emoji_events: 科研热点 TOP 10")
-    ranking_scope = "六学科范围" if result["field_id"] is None else str(field_label).split(" · ")[0]
-    ranking_basis = "最新周期增长率" if sort_by == "growth" else f"近{period_days}天 Works"
-    st.caption(f"{ranking_scope}内按{ranking_basis}排名；点击行查看 Topic 详情")
-    table = display_ranking.head(10).copy()
-    table["Topic"] = table.apply(_topic_label, axis=1)
-    table["所属学科"] = table["field_name_zh"] + " · " + table["field_name"]
-    table[f"{period_days}天 Works"] = table["period_works_count"]
-    table["增长率"] = pd.to_numeric(
-        table["period_growth_rate"], errors="coerce"
-    ).mul(100)
-    table["趋势"] = table["trend"]
-    table = table.rename(columns={"rank": "排名"})[
-        ["排名", "Topic", "所属学科", f"{period_days}天 Works", "增长率", "趋势"]
-    ]
-    event = st.dataframe(
-        table, hide_index=True, on_select="rerun", selection_mode="single-row",
-        key="v14_ranking_table",
-        column_config={
-            f"{period_days}天 Works": st.column_config.NumberColumn(format="localized"),
-            "增长率": st.column_config.NumberColumn(format="%.1f%%"),
-        },
-    )
-    selected_index = event.selection.rows[0] if event.selection.rows else 0
-    detail = display_ranking.head(10).iloc[selected_index]
-    st.markdown(f"**Topic 详情：{_topic_label(detail)}**")
-    detail_columns = st.columns(4)
-    detail_columns[0].metric("Topic ID", str(detail["topic_id"]))
-    detail_columns[1].metric(f"{period_days}天 Works", f"{int(detail['period_works_count']):,}")
-    detail_columns[2].metric("Field", str(detail["field_name"]))
-    detail_growth = pd.to_numeric(detail["period_growth_rate"], errors="coerce")
-    detail_columns[3].metric(
-        "增长率", f"{detail_growth:+.1%}" if pd.notna(detail_growth) else "NA"
-    )
-    detail_translation = topic_translation(
-        detail["topic_id"], detail["topic_name"], detail.get("topic_name_zh")
-    )
-    st.caption(
-        f"OpenAlex：{detail['topic_name']} · Subfield：{detail['subfield_name']} · "
-        f"中文名称状态：{detail_translation['translation_status_label']}。"
-    )
+ranking_top10 = display_ranking.head(10).reset_index(drop=True)
+topic_ids = ranking_top10["topic_id"].astype(str).tolist()
+selected_topic_id = str(st.session_state.get("v16_selected_topic_id", ""))
+if selected_topic_id not in topic_ids and topic_ids:
+    selected_topic_id = topic_ids[0]
+    st.session_state["v16_selected_topic_id"] = selected_topic_id
+st.session_state["v16_topic_table_ids"] = topic_ids
+
+ranking_columns = st.columns(2, gap="medium")
+with ranking_columns[0]:
+    with st.container(key="panel_v16_topic_ranking", border=True, height="stretch"):
+        st.subheader(":material/emoji_events: 科研热点 TOP 10")
+        ranking_scope = (
+            "六学科范围" if result["field_id"] is None else str(field_label).split(" · ")[0]
+        )
+        ranking_basis = "最新周期增长率" if sort_by == "growth" else f"近{period_days}天 Works"
+        st.caption(f"{ranking_scope}内按{ranking_basis}排名；点击行查看引用榜")
+        table = ranking_top10.copy()
+        table["Topic"] = table.apply(_topic_label, axis=1)
+        table["所属学科"] = table["field_name_zh"].fillna(table["field_name"])
+        table[f"近{period_days}天发文"] = table["period_works_count"]
+        table["增长率"] = pd.to_numeric(
+            table["period_growth_rate"], errors="coerce"
+        ).mul(100)
+        table = table.rename(columns={"rank": "排名"})[
+            ["排名", "Topic", "所属学科", f"近{period_days}天发文", "增长率"]
+        ]
+        selected_mask = ranking_top10["topic_id"].astype(str).eq(selected_topic_id)
+        styled_table = table.style.apply(
+            lambda row: [
+                "background-color: #E7F1FF; color: #102A43;"
+                if selected_mask.iloc[row.name] else ""
+            ] * len(row),
+            axis=1,
+        )
+        st.dataframe(
+            styled_table,
+            hide_index=True,
+            on_select=_on_topic_select,
+            selection_mode="single-row",
+            key="v16_topic_table_event",
+            height=448,
+            column_config={
+                "排名": st.column_config.NumberColumn(width="small", format="%02d"),
+                "Topic": st.column_config.TextColumn(width="medium"),
+                "所属学科": st.column_config.TextColumn(
+                    width="small", help="学科中文名称"
+                ),
+                f"近{period_days}天发文": st.column_config.NumberColumn(
+                    width="small", format="compact"
+                ),
+                "增长率": st.column_config.NumberColumn(width="small", format="%.1f%%"),
+            },
+        )
+
+detail = (
+    ranking_top10.loc[ranking_top10["topic_id"].astype(str).eq(selected_topic_id)].iloc[0]
+    if topic_ids else None
+)
+with ranking_columns[1]:
+    with st.container(key="panel_v16_citation_ranking", border=True, height="stretch"):
+        if detail is None:
+            st.subheader(":material/article: 高被引论文 TOP 10")
+            st.info("当前筛选范围没有 Topic。", icon=":material/info:")
+        else:
+            detail_name = _topic_label(detail)
+            st.subheader(f":material/article: {detail_name} · 高被引论文 TOP 10")
+            st.caption(
+                f"Topic ID：{selected_topic_id} · 按引用方作品发表日期统计窗口内新增引用；"
+                "引用方范围为全球"
+            )
+            citation_result = _load_citations(
+                str(db_path), signature, str(region_code), period_days,
+                selected_topic_id, str(detail["window_start"]), str(detail["window_end"]),
+            )
+            if citation_result["status"] != "available":
+                st.info(
+                    "引用数据暂不可用。现有发文榜可正常浏览；引用批次完整发布后将自动显示。",
+                    icon=":material/database_off:",
+                )
+            elif citation_result["works"].empty:
+                st.info("当前窗口内无符合条件且至少被引一次的论文。", icon=":material/search_off:")
+            else:
+                papers = citation_result["works"].copy()
+                st.html(_citation_table_html(papers, period_days))
+            st.caption(
+                f"统计区间：{detail['window_start']} 至 {detail['window_end']}（含起止日） · "
+                f"数据来源：OpenAlex · 引用数据更新时间："
+                f"{_display_time(citation_result.get('query_as_of'))}"
+            )

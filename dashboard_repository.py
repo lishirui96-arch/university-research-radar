@@ -1090,6 +1090,81 @@ def get_v15_regional_dashboard(
     }
 
 
+def get_citation_ranking(
+    path: str | Path,
+    *,
+    region_code: str,
+    period_days: int,
+    topic_id: str,
+    window_start: str,
+    window_end: str,
+) -> dict[str, Any]:
+    """Return a published citation ranking aligned to the dashboard window."""
+    empty = {
+        "status": "unavailable", "works": pd.DataFrame(), "batch_id": None,
+        "query_as_of": None, "window_start": window_start, "window_end": window_end,
+    }
+    region = str(region_code).upper()
+    if region not in {"GLOBAL", "CN", "US"}:
+        raise ValueError("region_code must be GLOBAL, CN, or US")
+    if period_days not in {90, 360}:
+        raise ValueError("period_days must be 90 or 360")
+    db_path = Path(path)
+    if not db_path.exists():
+        return empty
+    with closing(_connect_read_only(db_path)) as connection:
+        tables = _table_names(connection)
+        required = {
+            "citation_snapshot_batches", "citation_snapshot_scopes",
+            "citation_topic_work_snapshots",
+        }
+        if not required.issubset(tables):
+            return empty
+        batch = connection.execute(
+            """
+            SELECT b.batch_id, b.query_as_of, b.window_start, b.window_end
+            FROM citation_snapshot_batches b
+            JOIN citation_snapshot_scopes s ON s.batch_id=b.batch_id
+            WHERE b.status='published' AND b.period_days=?
+              AND b.window_start=? AND b.window_end=?
+              AND b.completed_scope_count=b.expected_scope_count
+              AND s.region_code=? AND s.topic_id=? AND s.status='success'
+            ORDER BY b.completed_at DESC LIMIT 1
+            """,
+            (period_days, window_start, window_end, region, str(topic_id)),
+        ).fetchone()
+        if batch is None:
+            return empty
+        scope = connection.execute(
+            """
+            SELECT status FROM citation_snapshot_scopes
+            WHERE batch_id=? AND region_code=? AND topic_id=?
+            """,
+            (batch["batch_id"], region, str(topic_id)),
+        ).fetchone()
+        if scope is None or scope["status"] != "success":
+            return empty
+        rows = connection.execute(
+            """
+            SELECT openalex_work_id, title, doi, openalex_url, venue,
+                   publication_date, window_citation_count
+            FROM citation_topic_work_snapshots
+            WHERE batch_id=? AND region_code=? AND topic_id=?
+              AND window_citation_count>0
+            ORDER BY window_citation_count DESC,
+                     CASE WHEN publication_date IS NULL THEN 1 ELSE 0 END,
+                     publication_date DESC, openalex_work_id ASC
+            LIMIT 10
+            """,
+            (batch["batch_id"], region, str(topic_id)),
+        ).fetchall()
+    return {
+        "status": "available", "works": _dataframe(rows),
+        "batch_id": str(batch["batch_id"]), "query_as_of": str(batch["query_as_of"]),
+        "window_start": str(batch["window_start"]), "window_end": str(batch["window_end"]),
+    }
+
+
 def _load_topic_ranking(
     connection: sqlite3.Connection, tables: set[str]
 ) -> pd.DataFrame:

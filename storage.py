@@ -21,6 +21,8 @@ from migrations import (
     MIGRATION_5_SQL,
     MIGRATION_6_SQL,
     MIGRATION_7_SQL,
+    MIGRATION_8_SQL,
+    MIGRATION_9_SQL,
 )
 
 
@@ -200,6 +202,28 @@ def initialize_database(path: Path | None = None) -> Path:
                     + "COMMIT;"
                 )
                 version = 7
+            if version < 8:
+                now = datetime.now().astimezone().isoformat()
+                connection.executescript(
+                    "BEGIN IMMEDIATE;\n"
+                    + MIGRATION_8_SQL
+                    + "\nINSERT OR REPLACE INTO schema_migrations(version, name, applied_at) "
+                    + f"VALUES (8, 'windowed citation rankings', '{now}');\n"
+                    + "UPDATE schema_metadata SET value='8' WHERE key='schema_version';\n"
+                    + "COMMIT;"
+                )
+                version = 8
+            if version < 9:
+                now = datetime.now().astimezone().isoformat()
+                connection.executescript(
+                    "BEGIN IMMEDIATE;\n"
+                    + MIGRATION_9_SQL
+                    + "\nINSERT OR REPLACE INTO schema_migrations(version, name, applied_at) "
+                    + f"VALUES (9, 'citation scope audits and resumable cache', '{now}');\n"
+                    + "UPDATE schema_metadata SET value='9' WHERE key='schema_version';\n"
+                    + "COMMIT;"
+                )
+                version = 9
         _INITIALIZED_PATHS.add(path_key)
     return db_path
 
